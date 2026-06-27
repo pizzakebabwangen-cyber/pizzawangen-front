@@ -1,0 +1,235 @@
+.paymentWay {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100000;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Add padding for smaller screens */
+  box-sizing: border-box; /* Ensure padding is included in width/height */
+
+  /* Container Styling */
+  .container {
+    width: 100%; /* Full width on small screens */
+    max-width: 400px; /* Max width for larger screens */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+
+  /* Heading Styling */
+  .container h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Methods Container Styling */
+  .methods {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* Zahlungsoptionen: wie Warenkorb «Bestellen» (Primary, volle Breite) */
+  .payment-way-native-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .method {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    background-color: #555;
+    color: #fff;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .method:hover:not(.selected) {
+    background-color: #5c5c5c;
+    border-color: #bbb;
+  }
+
+  .method.selected {
+    background-color: var(--primary-color, #f66f00);
+    border-color: #ffb300;
+    box-shadow: 0 4px 14px rgba(246, 111, 0, 0.35);
+  }
+
+  .method:focus-visible {
+    outline: 2px solid #ffb300;
+    outline-offset: 2px;
+  }
+
+  .method label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    cursor: pointer;
+    font-size: inherit;
+    color: #fff;
+    text-align: center;
+  }
+
+  .payment-way-label-with-icon {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+  }
+
+  .payment-way-icon {
+    flex-shrink: 0;
+    opacity: 0.95;
+  }
+
+  .payment-way-line-main {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .payment-way-agb {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    margin: 14px 0 4px;
+    padding: 8px 8px 8px 6px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.92);
+    cursor: pointer;
+    text-align: left;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .payment-way-agb input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .payment-way-agb a {
+    color: #ffb366;
+    text-decoration: underline;
+    font-weight: 600;
+  }
+
+  @keyframes payment-way-agb-shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    12%,
+    36%,
+    60% {
+      transform: translateX(-7px);
+    }
+    24%,
+    48%,
+    72% {
+      transform: translateX(7px);
+    }
+  }
+
+  .payment-way-agb.payment-way-agb--error {
+    animation: payment-way-agb-shake 0.55s ease-in-out;
+    border-color: #e53935;
+    box-shadow:
+      0 0 0 3px rgba(229, 57, 53, 0.35),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    background: rgba(229, 57, 53, 0.12);
+  }
+
+  .payment-way-line-sub {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Button Styling — gleiche Primary-Farbe wie Warenkorb «Bestellen» */
+  button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color, #f66f00);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, filter 0.2s ease;
+  }
+
+  button:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+
+  button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+/* Media Queries for Responsiveness */
+@media (max-width: 600px) {
+  .container {
+    padding: 15px; /* Reduce padding for smaller screens */
+  }
+
+  .container h2 {
+    font-size: 20px; /* Smaller heading for mobile */
+  }
+
+  .method {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+
+  .method label {
+    font-size: 14px; /* Smaller font size for mobile */
+  }
+
+  button {
+    padding: 12px; /* Smaller button padding for mobile */
+    font-size: 14px; /* Smaller font size for mobile */
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    max-width: 90%; /* Allow container to take more width on very small screens */
+  }
+}

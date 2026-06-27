@@ -1,0 +1,196 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* ======== google fonts ========= */
+
+/* ======== css variables ============ */
+:root {
+  --primary-color: #f66f00;
+  --orange-light: #e18336;
+  --secondary-color: #0d1113;
+  --heading-color: #fff;
+  --body-bg: #0e1213;
+  --small-text-color: #acb2b2;
+  --font-name: "Montserrat", sans-serif;
+  --card-bg: #0a0b0b;
+}
+
+/* base style */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  /* Gleiche Fläche wie body — verhindert helle «Streifen» am Rand (iOS Safari / Overscroll). */
+  background-color: var(--body-bg);
+}
+
+body {
+  background: var(--body-bg);
+  font-family: var(--font-name);
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--body-bg);
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
+
+ul {
+  list-style: none;
+}
+
+p {
+  color: var(--small-text-color);
+  font-size: 0.9rem;
+  line-height: 28px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--heading-color);
+  font-weight: 500;
+}
+
+/* reuseable css */
+
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+section {
+  padding: 60px 0;
+}
+.component-label {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 36px 0;
+  }
+  .component-label {
+    font-size: 1.75rem;
+    margin-top: 24px;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 440px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  section {
+    padding: 28px 0;
+  }
+
+  .component-label {
+    font-size: 1.45rem;
+    margin-top: 18px;
+  }
+}
+/* Custom dark-themed scrollbar */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  height: 12px; /* Height of the scrollbar (for horizontal scrollbars) */
+}
+
+::-webkit-scrollbar-track {
+  background: #2c2c2c; /* Dark background for the scrollbar track */
+  border-radius: 10px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color); /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ac5403; /* Color of the scrollbar thumb when hovered */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Makes scrollbar thinner */
+  scrollbar-color: #888 #2c2c2c; /* Thumb color and track color */
+}
+
+.loading-button{
+  cursor: not-allowed;
+  opacity: 0.6;
+  
+}
+.error-message{
+  color:red;
+  font-size: .8rem;
+  
+}

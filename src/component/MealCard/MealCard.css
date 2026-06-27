@@ -1,0 +1,571 @@
+.card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
+  min-height: 400px;
+  width: 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  border-radius: 8px;
+  /* overflow: hidden; */
+  margin-top: 200px;
+  color: var(--primary-color);
+  border-bottom: 0.1px solid var(--primary-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-image {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: 250px;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px;
+}
+
+.card-content {
+  padding: 16px;
+  
+  p{
+    font-size: 1.4rem;
+  }
+}
+
+.meal-name {
+  margin: 0;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+  font-size: 2rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.price {
+  font-size: 2rem;
+  color: white;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.cart-icon {
+  font-size: 40px;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Ant Design Produkt-Modal: Flex-Kette = Fusszeile bleibt im sichtbaren Bereich */
+.meal-card-product-modal.ant-modal .ant-modal-content {
+  max-height: min(92vh, 920px);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+@supports (height: 1dvh) {
+  .meal-card-product-modal.ant-modal .ant-modal-content {
+    max-height: min(88dvh, 94vh, 920px);
+  }
+}
+
+.meal-card-product-modal.ant-modal .ant-modal-header {
+  flex-shrink: 0;
+}
+
+.meal-card-product-modal.ant-modal .ant-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* Produkt-Modal: Extras scrollen, Anzahl + Warenkorb immer sichtbar */
+.meal-card-modal-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.meal-card-modal-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.meal-card-modal-footer {
+  flex-shrink: 0;
+  background: #fff;
+  border-top: 1px solid #e8e8e8;
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
+  padding: 12px max(12px, env(safe-area-inset-right, 0px)) max(16px, calc(12px + env(safe-area-inset-bottom, 0px))) max(12px, env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+.meal-card-modal-footer .meal-cart-actions {
+  margin-top: 0;
+}
+
+/* Modal-Fusszeile: Kapsel-Anzahl + orange „Hinzufügen“ mit Gesamtpreis (App-Referenz) */
+.meal-card-modal-footer .meal-cart-actions--modal-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.meal-card-modal-footer .meal-qty-pill {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 1 auto;
+  min-width: 0;
+  width: 112px;
+  max-width: min(148px, 32vw);
+  padding: 2px 2px;
+  background: #f2f2f2;
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+
+.meal-card-modal-footer .meal-qty-pill-btn {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #222;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.meal-card-modal-footer .meal-qty-pill-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.meal-card-modal-footer .meal-qty-pill-input {
+  flex: 1;
+  min-width: 28px;
+  max-width: 48px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #222;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.meal-card-modal-footer .meal-qty-pill-input::-webkit-outer-spin-button,
+.meal-card-modal-footer .meal-qty-pill-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.meal-card-modal-footer .meal-qty-pill-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.meal-card-modal-footer .meal-add-bar-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--primary-color, #ff6600);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.meal-card-modal-footer .meal-add-bar-btn:hover {
+  filter: brightness(1.05);
+}
+
+.meal-card-modal-footer .meal-add-bar-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Label darf nicht auf 0 schrumpfen — sonst nur Preis sichtbar (Handy). */
+.meal-card-modal-footer .meal-add-bar-label {
+  flex: 0 0 auto;
+  min-width: max-content;
+  overflow: visible;
+  white-space: nowrap;
+  text-align: left;
+}
+
+@media (max-width: 380px) {
+  .meal-card-modal-footer .meal-cart-actions--modal-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .meal-card-modal-footer .meal-qty-pill {
+    width: 108px;
+    max-width: 40%;
+  }
+
+  .meal-card-modal-footer .meal-add-bar-btn {
+    flex: 1 1 100%;
+    min-width: 0;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .meal-card-modal-footer .meal-add-bar-price {
+    font-size: 0.82rem;
+  }
+}
+
+.meal-card-modal-customizer {
+  margin-bottom: 0;
+}
+
+/* modal custom */
+/* if the modal with the extensions appear  */
+.pizza-customizer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 20px;
+
+  .pizza-image {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pizza-image img {
+    max-width: 100%;
+    object-fit: cover;
+  }
+
+  .pizza-details {
+    flex: 1;
+    min-width: 30%;
+    margin-left: 20px;
+    h1 {
+      color: var(--primary-color);
+    }
+    h3{
+      color: black;
+    }
+  }
+  .price {
+    color: green;
+    font-size: 1.5em;
+  }
+
+  .toppings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .toppings label {
+    width: 48%;
+    text-align: left;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    
+    input{
+      cursor: pointer;
+      margin-right: 5px;
+    }
+  }
+
+  .quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #d32f2f;
+  }
+
+  .meal-cart-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .meal-cart-actions .add-to-cart {
+    flex: 1 1 180px;
+    margin-top: 0;
+    width: auto;
+    min-height: 44px;
+  }
+
+  .quantity-stepper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+  }
+
+  .quantity-label {
+    color: #333;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-right: 2px;
+  }
+
+  .pizza-customizer .quantity-stepper-btn {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+    font-size: 1.35rem;
+    line-height: 1;
+    background-color: #e8e8e8 !important;
+    color: #222 !important;
+    border: 1px solid #bbb !important;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .pizza-customizer .quantity-stepper-btn:hover {
+    background-color: #ddd !important;
+  }
+
+  .quantity-stepper-input {
+    width: 52px;
+    height: 44px;
+    text-align: center;
+    font-size: 1.15rem;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+
+  .quantity-stepper-input::-webkit-outer-spin-button,
+  .quantity-stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .quantity-stepper-input {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .add-to-cart {
+    display: block;
+    margin-top: 20px auto;
+    width: 80%;
+    font-size: 1.2rem;
+  }
+
+  .total {
+    font-size: 1.2em;
+    margin-top: 10px;
+  }
+}
+/*  if the modal with the holiday appear */
+.holiday-message{
+   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .card {
+    margin-top: 28px;
+    min-height: 0;
+  }
+
+  .pizza-customizer {
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 10px;
+  }
+    .pizza-customizer .pizza-image {
+    width: 50%;
+  }
+   .pizza-customizer .pizza-details {
+    margin-left: 0;
+    margin-top: 20px;
+    /* padding: 20px 5px; */
+  }
+  .toppings {
+    width: 90%;
+  }
+  .pizza-customizer .toppings label {
+    width: 100%;
+  }
+}
+@media (max-width: 450px) {
+  .pizza-customizer {
+    padding: 5px;
+  }
+   .pizza-customizer .toppings label {
+    width: 100%;
+  }
+}
+
+/*  */
+
+/* Responsive adjustments */
+@media (max-width: 650px) {
+  .card {
+    width: 40%;
+  }
+
+  .meal-name {
+    font-size: 20px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+}
+@media (max-width: 480px) {
+  .card {
+    width: 90%;
+  }
+
+  .meal-name {
+    font-size: 16px;
+  }
+
+  .price {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 440px) {
+  .card {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 14px;
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 0;
+  }
+
+  .card-image {
+    max-width: 100%;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  .card-content p {
+    font-size: 1rem;
+  }
+
+  .meal-name {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+
+  .price {
+    font-size: 1.05rem;
+  }
+
+  .cart-icon {
+    font-size: 32px;
+  }
+
+  .card-footer {
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

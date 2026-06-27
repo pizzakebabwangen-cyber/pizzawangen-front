@@ -1,0 +1,49 @@
+.payment-form {
+  width: 40%;
+  padding: 80px 0;
+  .payment-method-selection {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  button {
+    padding: 10px 20px;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+    font-size: 18px;
+    color: var(--primary-color);
+    background-color: white;
+  }
+  button:hover {
+    transform: scale(1.05);
+    background-color: var(--primary-color);
+    color: white;
+  }
+  .disable {
+    cursor: not-allowed;
+  }
+  .disable:hover {
+    transform: scale(1);
+    color: var(--primary-color);
+    background-color: white;
+  }
+}
+.twint-payment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+@media only screen and (max-width: 691px) {
+  .payment-form {
+    width: 90%;
+  }
+}

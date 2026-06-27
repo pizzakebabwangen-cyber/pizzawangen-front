@@ -1,0 +1,716 @@
+/* Gutscheine Page Styles */
+
+/* Spezifischer als globales `section { padding: 60px 0 }` (App.css) */
+section.gutscheine-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  color: #fff;
+  padding: 2rem 1rem;
+}
+
+.gutscheine-page-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/*
+ * SVG ohne width/height: In Flex/Grid können Browser die riesig skalieren (goldener „Ball“).
+ * Eine Regel für die ganze Seite — Ausnahmen nur wo explizit grösser nötig.
+ */
+.gutscheine-page svg {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: block;
+}
+
+.gutscheine-page svg:not(.gutscheine-svg-hero):not(.error-icon) {
+  width: 1.35rem;
+  height: 1.35rem;
+  max-width: 2rem;
+  max-height: 2rem;
+}
+
+.gutscheine-page .spinner {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  max-width: 1.25rem !important;
+  max-height: 1.25rem !important;
+}
+
+.hero-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.feature-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+/* Back Link */
+.gutscheine-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #d4af37;
+  text-decoration: none;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.gutscheine-back-link:hover {
+  color: #ffd700;
+}
+
+/* Hero Banner */
+.gutscheine-hero-banner {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, #2d1b0e 0%, #4a2c17 50%, #2d1b0e 100%);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.hero-overlay {
+  position: relative;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: linear-gradient(135deg, rgba(45, 27, 14, 0.95) 0%, rgba(74, 44, 23, 0.9) 100%);
+}
+
+.hero-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, #d4af37, #ffd700);
+  color: #1a1a2e;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.gutscheine-hero-banner h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.text-gold {
+  background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-content p {
+  color: #ccc;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Gutschein Values Section */
+.gutscheine-section {
+  margin-bottom: 2rem;
+}
+
+/* Wertwahl direkt im Formular: sichtbar vor Adresse/Zahlung */
+.gutscheine-section--in-form {
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  padding: 1.75rem;
+  backdrop-filter: blur(10px);
+  margin-bottom: 0;
+}
+
+.gutscheine-amount-lead {
+  text-align: center;
+  color: #b8b8c8;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0 auto 1.25rem;
+  max-width: 42rem;
+}
+
+.gutscheine-summary-hint {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #c9b896;
+  line-height: 1.5;
+}
+
+.gutscheine-section h2 {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.gutschein-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+}
+
+.gutschein-value-card {
+  position: relative;
+  background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+  border: 2px solid #3a3a5a;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+.gutschein-value-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d4af37, #ffd700);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.gutschein-value-card:hover {
+  border-color: #d4af37;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+}
+
+.gutschein-value-card:hover::before {
+  opacity: 1;
+}
+
+.gutschein-value-card.selected {
+  border-color: #d4af37;
+  background: linear-gradient(180deg, #3a3040 0%, #2a2040 100%);
+  box-shadow: 
+    0 0 30px rgba(212, 175, 55, 0.4),
+    inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.gutschein-value-card.selected::before {
+  opacity: 1;
+}
+
+.card-sparkle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.gutschein-value-card:hover .card-sparkle,
+.gutschein-value-card.selected .card-sparkle {
+  opacity: 1;
+}
+
+.gutschein-value-amount {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #d4af37;
+  text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+}
+
+.gutschein-value-subtitle {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.test-badge {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.test-card {
+  border-color: rgba(231, 76, 60, 0.5);
+}
+
+/* Form Styles */
+.gutscheine-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.gutscheine-form-section {
+  background: rgba(26, 26, 46, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  padding: 1.75rem;
+  backdrop-filter: blur(10px);
+}
+
+.gutscheine-form-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 1.15rem;
+  color: #d4af37;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  font-weight: 600;
+}
+
+.form-row {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
+.form-row-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.form-row-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group-small {
+  max-width: 120px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(30, 30, 50, 0.8);
+  border: 1px solid #3a3a5a;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+/* Checkbox Styles */
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #d4af37;
+  flex-shrink: 0;
+}
+
+.checkbox-row label {
+  color: #ccc;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.checkbox-row a {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.checkbox-row a:hover {
+  text-decoration: underline;
+}
+
+/* Delivery Fields */
+.delivery-fields {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+/* Payment Methods */
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.payment-method-card {
+  background: rgba(30, 30, 50, 0.8);
+  border: 2px solid #3a3a5a;
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-method-card:hover {
+  border-color: #d4af37;
+  transform: translateY(-2px);
+}
+
+.payment-method-card.selected {
+  border-color: #d4af37;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 100%);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.payment-icon {
+  font-size: 1.8rem;
+}
+
+.payment-label {
+  font-size: 0.9rem;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.payment-method-card.selected .payment-label {
+  color: #d4af37;
+}
+
+/* Error Message — SVG braucht feste Grösse (sonst riesig im Flex-Layout) */
+.error-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(231, 76, 60, 0.15);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: #e74c3c;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.error-icon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  flex-shrink: 0;
+  display: block;
+  overflow: visible;
+}
+
+.error-message-text {
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Summary Section */
+.gutscheine-summary {
+  background: linear-gradient(135deg, rgba(45, 27, 14, 0.95) 0%, rgba(74, 44, 23, 0.9) 100%);
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.gutscheine-price-breakdown {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.gutscheine-price-breakdown .summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: #e8e0d5;
+}
+
+.gutscheine-price-breakdown .summary-line-mwst {
+  font-size: 0.9rem;
+  color: #c9b896;
+}
+
+.gutscheine-price-breakdown .summary-line-total {
+  margin-top: 0.35rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.45);
+  font-weight: 700;
+  font-size: 1.08rem;
+  color: #fff;
+}
+
+.summary-total {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.summary-total span:first-child {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.total-amount {
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #d4af37, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gutscheine-submit-btn {
+  background: linear-gradient(135deg, #d4af37, #ffd700);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 14px;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gutscheine-submit-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+}
+
+.gutscheine-submit-btn:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Success Message */
+.gutscheine-success {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(180deg, rgba(39, 174, 96, 0.15) 0%, rgba(39, 174, 96, 0.05) 100%);
+  border: 2px solid #27ae60;
+  border-radius: 24px;
+  margin-bottom: 2rem;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: #fff;
+  font-size: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+}
+
+.gutscheine-success h3 {
+  font-size: 2rem;
+  color: #2ecc71;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.gutscheine-success p {
+  color: #bbb;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 0.75rem;
+}
+
+.gutscheine-success strong {
+  color: #fff;
+}
+
+.btn-back {
+  margin-top: 2rem;
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+}
+
+/* Footer */
+.gutscheine-foot {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.gutscheine-foot p {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+.gutscheine-inline-link {
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.gutscheine-inline-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-overlay {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .gutscheine-hero-banner h1 {
+    font-size: 2rem;
+  }
+
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group-small {
+    max-width: 100%;
+  }
+
+  .gutschein-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gutscheine-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .gutscheine-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .gutscheine-hero-banner h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero-badge {
+    font-size: 0.75rem;
+  }
+
+  .gutscheine-form-section {
+    padding: 1.25rem;
+  }
+}
+
+.gutscheine-payment-info {
+  margin: 0;
+  color: #c8c8c8;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}

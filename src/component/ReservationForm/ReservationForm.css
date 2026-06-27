@@ -1,0 +1,147 @@
+.reservation {
+  background-image: url("../../assets/background/08.png");
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  /* gap: 100px; */
+  padding: 80px 50px 200px 200px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  form {
+    background-color: #3a3a3a;
+    padding: 60px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 50%;
+    .reservation-text {
+      margin-bottom: 50px;
+      h2 {
+        font-size: 3rem;
+        font-weight: bold;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      p {
+        color: white;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin-top: 20px;
+      }
+    }
+    .contact-us {
+      color: var(--primary-color);
+      font-size: 2rem;
+      text-align: center;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+  .dateContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white ;
+    #date {
+      width: 45px;
+    }
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 20px;
+    color: white;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: box-shadow 0.3s;
+    font-size: 20px;
+    
+  }
+
+  .form-group input,
+  .form-group textarea:focus {
+    box-shadow: 0 0 5px orange;
+    outline: none;
+  }
+  .time-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .form-group {
+      width: 45%;
+    }
+  }
+  .form-group select{
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: box-shadow 0.3s;
+    font-size: 20px;
+    cursor: pointer;
+    option{
+      cursor: pointer;
+    }
+  }
+  button {
+    width: 100%;
+    padding: 20px;
+    background-color: orange;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-top: 40px;
+  }
+
+  button:hover {
+    background-color: #e96e00;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .reservation {
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+    form {
+      width: 90%;
+    }
+  }
+}
+@media only screen and (max-width: 480px) {
+  .reservation{
+    form{
+      padding: 20px;
+      .reservation-text {
+        h2{
+          font-size: 2rem;
+        }
+        p{
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .time-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+
+    .form-group {
+      width: 95%;
+    }
+  }
+  }
+}

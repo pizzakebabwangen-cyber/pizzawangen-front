@@ -1,0 +1,88 @@
+.register {
+    margin-bottom: 40px;
+}
+
+.register .Page-name {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--primary-color);
+    letter-spacing: 2.3px;
+    font-weight: 600;
+
+}
+
+
+.register .form {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto 0;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #333333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .register .form {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 24px;
+        padding: 16px;
+    }
+}
+
+.register .form h2 {
+    margin-bottom: 20px;
+}
+
+.register .form-group {
+    margin-bottom: 15px;
+}
+
+.register .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--heading-color);
+}
+
+.register .form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #555555;
+    background-color: #555555;
+    color: #ffffff;
+}
+
+.register button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.register button:hover {
+    background-color: var(--orange-light)
+}
+
+.register .returnF {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.register .returnF .return {
+    margin: 20px 0;
+    text-transform: capitalize;
+}
+
+.register .returnF .return span {
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-left: 5px;
+
+}

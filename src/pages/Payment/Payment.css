@@ -1,0 +1,37 @@
+.payment-container {
+  padding: 20px 0 40px;
+  padding-top: calc(20px + env(safe-area-inset-top, 0px));
+  min-height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Kasse über Karte/iframe (flex row / stacking), damit «Weiter» zuverlässig touchbar bleibt */
+.payment-container > .checkContainer {
+  position: relative;
+  z-index: 2;
+}
+
+.payment-container > .animated-component {
+  position: relative;
+  z-index: 0;
+}
+
+@media only screen and (max-width: 695px) {
+  .payment-container {
+    padding: 12px 0 24px;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    gap: 1rem;
+  }
+}
+
+@media only screen and (min-width: 692px) {
+  .payment-container {
+    flex-direction: row;
+  }
+}

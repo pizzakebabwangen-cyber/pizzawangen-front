@@ -1,0 +1,20 @@
+.cards{
+  /* margin-top: 0px; */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+
+}
+.dailyProduct {
+  /* margin-top: 40px; */
+  h1{
+    font-size: 4rem;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 290px;
+    span{
+      color: var(--primary-color);
+    }
+  }
+}

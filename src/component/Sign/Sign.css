@@ -1,0 +1,35 @@
+
+.sign {
+  width: 100%;
+  margin-top: 200px;
+  /* padding: 50px 0; */
+  .text {
+    margin-top: 20px;
+    padding: 50px;
+    text-align: start;
+    background-image: url("../../assets/images/Image001.png");
+    h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      /* line-height: 40px; */
+      margin-bottom: 30px;
+      span {
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+@media only screen and (max-width: 641px) {
+  .sign{
+    .text{
+      h1{
+        font-size: 2.8rem;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .container {
+    width: 100%;
+  }
+}

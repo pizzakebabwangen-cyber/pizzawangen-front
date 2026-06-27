@@ -1,0 +1,206 @@
+.cart-container {
+  width: 100%;
+  margin: 50px 0;
+  padding: 50px 0;
+  .empty-cart {
+    width: 70%;
+    height: 70%;
+    display: block;
+    margin: auto;
+    object-fit: contain;
+  }
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
+  }
+  .select-city {
+    margin: 20px 0;
+    padding: 10px 20px;
+    /* width: 90%; */
+    border: 0;
+    outline: none;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: rgb(163, 163, 163);
+    font-weight: 600;
+    option {
+      /* color: white; */
+      font-weight: 600;
+      padding: 10px 20px;
+    }
+  }
+
+  .delivery-city-readonly {
+    margin: 12px 0 20px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-weight: 700;
+  }
+  
+
+  .quantity-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    color: white;
+    span {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-left: 5px;
+    }
+  }
+  .remove-button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+
+    color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+  }
+
+  .remove-button:hover {
+    background-color: transparent;
+  }
+  .minimumOrderAb {
+    color: red;
+    margin: 30px 0 0px 0;
+    font-size: 20px;
+  }
+  /* Warenkorb-CTA wie dieci-Webshop: orange, weisser Text, abgerundet, Betrag im Label */
+  .shopping-cart-order {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    border: 0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: clamp(15px, 3.2vw, 18px);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+    margin-top: 20px;
+    text-align: center;
+    white-space: normal;
+    transition: background-color 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.12);
+  }
+  .shopping-cart-order:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: grayscale(0.12);
+  }
+  .shopping-cart-order:hover:not(:disabled) {
+    filter: brightness(1.06);
+  }
+  .twoOptionsofDelivery{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .cart-container {
+    margin: 12px 0 24px;
+    padding: 12px 0 80px;
+  }
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .product-details {
+    .description {
+      margin-top: 20px;
+      span {
+        margin-top: -15px;
+      }
+    }
+  }
+  .product-image {
+    width: 100%;
+    max-width: 300px;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+  
+  .remove-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 440px) {
+  .cart-container {
+    margin: 8px 0 20px;
+    padding: 8px 0 72px;
+  }
+
+  .cart-container .title h1 {
+    font-size: 1.35rem;
+    margin-bottom: 12px;
+  }
+
+  .cart-container .empty-cart {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+  }
+
+  .cart-container .select-city {
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+
+  .cart-container .shopping-cart-order {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .cart-container .minimumOrderAb {
+    font-size: 16px;
+    margin-top: 16px;
+  }
+
+  .cart-container .twoOptionsofDelivery {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+}
+
+/* @media (max-width: 653px) {
+    .cart-container .twoOptionsofDelivery{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      .deliveryOptions{
+        width: 90%;
+        margin:70px auto;
+
+      }
+    }
+} */

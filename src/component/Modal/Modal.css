@@ -1,0 +1,63 @@
+.modalForBusy {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(920px, calc(100% - 24px));
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1200;
+  padding: 0;
+  pointer-events: none;
+}
+
+.modalForBusy::before {
+  display: none;
+}
+
+.modalForBusy .modal-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: none;
+  min-height: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.97);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  white-space: pre-line;
+  text-align: justify;
+  h2{
+    color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 10px;
+  }
+  p{
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 35px;
+  }
+  .modal-content p {
+  white-space: pre-line;
+}
+
+}
+
+.modalForBusy.modalForBusy--nonBlocking {
+  /* kept for compatibility; base style is already non-blocking */
+}
+
+.modalForBusy.modalForBusy--nonBlocking::before {
+  display: none;
+}
+
+.modalForBusy.modalForBusy--nonBlocking .modal-content {
+  width: 100%;
+  max-width: none;
+  min-height: auto;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.97);
+}

@@ -1,0 +1,16 @@
+/* Sichtbarer Ersatz, wenn alle /Images-Hosts 404 liefern (Handy: kein kaputtes Icon). */
+.webroot-image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #5c2f0a 0%, #90490a 55%, #6b3608 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(1.25rem, 5vw, 2rem);
+  letter-spacing: 0.02em;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  box-sizing: border-box;
+  object-fit: contain;
+}

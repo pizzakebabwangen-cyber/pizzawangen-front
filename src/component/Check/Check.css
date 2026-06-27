@@ -1,0 +1,199 @@
+.checkContainer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 24px 0 40px;
+  padding-top: calc(24px + env(safe-area-inset-top, 0px));
+  gap: 0;
+  .check {
+    background-color: transparent;
+    border: 1px solid gray;
+    border-radius: 10px;
+    width: min(640px, 92%);
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* align-items: center; */
+    padding: 30px 20px;
+    margin-top: 0;
+    color: var(--primary-color);
+    .highlight {
+      text-align: start !important;
+      margin-bottom: 24px;
+      margin-top: 16px;
+      font-size: 1.5rem;
+    }
+    p {
+      color: rgb(183, 183, 183);
+    }
+    .price-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      padding: 0 30px;
+      gap: 10px;
+      p {
+        color: white;
+        font-size: 18px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+    }
+    .price-container:last-of-type {
+      border: 1px solid white;
+      padding: 10px 30px;
+      h2,
+      p {
+        color: var(--primary-color);
+      }
+    }
+    .check-agb-link {
+      color: #ffb366;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .check-agb-link:hover {
+      color: #ffd4a8;
+    }
+    label {
+      text-align: start;
+      margin-top: 16px;
+      font-size: 1.2rem;
+      color: white;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      input {
+        width: 20px;
+        height: 20px;
+        margin-top: 4px;
+        margin-right: 0;
+        flex-shrink: 0;
+      }
+    }
+    hr {
+      position: relative;
+      z-index: 0;
+      width: 80%;
+      margin: auto;
+      margin-top: 20px;
+      height: 1px;
+      border: 0;
+      background-color: var(--primary-color);
+    }
+    .check-actions {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      isolation: isolate;
+      transform: translateZ(0);
+      pointer-events: auto;
+    }
+    .btn-pay {
+      display: block;
+      margin: auto;
+      margin-top: 24px;
+      padding: 14px 18px;
+      min-height: 52px;
+      color: #fff;
+      background-color: var(--primary-color);
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: clamp(14px, 3.5vw, 18px);
+      font-weight: 800;
+      line-height: 1.25;
+      white-space: normal;
+      text-align: center;
+      hyphens: auto;
+      transition: background-color 0.2s ease, filter 0.2s ease, color 0.2s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.12);
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .check-actions .btn-pay:first-of-type {
+      margin-top: 16px;
+    }
+    .check-actions .btn-pay + .btn-pay {
+      margin-top: 10px;
+    }
+    .btn-pay:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .disable {
+      cursor: not-allowed;
+    }
+    
+  }
+}
+
+/* Kein transform-/hover-Scale auf Touch: erste Tap wird sonst oft von iOS als Hover «geschluckt». */
+@media (hover: hover) and (pointer: fine) {
+  .checkContainer .check .btn-pay:hover:not(:disabled) {
+    color: #fff;
+    filter: brightness(1.06);
+  }
+}
+
+@media only screen and (max-width: 895px) {
+  .checkContainer {
+    align-items: center;
+    gap: 24px;
+    padding: 16px 0 24px;
+    padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+  .checkContainer .check {
+    width: min(640px, 88%);
+    padding: 20px 16px;
+    /* «Grauer» Rand wirkte auf OLED wie ein heller Streifen am Kartenrand — dezenter Rand. */
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media only screen and (max-width: 695px) {
+  .checkContainer {
+    gap: 20px;
+    padding: 12px 0 20px;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+  }
+  .checkContainer .check {
+    width: min(640px, 90%);
+    padding: 16px 12px;
+  }
+  .checkContainer .check .highlight {
+    margin-bottom: 16px;
+    margin-top: 12px;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .checkContainer {
+    gap: 16px;
+    padding: 8px 0 16px;
+    padding-top: calc(8px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  .checkContainer .check {
+    width: min(640px, 94%);
+    padding: 14px 10px;
+  }
+}

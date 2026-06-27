@@ -1,0 +1,32 @@
+.menue-demo-sec .demo-badge {
+  font-size: 1.2rem;
+  color: #dac094;
+  font-weight: normal;
+}
+
+.menue-demo-sec .cards {
+  gap: 20px;
+}
+
+.menue-demo-sec .menue-load-more-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 3rem;
+}
+
+.menue-demo-sec .menue-load-more {
+  cursor: pointer;
+  border: 0;
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0d1113;
+  background-color: var(--primary-color);
+  transition: filter 0.2s ease;
+}
+
+.menue-demo-sec .menue-load-more:hover {
+  filter: brightness(1.08);
+}

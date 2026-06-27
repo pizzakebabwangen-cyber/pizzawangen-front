@@ -1,0 +1,1153 @@
+﻿diff --git a/Front/Front/src/component/CheckOutForm/CheckOutForm.css b/Front/Front/src/component/CheckOutForm/CheckOutForm.css
+index 4fad578..05ac482 100644
+--- a/Front/Front/src/component/CheckOutForm/CheckOutForm.css
++++ b/Front/Front/src/component/CheckOutForm/CheckOutForm.css
+@@ -73,7 +73,152 @@
+ 
+     .form-group textarea {
+       resize: vertical;
++      min-height: 96px;
++      max-height: 220px;
++      font-size: 16px;
++    }
++
++    .checkout-codes-row {
++      display: flex;
++      flex-wrap: wrap;
++      gap: 12px 16px;
++      margin-bottom: 15px;
++    }
++
++    .checkout-codes-row .checkout-code-field {
++      flex: 1 1 200px;
++      margin-bottom: 0;
++      min-width: 0;
++    }
++
++    .street-autocomplete-wrap {
++      position: relative;
++    }
++
++    .street-autocomplete-hint {
++      margin: 0 0 8px 0;
++      font-size: 0.85rem;
++      line-height: 1.35;
++      color: #bbb;
++    }
++
++    .street-autocomplete-nohits {
++      margin-top: 8px;
++      color: #e6c35c;
++    }
++
++    .street-autocomplete-wrap input::placeholder {
++      color: #999;
++      opacity: 1;
++    }
++
++    .street-suggestions {
++      position: absolute;
++      left: 0;
++      right: 0;
++      top: calc(100% - 6px);
++      z-index: 100;
++      max-height: 240px;
++      overflow-y: auto;
++      margin: 0;
++      padding: 0;
++      list-style: none;
++      background-color: #2a2a2a;
++      border: 1px solid #555;
++      border-radius: 5px;
++      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
++    }
++
++    .street-suggestions li {
++      padding: 10px 12px;
++      cursor: pointer;
++      color: #fff;
++      font-size: 16px;
++      line-height: 1.35;
++      border-bottom: 1px solid #3a3a3a;
++    }
++
++    .street-suggestions li:last-child {
++      border-bottom: none;
++    }
++
++    .street-suggestions li:hover {
++      background-color: rgba(255, 102, 0, 0.15);
++    }
++
++    /* Zahlungswahl: helle Karten, eigene Textfarben (nicht .form-group label { color: white }) */
++    .checkout-payment-methods {
++      display: flex;
++      flex-direction: column;
++      gap: 15px;
++      margin-top: 10px;
+     }
++
++    .checkout-payment-method {
++      display: flex;
++      align-items: center;
++      gap: 12px;
++      background-color: #fff;
++      padding: 15px;
++      border-radius: 8px;
++      border: 1px solid #ddd;
++      cursor: pointer;
++      transition: border-color 0.2s ease, box-shadow 0.2s ease;
++      outline: none;
++    }
++
++    .checkout-payment-method:hover {
++      border-color: #ffb300;
++      box-shadow: 0 4px 8px rgba(255, 154, 2, 0.2);
++    }
++
++    .checkout-payment-method.selected {
++      border: 2px solid #ff6600;
++      padding: 14px;
++      box-shadow: 0 2px 10px rgba(255, 102, 0, 0.18);
++    }
++
++    .checkout-payment-method input[type="radio"] {
++      width: 18px;
++      height: 18px;
++      flex-shrink: 0;
++      accent-color: #ff6600;
++      cursor: pointer;
++      margin: 0;
++    }
++
++    .checkout-payment-method-text {
++      display: flex;
++      flex-direction: column;
++      gap: 2px;
++      text-align: left;
++    }
++
++    .checkout-payment-line-main {
++      font-size: 16px;
++      font-weight: 700;
++      color: #222;
++    }
++
++    .checkout-payment-line-sub {
++      font-size: 13px;
++      font-weight: 500;
++      color: #555;
++    }
++
++    .checkout-payment-method.selected .checkout-payment-line-main {
++      color: #b8860b;
++    }
++
++    .checkout-payment-method.selected .checkout-payment-line-sub {
++      color: #444;
++    }
++
++    .checkout-submit-btn {
++      width: 100%;
++      margin-top: 8px;
++    }
++
+     .address-inputs {
+       display: flex;
+       justify-content: space-between;
+@@ -82,7 +227,7 @@
+         width: 32%;
+       }
+     }
+-    button {
++    .checkout-submit-btn {
+       width: 100%;
+       padding: 10px;
+       border: none;
+@@ -93,9 +238,13 @@
+       cursor: pointer;
+     }
+ 
+-    button:hover {
++    .checkout-submit-btn:hover:not(:disabled) {
+       background-color: #e65c00;
+     }
++    .checkout-submit-btn:disabled {
++      opacity: 0.55;
++      cursor: not-allowed;
++    }
+   }
+ 
+   form h2 {
+@@ -128,7 +277,7 @@
+     resize: vertical;
+   }
+ 
+-  button {
++  .checkout-submit-btn {
+     width: 100%;
+     padding: 10px;
+     border: none;
+@@ -139,7 +288,7 @@
+     cursor: pointer;
+   }
+ 
+-  button:hover {
++  .checkout-submit-btn:hover:not(:disabled) {
+     background-color: #e65c00;
+   }
+ }
+@@ -155,7 +304,7 @@
+     .check-out-container {
+       padding: 15px;
+       width: 95%;
+-      button {
++      .checkout-submit-btn {
+         font-size: 14px;
+       }
+     }
+diff --git a/Front/Front/src/component/CheckOutForm/CheckOutForm.jsx b/Front/Front/src/component/CheckOutForm/CheckOutForm.jsx
+index 94a7689..678e323 100644
+--- a/Front/Front/src/component/CheckOutForm/CheckOutForm.jsx
++++ b/Front/Front/src/component/CheckOutForm/CheckOutForm.jsx
+@@ -1,7 +1,7 @@
+ /* eslint-disable no-unused-vars */
+ import "./CheckOutForm.css";
+ import { motion } from "framer-motion";
+-import { useEffect, useState } from "react";
++import { useEffect, useMemo, useRef, useState } from "react";
+ import { useInView } from "react-intersection-observer";
+ import checkOut from "../../assets/images/checkOut.jpg";
+ import axios from "axios";
+@@ -10,8 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
+ import { useDispatch, useSelector } from "react-redux";
+ import { successCheckOut } from "../../reduxTool/AuthContext";
+ import useGetUserData from "../../hook/useGetUserData";
+-import PaymentWayModal from "./PaymentWayModal";
+ import useGetDeliveryTimes from "../../hooks/useGetDeliveryTimes";
++import { useAvailability } from "../../context/AvailabilityContext.jsx";
+ 
+ const splitPlzCity = (value) => {
+   const raw = String(value || "").trim();
+@@ -25,27 +25,190 @@ const splitPlzCity = (value) => {
+   };
+ };
+ 
++/** Antwort von cart/add ist meist ein String (VisitorId); falls Objekt, Id extrahieren. */
++const normalizeVisitorId = (raw) => {
++  if (raw == null || raw === "") return "";
++  if (typeof raw === "string") return raw.trim();
++  if (typeof raw === "object") {
++    const v =
++      raw.userId ??
++      raw.UserId ??
++      raw.visitorId ??
++      raw.VisitorId;
++    if (typeof v === "string" && v.trim()) return v.trim();
++  }
++  return String(raw).trim();
++};
++
++/** Gleiche Keys wie DeliveryMethod / ShoppingCart ظ¤ Kontext f├╝r Strassensuche */
++const LS_DELIVERY_POSTCODE = "wangen-delivery-postcode";
++const LS_DELIVERY_CITY = "wangen-delivery-city";
++
++/** Suchstring f├╝r Photon: Strasse + PLZ + Ort (sonst findet z. B. ظئkanظ£ fast nichts) */
++const buildStreetSearchQuery = (streetTyped, postBox, cityField) => {
++  const q = String(streetTyped || "").trim();
++  let plz = String(postBox || "").trim();
++  let ort = String(cityField || "").trim();
++  if ((!plz || !ort) && typeof localStorage !== "undefined") {
++    const combined = (localStorage.getItem(LS_DELIVERY_CITY) || "").trim();
++    if (combined) {
++      const p = splitPlzCity(combined);
++      if (!plz) plz = p.postBox;
++      if (!ort) ort = p.city || ort;
++    }
++    if (!plz) {
++      const fromPc = (localStorage.getItem(LS_DELIVERY_POSTCODE) || "").match(/\d{4}/);
++      if (fromPc) plz = fromPc[0];
++    }
++  }
++  const tail = [plz, ort].filter(Boolean).join(" ").trim();
++  if (!tail) return q;
++  return `${q} ${tail}`.trim();
++};
++
++/** Photon (Komoot) ظ¤ nur Schweiz: enge Bounding-Box + Filter auf countrycode CH */
++const CH_PHOTON_BBOX = "5.95,45.78,10.52,47.84";
++const PHOTON_AUTOCOMPLETE = (q) =>
++  `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=50&lang=de&bbox=${CH_PHOTON_BBOX}`;
++
++/** St├جdte/D├╢rfer ausschliessen ظ¤ nur Strassen, H├جuser, benannte Wege (highway) */
++const PHOTON_PLACE_ONLY_TYPES = new Set([
++  "city",
++  "town",
++  "village",
++  "hamlet",
++  "municipality",
++  "suburb",
++  "neighbourhood",
++  "quarter",
++  "locality",
++  "district",
++  "county",
++  "state",
++  "country",
++  "region",
++  "postcode",
++]);
++
++const isPhotonStreetLevelFeature = (feature) => {
++  const p = feature?.properties || {};
++  const type = String(p.type || "").toLowerCase();
++  const hasStreet = String(p.street || "").trim().length > 0;
++  const hasHousenumber = String(p.housenumber || "").trim().length > 0;
++
++  if (hasStreet || hasHousenumber) return true;
++  if (type === "street" || type === "house") return true;
++  const osmKey = String(p.osm_key || "").toLowerCase();
++  if (osmKey === "highway" && String(p.name || "").trim()) return true;
++
++  if (PHOTON_PLACE_ONLY_TYPES.has(type)) return false;
++
++  return false;
++};
++
++const photonStreetResultRank = (feature) => {
++  const p = feature?.properties || {};
++  if (String(p.housenumber || "").trim()) return 0;
++  if (String(p.street || "").trim()) return 1;
++  if (String(p.type || "").toLowerCase() === "street") return 2;
++  return 3;
++};
++
++const CH_LON_LAT = { minLon: 5.95, maxLon: 10.52, minLat: 45.78, maxLat: 47.84 };
++
++const isPhotonFeatureSwitzerland = (feature) => {
++  const p = feature?.properties || {};
++  const cc = String(p.countrycode || p.country_code || "").toLowerCase();
++  if (cc === "li") return false;
++  if (cc === "ch") return true;
++  const country = String(p.country || "").toLowerCase();
++  if (country === "liechtenstein") return false;
++  if (
++    country === "switzerland" ||
++    country === "schweiz" ||
++    country === "suisse" ||
++    country === "svizzera"
++  ) {
++    return true;
++  }
++  const coords = feature?.geometry?.coordinates;
++  if (Array.isArray(coords) && coords.length >= 2) {
++    const lon = Number(coords[0]);
++    const lat = Number(coords[1]);
++    if (
++      lon >= CH_LON_LAT.minLon &&
++      lon <= CH_LON_LAT.maxLon &&
++      lat >= CH_LON_LAT.minLat &&
++      lat <= CH_LON_LAT.maxLat
++    ) {
++      return true;
++    }
++  }
++  return false;
++};
++
++const photonFeatureToAddress = (feature) => {
++  const p = feature?.properties || {};
++  const locality =
++    p.city ||
++    p.town ||
++    p.village ||
++    p.district ||
++    p.locality ||
++    "";
++  const pc = String(p.postcode || "").trim();
++  const hn = String(p.housenumber || "").trim();
++  const st = String(p.street || "").trim();
++  let line1 = [hn, st].filter(Boolean).join(" ").trim();
++  if (!line1 && String(p.osm_key || "").toLowerCase() === "highway" && p.name) {
++    line1 = String(p.name).trim();
++  }
++  if (!line1 && p.name && String(p.type || "").toLowerCase() === "street") {
++    line1 = String(p.name).trim();
++  }
++  const plzOrt = [pc, locality].filter(Boolean).join(" ").trim();
++  const label = [line1, plzOrt].filter(Boolean).join(" ┬╖ ") || plzOrt || line1;
++  return { line1, postBox: pc, plzOrt, label };
++};
++
+ const CheckOutForm = () => {
+   const { ref, inView } = useInView({
+     triggerOnce: true,
+     threshold: 0.1,
+   });
+ 
+-  const server = import.meta.env.VITE_SERVER;
+   const navigate = useNavigate();
+   const dispatch = useDispatch();
+   const location = useLocation();
+   const [sending, setSending] = useState(false);
+-  const [openPaymentModal, setOpenPaymentModal] = useState(false);
+   const [errors, setErrors] = useState({});
+   const [deliveryTimeOption, setDeliveryTimeOption] = useState("1");
+   const { userData, getUserData } = useGetUserData();
+-  const { getDeliveryTimes, times, isAvailable, message } = useGetDeliveryTimes();
++  const { getDeliveryTimes, times, isAvailable: timesApiOk, message } = useGetDeliveryTimes();
++  const {
++    isAvailable: deliveryNow,
++    isPickupAvailable: pickupNow,
++    isPreorderAllowed,
++    ready: availReady,
++    message: availMessage,
++  } = useAvailability();
++  const deliverMethod = useSelector((state) => state.delivery.deliverMethod);
++  const isCollect = deliverMethod === "collect";
++  const needsWunschzeit =
++    availReady &&
++    isPreorderAllowed &&
++    ((!isCollect && !deliveryNow) || (isCollect && !pickupNow));
+   const [isLoading, setIsLoading] = useState(false);
++  const [selectedPayment, setSelectedPayment] = useState("1");
+   const [sent, setSent] = useState(false);
+   const { isCheckedOut } = useSelector((state) => state.Auth);
+ 
+-  const userId = location.state?.response;
++  const [streetSuggestions, setStreetSuggestions] = useState([]);
++  const [streetSuggestOpen, setStreetSuggestOpen] = useState(false);
++  const [streetSearchNoHits, setStreetSearchNoHits] = useState(false);
++  const skipStreetFetchRef = useRef(false);
++
++  const visitorId = normalizeVisitorId(location.state?.response);
+   const addressCity = location.state?.city;
+   const parsedAddressCity = splitPlzCity(addressCity);
+ 
+@@ -53,20 +216,33 @@ const CheckOutForm = () => {
+     getUserData();
+   }, []);
+ 
++  useEffect(() => {
++    const raw = (location.hash || "").replace(/^#/, "");
++    if (raw !== "gutschein-einloesen" && raw !== "gutscheinCode") return;
++    const run = () => {
++      const row = document.getElementById("gutschein-einloesen");
++      const input = document.getElementById("gutscheinCode");
++      (row || input)?.scrollIntoView?.({ behavior: "smooth", block: "center" });
++      input?.focus?.({ preventScroll: true });
++    };
++    window.requestAnimationFrame(run);
++  }, [location.hash, location.pathname]);
++
+   const userName = localStorage.getItem("userName");
+   const [formData, setFormData] = useState({
+-    userId: userId || "",
++    userId: visitorId || "",
+     salute: userData?.salute || "",
+     name: userName || "",
+     street: userData?.street || "",
+     city: parsedAddressCity.city || "",
+     postBox: parsedAddressCity.postBox || userData?.postBox || "",
++    gutscheinCode: "",
+     discountCode: "",
+     notes: "",
+     deliveryTime: "so schnell wie m├╢glich",
+     email: userData?.email || "",
+     mobile: userData?.phoneNumber || "",
+-    paymentWay: 0,
++    paymentWay: 1, // Default: Barzahlung
+   });
+ 
+   useEffect(() => {
+@@ -81,16 +257,146 @@ const CheckOutForm = () => {
+     }));
+   }, [addressCity, userData]);
+ 
++  useEffect(() => {
++    const vid = normalizeVisitorId(location.state?.response);
++    if (vid) {
++      setFormData((prev) => ({ ...prev, userId: vid }));
++    }
++  }, [location.state?.response]);
++
++  useEffect(() => {
++    if (!needsWunschzeit || deliveryTimeOption !== "1") return;
++    setDeliveryTimeOption("2");
++    setFormData((prev) => ({ ...prev, deliveryTime: "" }));
++    getDeliveryTimes();
++    // eslint-disable-next-line react-hooks/exhaustive-deps -- getDeliveryTimes ist pro Render neu
++  }, [needsWunschzeit, deliverMethod, deliveryTimeOption]);
++
+   useEffect(() => {
+     if (deliveryTimeOption === "2") {
+       getDeliveryTimes();
+     }
+   }, [deliveryTimeOption]);
+ 
++  const getTimeValue = (t) =>
++    typeof t === "string" ? t : (t?.value ?? t?.Value ?? t?.time ?? t?.Time ?? "");
++
++  const slotList = useMemo(() => (Array.isArray(times) ? times : []), [times]);
++
++  const isClockDeliveryTime = (v) => /^\d{1,2}:\d{2}$/.test(String(v || ""));
++  const timeOkForWishOption =
++    deliveryTimeOption !== "2" ||
++    (isClockDeliveryTime(formData.deliveryTime) && timesApiOk);
++
++  /** Fehlende Uhrzeit mit erstem Slot f├╝llen, sobald die API-Zeiten da sind. */
++  useEffect(() => {
++    if (deliveryTimeOption !== "2" || !slotList.length) return;
++    const firstTime = getTimeValue(slotList[0]);
++    const current = formData.deliveryTime || "";
++    const isValidClock = /^\d{1,2}:\d{2}$/.test(current);
++    if (!firstTime) return;
++    if (!current || !isValidClock) {
++      setFormData((prev) => ({ ...prev, deliveryTime: firstTime }));
++    }
++  }, [deliveryTimeOption, slotList]);
++
+   const handleChange = (e) => {
+     setFormData({ ...formData, [e.target.name]: e.target.value });
+   };
+ 
++  const handleStreetChange = (e) => {
++    skipStreetFetchRef.current = false;
++    setStreetSuggestOpen(true);
++    handleChange(e);
++  };
++
++  useEffect(() => {
++    const q = String(formData.street || "").trim();
++    if (skipStreetFetchRef.current) {
++      skipStreetFetchRef.current = false;
++      return;
++    }
++    if (q.length < 3) {
++      setStreetSuggestions([]);
++      setStreetSuggestOpen(false);
++      setStreetSearchNoHits(false);
++      return;
++    }
++    const searchQuery = buildStreetSearchQuery(
++      q,
++      formData.postBox,
++      formData.city
++    );
++    const ctrl = new AbortController();
++    const t = setTimeout(async () => {
++      try {
++        setStreetSearchNoHits(false);
++        const res = await fetch(PHOTON_AUTOCOMPLETE(searchQuery), {
++          signal: ctrl.signal,
++        });
++        if (!res.ok) return;
++        const data = await res.json();
++        const raw = Array.isArray(data?.features) ? data.features : [];
++        const list = raw
++          .filter(isPhotonFeatureSwitzerland)
++          .filter(isPhotonStreetLevelFeature)
++          .sort((a, b) => photonStreetResultRank(a) - photonStreetResultRank(b))
++          .slice(0, 8);
++        setStreetSuggestions(list);
++        setStreetSuggestOpen(list.length > 0);
++        setStreetSearchNoHits(list.length === 0);
++      } catch (e) {
++        if (e?.name !== "AbortError") {
++          setStreetSuggestions([]);
++          setStreetSuggestOpen(false);
++          setStreetSearchNoHits(false);
++        }
++      }
++    }, 400);
++    return () => {
++      clearTimeout(t);
++      ctrl.abort();
++    };
++  }, [formData.street, formData.postBox, formData.city]);
++
++  const applyStreetSuggestion = (feature) => {
++    const { line1, postBox, plzOrt } = photonFeatureToAddress(feature);
++    skipStreetFetchRef.current = true;
++    setStreetSuggestions([]);
++    setStreetSuggestOpen(false);
++    setStreetSearchNoHits(false);
++    setFormData((prev) => ({
++      ...prev,
++      street: line1 || prev.street,
++      postBox: postBox || prev.postBox,
++      city: plzOrt || prev.city,
++    }));
++  };
++
++  // Handle radio button change
++  const handleDeliveryOptionChange = (option) => {
++    if (option === "1" && needsWunschzeit) {
++      toast.error("Bitte w├جhlen Sie eine Wunschzeit");
++      return;
++    }
++    
++    if (option === "2") {
++      getDeliveryTimes();
++      const firstTime = getTimeValue((Array.isArray(times) ? times : [])[0]);
++      const validTime = firstTime && /^\d{1,2}:\d{2}$/.test(String(firstTime)) ? firstTime : "";
++      setFormData((prev) => ({
++        ...prev,
++        deliveryTime: validTime || "",
++      }));
++    } else {
++      setFormData((prev) => ({
++        ...prev,
++        deliveryTime: "so schnell wie m├╢glich",
++      }));
++    }
++    setDeliveryTimeOption(option);
++  };
++
+   return (
+     <motion.div
+       ref={ref}
+@@ -140,16 +446,50 @@ const CheckOutForm = () => {
+               {errors.name && <div style={{ color: "red" }}>{errors.name}</div>}
+             </div>
+ 
+-            {/* --- street --- */}
+-            <div className="form-group">
++            {/* --- street (Autocomplete Adresse, CH) --- */}
++            <div className="form-group street-autocomplete-wrap">
+               <label htmlFor="street">Strasse:</label>
++              <p className="street-autocomplete-hint">Strasse tippen (mind. 3 Zeichen)</p>
+               <input
+                 type="text"
+                 id="street"
+                 name="street"
++                autoComplete="off"
++                placeholder="z. B. Hauptstrasse 12 Wangen"
+                 value={formData.street}
+-                onChange={handleChange}
++                onChange={handleStreetChange}
++                onFocus={() => {
++                  if (streetSuggestions.length) setStreetSuggestOpen(true);
++                }}
++                onBlur={() => {
++                  window.setTimeout(() => setStreetSuggestOpen(false), 200);
++                }}
+               />
++              {streetSuggestOpen && streetSuggestions.length > 0 && (
++                <ul className="street-suggestions" role="listbox">
++                  {streetSuggestions.map((f, idx) => {
++                    const { label } = photonFeatureToAddress(f);
++                    return (
++                      <li
++                        key={`${f?.properties?.osm_id ?? idx}-${idx}`}
++                        role="option"
++                        tabIndex={0}
++                        onMouseDown={(e) => e.preventDefault()}
++                        onClick={() => applyStreetSuggestion(f)}
++                      >
++                        {label}
++                      </li>
++                    );
++                  })}
++                </ul>
++              )}
++              {streetSearchNoHits && (
++                <p className="street-autocomplete-hint street-autocomplete-nohits">
++                  Keine Vorschl├جge ظ¤ weiter tippen oder Strasse und PLZ/Ort manuell pr├╝fen. Wenn die
++                  Liste leer bleibt, pr├╝fen Sie die Netzwerkverbindung (Vorschl├جge kommen von einer
++                  externen Adress-Datenbank).
++                </p>
++              )}
+               {errors.street && <div style={{ color: "red" }}>{errors.street}</div>}
+             </div>
+ 
+@@ -166,17 +506,31 @@ const CheckOutForm = () => {
+               {errors.city && <div style={{ color: "red" }}>{errors.city}</div>}
+             </div>
+ 
+-            {/* --- discount --- */}
+-            <div className="form-group">
+-              <label htmlFor="discountCode">Rabattcode:</label>
+-              <input
+-                type="text"
+-                id="discountCode"
+-                name="discountCode"
+-                placeholder="Code eingeben"
+-                onChange={handleChange}
+-                value={formData.discountCode}
+-              />
++            {/* --- Gutschein + Rabatt (eine Zeile auf Desktop) --- */}
++            <div className="checkout-codes-row" id="gutschein-einloesen">
++              <div className="form-group checkout-code-field">
++                <label htmlFor="gutscheinCode">Gutschein-Code:</label>
++                <input
++                  type="text"
++                  id="gutscheinCode"
++                  name="gutscheinCode"
++                  placeholder="optional"
++                  autoComplete="off"
++                  onChange={handleChange}
++                  value={formData.gutscheinCode}
++                />
++              </div>
++              <div className="form-group checkout-code-field">
++                <label htmlFor="discountCode">Rabattcode:</label>
++                <input
++                  type="text"
++                  id="discountCode"
++                  name="discountCode"
++                  placeholder="Code eingeben"
++                  onChange={handleChange}
++                  value={formData.discountCode}
++                />
++              </div>
+             </div>
+ 
+             {/* --- email --- */}
+@@ -215,20 +569,15 @@ const CheckOutForm = () => {
+               </label>
+ 
+ <div style={{ display: "flex", gap: "20px", marginTop: "8px" }}>
+-  <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
++  <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: needsWunschzeit ? "not-allowed" : "pointer", opacity: needsWunschzeit ? 0.5 : 1 }}>
+     <input
+       type="radio"
+       name="deliveryOption"
+       value="1"
+       checked={deliveryTimeOption === "1"}
+       required
+-      onChange={() => {
+-        setFormData((prev) => ({
+-          ...prev,
+-          deliveryTime: "so schnell wie m├╢glich",
+-        }));
+-        setDeliveryTimeOption("1");
+-      }}
++      disabled={needsWunschzeit}
++      onChange={() => handleDeliveryOptionChange("1")}
+       style={{
+         width: "18px",
+         height: "18px",
+@@ -245,13 +594,7 @@ const CheckOutForm = () => {
+       name="deliveryOption"
+       value="2"
+       checked={deliveryTimeOption === "2"}
+-      onChange={() => {
+-        setDeliveryTimeOption("2");
+-        setFormData((prev) => ({
+-          ...prev,
+-          deliveryTime: times[0]?.value,
+-        }));
+-      }}
++      onChange={() => handleDeliveryOptionChange("2")}
+       style={{
+         width: "18px",
+         height: "18px",
+@@ -263,36 +606,60 @@ const CheckOutForm = () => {
+   </label>
+ </div>
+ 
++            {needsWunschzeit && (
++              <p className="notAvailableToOrder" style={{ 
++                backgroundColor: "#fff3cd", 
++                border: "1px solid #ffc107",
++                padding: "10px",
++                borderRadius: "5px",
++                marginTop: "10px"
++              }}>
++                {availMessage ||
++                  "Bitte w├جhlen Sie eine Wunschzeit (Vorbestellung)."}
++              </p>
++            )}
+ 
+-              {!isAvailable && message && (
+-                <p className="notAvailableToOrder">{message}</p>
+-              )}
++            {/* Show message from API if any */}
++            {(!needsWunschzeit || deliveryTimeOption === "2") && message && (
++              <p className="notAvailableToOrder">{message}</p>
++            )}
+ 
+               {deliveryTimeOption === "2" && (
+-                <select
+-                  name="deliveryTime"
+-                  required
+-                  value={formData.deliveryTime || ""}
+-                  onChange={(e) =>
+-                    setFormData((prev) => ({
+-                      ...prev,
+-                      deliveryTime: e.target.value,
+-                    }))
+-                  }
+-                  style={{
+-                    marginTop: "10px",
+-                    padding: "6px",
+-                    borderRadius: "8px",
+-                    border: "1px solid #ccc",
+-                  }}
+-                >
+-                  {times &&
+-                    times.map((t, idx) => (
+-                      <option key={idx} value={t.value}>
+-                        {t.value}
+-                      </option>
+-                    ))}
+-                </select>
++                <>
++                  <select
++                    name="deliveryTime"
++                    required
++                    value={
++                      isClockDeliveryTime(formData.deliveryTime)
++                        ? formData.deliveryTime
++                        : ""
++                    }
++                    onChange={(e) =>
++                      setFormData((prev) => ({
++                        ...prev,
++                        deliveryTime: e.target.value,
++                      }))
++                    }
++                    style={{
++                      marginTop: "10px",
++                      padding: "6px",
++                      borderRadius: "8px",
++                      border: "1px solid #ccc",
++                    }}
++                    disabled={!slotList.length}
++                  >
++                    <option value="">{slotList.length ? "Uhrzeit w├جhlen..." : "Laden..."}</option>
++                    {slotList.map((t, idx) => {
++                      const timeVal = getTimeValue(t);
++                      if (!timeVal || !/^\d{1,2}:\d{2}$/.test(String(timeVal))) return null;
++                      return (
++                        <option key={idx} value={timeVal}>
++                          {timeVal} Uhr
++                        </option>
++                      );
++                    })}
++                  </select>
++                </>
+               )}
+             </div>
+ 
+@@ -302,17 +669,87 @@ const CheckOutForm = () => {
+               <textarea
+                 id="notes"
+                 name="notes"
++                rows={4}
++                placeholder="Optional"
+                 onChange={handleChange}
+                 value={formData.notes}
+-              ></textarea>
++              />
++            </div>
++
++            {/* --- Zahlungsmethode (wie PaymentWay-Modal: volle Breite, dunkle Schrift) --- */}
++            <div className="form-group checkout-payment-group">
++              <label>Zahlungsmethode:</label>
++              <div
++                className="checkout-payment-methods"
++                role="radiogroup"
++                aria-label="Zahlungsmethode"
++              >
++                <div
++                  className={`checkout-payment-method ${selectedPayment === "1" ? "selected" : ""}`}
++                  role="radio"
++                  aria-checked={selectedPayment === "1"}
++                  tabIndex={0}
++                  onClick={() => setSelectedPayment("1")}
++                  onKeyDown={(e) => {
++                    if (e.key === "Enter" || e.key === " ") {
++                      e.preventDefault();
++                      setSelectedPayment("1");
++                    }
++                  }}
++                >
++                  <input
++                    type="radio"
++                    name="paymentMethod"
++                    value="1"
++                    checked={selectedPayment === "1"}
++                    onChange={() => setSelectedPayment("1")}
++                    onClick={(e) => e.stopPropagation()}
++                  />
++                  <div className="checkout-payment-method-text">
++                    <span className="checkout-payment-line-main">Barzahlung</span>
++                    <span className="checkout-payment-line-sub">Bar / Kasse</span>
++                  </div>
++                </div>
++
++                <div
++                  className={`checkout-payment-method ${selectedPayment === "2" ? "selected" : ""}`}
++                  role="radio"
++                  aria-checked={selectedPayment === "2"}
++                  tabIndex={0}
++                  onClick={() => setSelectedPayment("2")}
++                  onKeyDown={(e) => {
++                    if (e.key === "Enter" || e.key === " ") {
++                      e.preventDefault();
++                      setSelectedPayment("2");
++                    }
++                  }}
++                >
++                  <input
++                    type="radio"
++                    name="paymentMethod"
++                    value="2"
++                    checked={selectedPayment === "2"}
++                    onChange={() => setSelectedPayment("2")}
++                    onClick={(e) => e.stopPropagation()}
++                  />
++                  <div className="checkout-payment-method-text">
++                    <span className="checkout-payment-line-main">Online Zahlung</span>
++                    <span className="checkout-payment-line-sub">Twint / Visa / PFPay</span>
++                  </div>
++                </div>
++              </div>
+             </div>
+ 
+             {/* --- submit button --- */}
+             <button
+-              type="button"
+-              disabled={!isAvailable && deliveryTimeOption === "2"}
++                type="button"
++                className="checkout-submit-btn"
++                disabled={sending}
+               onClick={() => {
+                 const newErrors = {};
++                if (!formData.salute || String(formData.salute).trim() === "") {
++                  newErrors.salute = "Anrede fehlt";
++                }
+                 if (formData.name.trim() === "") {
+                   newErrors.name = "Name fehlt";
+                 }
+@@ -338,22 +775,85 @@ const CheckOutForm = () => {
+ 
+                 if (Object.keys(newErrors).length > 0) {
+                   setErrors(newErrors);
+-                } else {
+-                  setErrors({});
+-                  setOpenPaymentModal(true);
++                  return;
++                }
++
++                if (deliveryTimeOption === "2") {
++                  if (!isClockDeliveryTime(formData.deliveryTime)) {
++                    toast.error("Bitte eine Wunschzeit w├جhlen.");
++                    return;
++                  }
++                  if (!slotList.length) {
++                    toast.error("Keine Lieferzeiten verf├╝gbar. Bitte Seite neu laden.");
++                    return;
++                  }
+                 }
++
++                const uid = normalizeVisitorId(formData.userId);
++                if (!uid) {
++                  toast.error("Sitzung abgelaufen. Bitte erneut ├╝ber den Warenkorb zur Kasse gehen.");
++                  navigate("/cart");
++                  return;
++                }
++
++                setErrors({});
++                setSending(true);
++                const server = import.meta.env.VITE_SERVER;
++                const rawTime = (formData.deliveryTime ?? "").trim();
++                let dTime = rawTime;
++                const isClock = /^\d{1,2}:\d{2}$/.test(dTime);
++                const isAsap = dTime.toLowerCase() === "so schnell wie m├╢glich";
++                if (!isClock && !isAsap) {
++                  dTime = "so schnell wie m├╢glich";
++                }
++                const payload = {
++                  ...formData,
++                  userId: uid,
++                  paymentWay: parseInt(selectedPayment, 10),
++                  deliveryTime: dTime,
++                  DeliveryTime: dTime,
++                };
++                axios
++                  .post(`${server}/api/Cart/order`, payload, {
++                    headers: { "Content-Type": "application/json" },
++                    withCredentials: true,
++                  })
++                  .then((response) => {
++                    const ok = response.status >= 200 && response.status < 300;
++                    if (!ok) return;
++                    const body = response.data;
++                    const data = body?.data ?? body?.Data;
++                    const orderId = data?.id ?? data?.Id;
++                    if (orderId == null || orderId === "") {
++                      toast.error("Bestellnummer fehlt. Bitte erneut versuchen.");
++                      return;
++                    }
++                    toast.success("Bestellung erfasst!");
++                    dispatch(successCheckOut());
++                    try {
++                      sessionStorage.setItem("wangen_paymentResponse", JSON.stringify(body));
++                    } catch (_) {}
++                    navigate("/cart/checkOut/payment", { state: { response: body } });
++                  })
++                  .catch((err) => {
++                    console.error("Order error:", err);
++                    const d = err?.response?.data;
++                    const msg =
++                      (typeof d === "string" && d) ||
++                      d?.message ||
++                      d?.Message ||
++                      d?.title ||
++                      "Bestellung fehlgeschlagen.";
++                    toast.error(msg);
++                  })
++                  .finally(() => {
++                    setSending(false);
++                  });
+               }}
+             >
+-              {sending ? "Weiter..." : "Zur Kasse"}
++              {sending ? "Bestellen..." : "Bestellen"}
+             </button>
+           </form>
+-
+-          {/* --- Payment Modal --- */}
+-          <PaymentWayModal
+-            open={openPaymentModal}
+-            onClose={() => setOpenPaymentModal(false)}
+-            formData={formData}
+-          />
+         </div>
+       </div>
+     </motion.div>
+diff --git a/Front/Front/src/component/ProtectedRoute/ProtectedRoute.jsx b/Front/Front/src/component/ProtectedRoute/ProtectedRoute.jsx
+index 39bccec..6488138 100644
+--- a/Front/Front/src/component/ProtectedRoute/ProtectedRoute.jsx
++++ b/Front/Front/src/component/ProtectedRoute/ProtectedRoute.jsx
+@@ -1,12 +1,16 @@
+ /* eslint-disable no-unused-vars */
+ /* eslint-disable react/prop-types */
+ // import React from 'react'
+-import { Navigate } from "react-router-dom";
+-export const ProtectedRoute = ({element: Component,isAllowed,redirectPath}) => {
+-  if (!isAllowed) {
+-    return <Navigate to={redirectPath} />;
++import { Navigate, useLocation } from "react-router-dom";
++
++/** Erlaubt Kasse nach erfolgreichem cart/add ظ¤ location.state ist sofort da, isAllowed-State evtl. noch nicht. */
++export const ProtectedRoute = ({ element: Component, isAllowed, redirectPath }) => {
++  const location = useLocation();
++  const unlocked =
++    Boolean(isAllowed) || location.state?.checkoutUnlocked === true;
++
++  if (!unlocked) {
++    return <Navigate to={redirectPath} replace />;
+   }
+-  return(
+-     <Component />
+-    );
++  return <Component />;
+ };
+diff --git a/Front/Front/src/component/ShoppingCart/ShoppingCart.jsx b/Front/Front/src/component/ShoppingCart/ShoppingCart.jsx
+index 4f71115..087ae0c 100644
+--- a/Front/Front/src/component/ShoppingCart/ShoppingCart.jsx
++++ b/Front/Front/src/component/ShoppingCart/ShoppingCart.jsx
+@@ -24,6 +24,23 @@ const extractPlz = (value) => {
+   return m ? m[0] : "";
+ };
+ 
++const isDeliveryOrPreorder = (method) =>
++  method === "delivery" || method === "vorbestellung";
++
++/** API erwartet CartItemDto; Wertgutschein-Zeilen per Flag + Betrag (kein DB-Produkt mit Frontend-String-Id). */
++const mapCartItemsForApi = (items) =>
++  (Array.isArray(items) ? items : []).map((it) => {
++    const isGutschein = Boolean(it.isGutschein);
++    const betrag = Number(it.price ?? it.pickup_Price ?? 0);
++    return {
++      productId: typeof it.productId === "number" ? it.productId : 0,
++      quantity: Number(it.quantity || 1),
++      extensions: Array.isArray(it.extensions) ? it.extensions : [],
++      isWertgutschein: isGutschein,
++      wertgutscheinBetragChf: isGutschein ? betrag : null,
++    };
++  });
++
+ const ShoppingCart = ({ setCheckoutAllowed }) => {
+   const [selectedCity, setSelectedCity] = useState("");
+   const [minimumOrderAb, setMinimumOrderAb] = useState("");
+@@ -43,11 +60,19 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
+     e.preventDefault();
+     setSending(true);
+     try {
+-      const response = await axios.post(`${server}/api/Cart/cart/add`, cart);
+-      if (response.status === 200) {
++      const response = await axios.post(
++        `${server}/api/Cart/cart/add`,
++        { items: mapCartItemsForApi(cart.items) },
++        { withCredentials: true }
++      );
++      if (response.status >= 200 && response.status < 300) {
+         setCheckoutAllowed(true);
+         navigate("/cart/checkOut", {
+-          state: { response: response.data, city: selectedCity },
++          state: {
++            response: response.data,
++            city: selectedCity,
++            checkoutUnlocked: true,
++          },
+         });
+         toast.success("success");
+       }
+@@ -62,11 +87,19 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
+     e.preventDefault();
+     setSending(true);
+     try {
+-      const response = await axios.post(`${server}/api/Cart/pickup_cart/add`, cart);
++      const response = await axios.post(
++        `${server}/api/Cart/pickup_cart/add`,
++        { items: mapCartItemsForApi(cart.items) },
++        { withCredentials: true }
++      );
+       toast.success("success");
+       setCheckoutAllowed(true);
+       navigate("/cart/checkOut", {
+-        state: { response: response.data, city: selectedCity },
++        state: {
++          response: response.data,
++          city: selectedCity,
++          checkoutUnlocked: true,
++        },
+       });
+     } catch (err) {
+       toast.error("Failed to send");
+@@ -92,7 +125,7 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
+   }, []);
+ 
+   useEffect(() => {
+-    if (deliverMethod !== "delivery") {
++    if (!isDeliveryOrPreorder(deliverMethod)) {
+       setSelectedCity("");
+       setMinimumOrderAb("");
+       return;
+@@ -122,7 +155,7 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
+     <div className="cart-container">
+       <div className="title">
+         <h1 className="highlight">Pizza Wangen</h1>
+-        {cartItemsCount > 0 && deliverMethod === "delivery" && (
++        {cartItemsCount > 0 && isDeliveryOrPreorder(deliverMethod) && (
+           <p className="delivery-city-readonly">
+             {selectedCity
+               ? `Liefer-PLZ: ${selectedCity}`
+@@ -140,10 +173,10 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
+         <>
+           <CartMeals
+             data={cart}
+-            withDelivery={deliverMethod === "delivery" ? true : false}
++            withDelivery={isDeliveryOrPreorder(deliverMethod)}
+             minimumOrderAb={minimumOrderAb}
+             sending={sending}
+-            handleOrderClick={deliverMethod === "delivery" ? handleOrderClick: handleOrderClickWithoutDelivery}
++            handleOrderClick={deliverMethod === "collect" ? handleOrderClickWithoutDelivery : handleOrderClick}
+           />
+         </>
+       )}

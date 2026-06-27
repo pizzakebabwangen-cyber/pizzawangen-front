@@ -1,0 +1,33 @@
+ Volume in Laufwerk C: hat keine Bezeichnung.
+ Volumeseriennummer: 40B0-D040
+
+ Verzeichnis von C:\Users\adnan\Desktop\PizzaWangen-alles\Front\dist\assets
+
+20.05.2026  01:04    <DIR>          .
+20.05.2026  01:05    <DIR>          ..
+20.05.2026  01:04         1'626'962 08-DjtOqnNY.png
+20.05.2026  01:04            56'999 85a30340-f824-4e4a-b2a5-c5d808affecc-CQ9wNsbh.png
+20.05.2026  01:04           372'037 aboutimage (2)-CN7H4tlg.png
+20.05.2026  01:04           393'711 bg11-BBxUncj0.jpg
+20.05.2026  01:04           941'155 checkOut-BQSpRhZA.jpg
+20.05.2026  01:04            31'777 emptyCart-Nsa1qgLr.png
+20.05.2026  01:04            14'501 Facebook-Cz1DbcoK.jpg
+20.05.2026  01:04           253'762 garage1-CKv6nGdi.png
+20.05.2026  01:04           210'471 garage2-BBas3cy3.png
+20.05.2026  01:04           225'238 garage3-B7LaCs0-.png
+20.05.2026  01:04           526'002 Image001-Ccp2lfC6.png
+20.05.2026  01:04           353'875 Image002-Bwb2vphz.png
+20.05.2026  01:04           481'065 Image003-BRyvtLf5.png
+20.05.2026  01:04           107'418 index-Cvjc53Vc.css
+20.05.2026  01:04           985'871 index-fpQ1_J6U.js
+20.05.2026  01:04             7'492 instgram-BG8DZ92q.jpg
+20.05.2026  01:04         1'631'792 paner-DylGX3QO.png
+20.05.2026  01:04           148'568 panerBoy-CvMRuiyJ.jpg
+20.05.2026  01:04           845'865 pizza1-DoOW5LUS.jpg
+20.05.2026  01:04           469'658 pizza2-Cwlpi0GJ.jpg
+20.05.2026  01:04         1'056'426 pizza3-Ce1zrJ3c.jpg
+20.05.2026  01:04           350'777 pizza4-qZMZkm9b.jpg
+20.05.2026  01:04             9'289 TwentImage-CtH2mJUO.png
+20.05.2026  01:04            16'278 Twitter-DGpA0o4R.jpg
+              24 Datei(en),     11'116'989 Bytes
+               2 Verzeichnis(se), 815'128'608'768 Bytes frei

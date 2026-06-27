@@ -1,0 +1,138 @@
+.restaurant-page {
+  padding: 24px 16px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+  color: #f5f5f5;
+}
+
+.restaurant-title {
+  text-align: center;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  margin: 24px 0 12px;
+}
+
+.restaurant-intro {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 28px;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+.restaurant-loading,
+.restaurant-empty {
+  text-align: center;
+  opacity: 0.8;
+  margin: 24px 0;
+}
+
+.restaurant-hero-media {
+  margin: 0 auto 28px;
+  max-width: 960px;
+}
+
+.restaurant-hero-img {
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+
+.restaurant-hero-caption {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.restaurant-video-wrap {
+  max-width: 960px;
+  margin: 0 auto 32px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #111;
+}
+
+.restaurant-video-wrap iframe,
+.restaurant-video-wrap video {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.restaurant-gallery-heading {
+  text-align: center;
+  color: var(--primary-color, #e8a54b);
+  margin-bottom: 20px;
+}
+
+.restaurant-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.restaurant-gallery-item {
+  margin: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.restaurant-gallery-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.restaurant-gallery-item figcaption {
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.restaurant-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 36px 0 24px;
+}
+
+.restaurant-cta-btn {
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--primary-color, #c9923f);
+  color: #111;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.restaurant-cta-btn.secondary {
+  background: transparent;
+  color: var(--primary-color, #e8a54b);
+  border: 2px solid var(--primary-color, #c9923f);
+}
+
+@media (max-width: 768px) {
+  .restaurant-gallery-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 8px;
+  }
+
+  .restaurant-gallery-item {
+    flex: 0 0 82%;
+    max-width: 82%;
+    scroll-snap-align: center;
+  }
+
+  .restaurant-gallery-img {
+    height: 200px;
+  }
+}

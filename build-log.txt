@@ -1,0 +1,40 @@
+
+> vite-project@0.0.0 build
+> vite build
+
+vite v5.4.11 building for production...
+transforming...
+✓ 2325 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                    5.37 kB │ gzip:   2.00 kB
+dist/assets/instgram-BG8DZ92q.jpg                                  7.49 kB
+dist/assets/TwentImage-CtH2mJUO.png                                9.29 kB
+dist/assets/Facebook-Cz1DbcoK.jpg                                 14.50 kB
+dist/assets/Twitter-DGpA0o4R.jpg                                  16.28 kB
+dist/assets/emptyCart-Nsa1qgLr.png                                31.78 kB
+dist/assets/85a30340-f824-4e4a-b2a5-c5d808affecc-CQ9wNsbh.png     57.00 kB
+dist/assets/panerBoy-CvMRuiyJ.jpg                                148.57 kB
+dist/assets/garage2-BBas3cy3.png                                 210.47 kB
+dist/assets/garage3-B7LaCs0-.png                                 225.24 kB
+dist/assets/garage1-CKv6nGdi.png                                 253.76 kB
+dist/assets/pizza4-qZMZkm9b.jpg                                  350.78 kB
+dist/assets/Image002-Bwb2vphz.png                                353.88 kB
+dist/assets/aboutimage (2)-CN7H4tlg.png                          372.04 kB
+dist/assets/bg11-BBxUncj0.jpg                                    393.71 kB
+dist/assets/pizza2-Cwlpi0GJ.jpg                                  469.66 kB
+dist/assets/Image003-BRyvtLf5.png                                481.07 kB
+dist/assets/Image001-Ccp2lfC6.png                                526.00 kB
+dist/assets/pizza1-DoOW5LUS.jpg                                  845.87 kB
+dist/assets/checkOut-BQSpRhZA.jpg                                941.16 kB
+dist/assets/pizza3-Ce1zrJ3c.jpg                                1,056.43 kB
+dist/assets/08-DjtOqnNY.png                                    1,626.96 kB
+dist/assets/paner-DylGX3QO.png                                 1,631.79 kB
+dist/assets/index-Cvjc53Vc.css                                   107.42 kB │ gzip:  21.09 kB
+dist/assets/index-Du6hgcC-.js                                    984.60 kB │ gzip: 316.17 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 55.67s
