@@ -6,72 +6,106 @@
   <title>Invoice Preview — Just Eat Style</title>
   <link rel="stylesheet" href="invoice-print-just-eat.css" />
 </head>
-<body style="margin:0;background:#1a1a2e;padding:24px 12px;">
+<body style="margin:0;background:#222;padding:24px 12px;">
   <article class="invoice">
-    <header class="invoice-section">
-      <h1 class="invoice-brand">Wangen Pizza Kebab</h1>
-      <p class="invoice-title">Rechnung #5885</p>
-      <p class="invoice-customer-name">Saifeddin Mohammad Adnan</p>
-      <p class="invoice-customer-line">Zürcherstrasse 24</p>
-      <p class="invoice-customer-line">8853 Lachen SZ</p>
-      <p class="invoice-customer-line">Tel: 0766077955</p>
-      <p class="invoice-customer-line">28.04.2026 21:27</p>
-      <div class="invoice-meta-row">
-        <span class="invoice-tag">Lieferung</span>
-        <span class="invoice-tag">Barzahlung</span>
+    <p class="invoice-status">Zugestellt</p>
+
+    <div class="invoice-address-block">
+      <p class="invoice-address-line">8854 Galgenen, Zeughausstrasse 48c</p>
+      <p class="invoice-order-ref">OrderNr # 6306 · Online</p>
+    </div>
+
+    <div class="invoice-customer-block">
+      <p class="invoice-customer-name">Kevin Goldmann</p>
+      <p class="invoice-customer-line">+41796151794</p>
+      <p class="invoice-customer-line">Bestätigungscode: 033422709</p>
+      <div class="invoice-pill-row">
+        <span class="invoice-pill">Floor: 3</span>
       </div>
-      <p class="invoice-delivery-note">Gewünschter Liefertermin so schnell wie möglich</p>
-    </header>
+      <p class="invoice-accepted">Bestellung angenommen um 19:27 - 10 Jul</p>
+    </div>
 
     <section class="invoice-qr">
       <p class="invoice-qr-label">Kurier - QR scannen</p>
       <div style="width:120px;height:120px;margin:0 auto;background:#eee;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666;">QR (unchanged)</div>
-      <p class="invoice-qr-address">Zürcherstrasse 24 8853 Lachen SZ</p>
+      <p class="invoice-qr-address">Zeughausstrasse 46 8854 Galgenen</p>
     </section>
 
-    <section class="invoice-section">
+    <section class="invoice-items-section">
       <div class="invoice-items-header">
         <span class="invoice-items-count">3 Gerichte</span>
         <span class="invoice-items-badge">Online</span>
       </div>
 
       <h2 class="invoice-category">Kebab</h2>
-      <div class="invoice-line">
-        <span class="invoice-line-main">1 x Döner im Taschenbrot</span>
-        <span class="invoice-line-price">14.00 CHF</span>
-      </div>
-      <div class="invoice-extra">
-        <span class="invoice-extra-name">Salat</span>
-        <span>0.00 CHF</span>
-      </div>
-      <div class="invoice-extra">
-        <span class="invoice-extra-name">Cocktailsauce</span>
-        <span>0.00 CHF</span>
+
+      <div class="invoice-item-block">
+        <div class="invoice-line">
+          <span class="invoice-line-main">1 <strong>Döner im Fladenbrot</strong></span>
+          <span class="invoice-line-price">CHF 15.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Salat</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Tomaten</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Joghurtsauce</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-note">Viel Sauce Bitte. Danke</div>
       </div>
 
-      <div class="invoice-line">
-        <span class="invoice-line-main">1 x Spezial Döner (mit Ei im Taschenbrot)</span>
-        <span class="invoice-line-price">16.00 CHF</span>
+      <div class="invoice-item-block">
+        <div class="invoice-line">
+          <span class="invoice-line-main">1 <strong>Döner im Taschenbrot</strong></span>
+          <span class="invoice-line-price">CHF 15.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Zwiebeln</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Cocktailsauce</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-note">Viel Sauce Bitte. Danke</div>
       </div>
 
-      <div class="invoice-line">
-        <span class="invoice-line-main">1 x Spezial Döner (mit Ei im Fladenbrot)</span>
-        <span class="invoice-line-price">16.00 CHF</span>
-      </div>
+      <h2 class="invoice-category">Snacks</h2>
 
-      <div class="invoice-note">Viel Sauce bitte. Danke.</div>
+      <div class="invoice-item-block">
+        <div class="invoice-line">
+          <span class="invoice-line-main">1 <strong>Portion Pommes Frites</strong></span>
+          <span class="invoice-line-price">CHF 9.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Sauce, scharf</span>
+          <span>CHF 0.00</span>
+        </div>
+      </div>
     </section>
 
     <section class="invoice-totals">
       <div class="invoice-total-row">
         <span>Zwischensumme</span>
-        <span>46.00 CHF</span>
+        <span>CHF 39.00</span>
       </div>
       <div class="invoice-total-row grand">
-        <span>Total CHF</span>
-        <span>46.00</span>
+        <span>Gesamt</span>
+        <span>CHF 39.00</span>
       </div>
     </section>
+
+    <div class="invoice-actions">
+      <button type="button" class="invoice-print-btn" onclick="window.print()">
+        <span class="invoice-print-icon" aria-hidden="true">⎙</span>
+        Drucken
+      </button>
+    </div>
 
     <footer class="invoice-footer">
       <strong>Wangen Pizza Kebab</strong>

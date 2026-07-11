@@ -11,29 +11,31 @@
 <link rel="stylesheet" href="~/css/invoice-print-just-eat.css" />
 
 <article class="invoice">
-  <header class="invoice-section">
-    <h1 class="invoice-brand">Wangen Pizza Kebab</h1>
-    <p class="invoice-title">Rechnung #@Model.OrderId</p>
+  @if (!string.IsNullOrWhiteSpace(Model.StatusLabel))
+  {
+    <p class="invoice-status">@Model.StatusLabel</p>
+  }
 
+  <div class="invoice-address-block">
+    <p class="invoice-address-line">@Model.PostCode @Model.City, @Model.Street @Model.Hausnummer</p>
+    <p class="invoice-order-ref">OrderNr # @Model.OrderId · @Model.PaymentTypeLabel</p>
+  </div>
+
+  <div class="invoice-customer-block">
     <p class="invoice-customer-name">@Model.CustomerName</p>
-    <p class="invoice-customer-line">@Model.Street @Model.Hausnummer</p>
-    <p class="invoice-customer-line">@Model.PostCode @Model.City</p>
-    <p class="invoice-customer-line">Tel: @Model.Phone</p>
-    @if (!string.IsNullOrWhiteSpace(Model.Email))
+    <p class="invoice-customer-line">@Model.Phone</p>
+    @if (!string.IsNullOrWhiteSpace(Model.ConfirmationCode))
     {
-      <p class="invoice-customer-line">@Model.Email</p>
+      <p class="invoice-customer-line">Bestätigungscode: @Model.ConfirmationCode</p>
     }
-
-    <p class="invoice-customer-line">@Model.OrderDate.ToString("dd.MM.yyyy HH:mm")</p>
-    <div class="invoice-meta-row">
-      <span class="invoice-tag">@Model.DeliveryTypeLabel</span>
-      <span class="invoice-tag">@Model.PaymentTypeLabel</span>
-    </div>
-    @if (!string.IsNullOrWhiteSpace(Model.DeliveryTimeNote))
+    @if (!string.IsNullOrWhiteSpace(Model.Floor))
     {
-      <p class="invoice-delivery-note">@Model.DeliveryTimeNote</p>
+      <div class="invoice-pill-row">
+        <span class="invoice-pill">Floor: @Model.Floor</span>
+      </div>
     }
-  </header>
+    <p class="invoice-accepted">Bestellung angenommen um @Model.OrderDate.ToString("HH:mm") - @Model.OrderDate.ToString("dd MMM")</p>
+  </div>
 
   @* === QR: DO NOT CHANGE — paste existing working QR markup here === *@
   <section class="invoice-qr">
@@ -43,7 +45,7 @@
     <p class="invoice-qr-address">@Model.Street @Model.Hausnummer @Model.PostCode @Model.City</p>
   </section>
 
-  <section class="invoice-section">
+  <section class="invoice-items-section">
     <div class="invoice-items-header">
       <span class="invoice-items-count">@Model.ItemCount Gerichte</span>
       <span class="invoice-items-badge">@Model.PaymentTypeLabel</span>
@@ -55,18 +57,25 @@
 
       @foreach (var item in group.Items)
       {
-        <div class="invoice-line">
-          <span class="invoice-line-main">@item.Quantity x @item.Name</span>
-          <span class="invoice-line-price">@item.LineTotal.ToString("0.00") CHF</span>
-        </div>
-
-        @foreach (var extra in item.Extras)
-        {
-          <div class="invoice-extra">
-            <span class="invoice-extra-name">@extra.Name</span>
-            <span class="invoice-extra-price">@extra.Price.ToString("0.00") CHF</span>
+        <div class="invoice-item-block">
+          <div class="invoice-line">
+            <span class="invoice-line-main">@item.Quantity <strong>@item.Name</strong></span>
+            <span class="invoice-line-price">CHF @item.LineTotal.ToString("0.00")</span>
           </div>
-        }
+
+          @foreach (var extra in item.Extras)
+          {
+            <div class="invoice-extra">
+              <span class="invoice-extra-name">@extra.Name</span>
+              <span class="invoice-extra-price">CHF @extra.Price.ToString("0.00")</span>
+            </div>
+          }
+
+          @if (!string.IsNullOrWhiteSpace(item.Note))
+          {
+            <div class="invoice-note">@item.Note</div>
+          }
+        </div>
       }
     }
 
@@ -79,27 +88,34 @@
   <section class="invoice-totals">
     <div class="invoice-total-row">
       <span>Zwischensumme</span>
-      <span>@Model.Subtotal.ToString("0.00") CHF</span>
+      <span>CHF @Model.Subtotal.ToString("0.00")</span>
     </div>
     @if (Model.Discount > 0)
     {
       <div class="invoice-total-row">
         <span>Rabatt</span>
-        <span>-@Model.Discount.ToString("0.00") CHF</span>
+        <span>-CHF @Model.Discount.ToString("0.00")</span>
       </div>
     }
     @if (Model.VoucherDeduction > 0)
     {
       <div class="invoice-total-row">
         <span>Wertgutschein</span>
-        <span>-@Model.VoucherDeduction.ToString("0.00") CHF</span>
+        <span>-CHF @Model.VoucherDeduction.ToString("0.00")</span>
       </div>
     }
     <div class="invoice-total-row grand">
-      <span>Total CHF</span>
-      <span>@Model.GrandTotal.ToString("0.00")</span>
+      <span>Gesamt</span>
+      <span>CHF @Model.GrandTotal.ToString("0.00")</span>
     </div>
   </section>
+
+  <div class="invoice-actions">
+    <button type="button" class="invoice-print-btn" onclick="window.print()">
+      <span class="invoice-print-icon" aria-hidden="true">⎙</span>
+      Drucken
+    </button>
+  </div>
 
   <footer class="invoice-footer">
     <strong>Wangen Pizza Kebab</strong>
