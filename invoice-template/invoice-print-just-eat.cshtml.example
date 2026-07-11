@@ -1,0 +1,109 @@
+@*
+  Just Eat style invoice — paste into PizzaWangen-alles Print/Email view.
+
+  RULES:
+  - Do NOT modify the QR block (copy your existing Kurier QR markup into invoice-qr).
+  - Main item: one row with quantity + name + price.
+  - Extras/sauces: indented rows only — NO Anzahl column per extra (fixes 1 1 1 1 bug).
+*@
+@model YourOrderPrintViewModel
+
+<link rel="stylesheet" href="~/css/invoice-print-just-eat.css" />
+
+<article class="invoice">
+  <header class="invoice-section">
+    <h1 class="invoice-brand">Wangen Pizza Kebab</h1>
+    <p class="invoice-title">Rechnung #@Model.OrderId</p>
+
+    <p class="invoice-customer-name">@Model.CustomerName</p>
+    <p class="invoice-customer-line">@Model.Street @Model.Hausnummer</p>
+    <p class="invoice-customer-line">@Model.PostCode @Model.City</p>
+    <p class="invoice-customer-line">Tel: @Model.Phone</p>
+    @if (!string.IsNullOrWhiteSpace(Model.Email))
+    {
+      <p class="invoice-customer-line">@Model.Email</p>
+    }
+
+    <p class="invoice-customer-line">@Model.OrderDate.ToString("dd.MM.yyyy HH:mm")</p>
+    <div class="invoice-meta-row">
+      <span class="invoice-tag">@Model.DeliveryTypeLabel</span>
+      <span class="invoice-tag">@Model.PaymentTypeLabel</span>
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Model.DeliveryTimeNote))
+    {
+      <p class="invoice-delivery-note">@Model.DeliveryTimeNote</p>
+    }
+  </header>
+
+  @* === QR: DO NOT CHANGE — paste existing working QR markup here === *@
+  <section class="invoice-qr">
+    @* @Html.Raw(Model.ExistingQrBlockHtml) or your current partial *@
+    <p class="invoice-qr-label">Kurier - QR scannen</p>
+    @* <img src="@Model.QrCodeUrl" alt="QR" /> *@
+    <p class="invoice-qr-address">@Model.Street @Model.Hausnummer @Model.PostCode @Model.City</p>
+  </section>
+
+  <section class="invoice-section">
+    <div class="invoice-items-header">
+      <span class="invoice-items-count">@Model.ItemCount Gerichte</span>
+      <span class="invoice-items-badge">@Model.PaymentTypeLabel</span>
+    </div>
+
+    @foreach (var group in Model.ItemsByCategory)
+    {
+      <h2 class="invoice-category">@group.CategoryName</h2>
+
+      @foreach (var item in group.Items)
+      {
+        <div class="invoice-line">
+          <span class="invoice-line-main">@item.Quantity x @item.Name</span>
+          <span class="invoice-line-price">@item.LineTotal.ToString("0.00") CHF</span>
+        </div>
+
+        @foreach (var extra in item.Extras)
+        {
+          <div class="invoice-extra">
+            <span class="invoice-extra-name">@extra.Name</span>
+            <span class="invoice-extra-price">@extra.Price.ToString("0.00") CHF</span>
+          </div>
+        }
+      }
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.CustomerNote))
+    {
+      <div class="invoice-note">@Model.CustomerNote</div>
+    }
+  </section>
+
+  <section class="invoice-totals">
+    <div class="invoice-total-row">
+      <span>Zwischensumme</span>
+      <span>@Model.Subtotal.ToString("0.00") CHF</span>
+    </div>
+    @if (Model.Discount > 0)
+    {
+      <div class="invoice-total-row">
+        <span>Rabatt</span>
+        <span>-@Model.Discount.ToString("0.00") CHF</span>
+      </div>
+    }
+    @if (Model.VoucherDeduction > 0)
+    {
+      <div class="invoice-total-row">
+        <span>Wertgutschein</span>
+        <span>-@Model.VoucherDeduction.ToString("0.00") CHF</span>
+      </div>
+    }
+    <div class="invoice-total-row grand">
+      <span>Total CHF</span>
+      <span>@Model.GrandTotal.ToString("0.00")</span>
+    </div>
+  </section>
+
+  <footer class="invoice-footer">
+    <strong>Wangen Pizza Kebab</strong>
+    Zürcherstrasse 3 · 8855 Wangen<br />
+    +41 55 460 33 66 · info@pizzawangen.ch
+  </footer>
+</article>
