@@ -121,6 +121,31 @@
     <!-- END Google Merchant store widget -->
   </head>
   <body>
+    <!-- COOKIE BANNER -->
+    <div id="cookie-bar" role="dialog" aria-label="Cookie-Hinweis" style="display:none; position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #e0e0e0; padding:14px 20px; z-index:9999999; font-family:'Segoe UI',Arial,sans-serif; box-shadow:0 -4px 20px rgba(0,0,0,0.12);">
+      <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+        <div style="font-size:13px; color:#222; line-height:1.5; flex:1; min-width:200px;">
+          Um fortzufahren, akzeptieren Sie bitte unsere&nbsp;
+          <a href="/datenschutz" target="_blank" style="color:#222; text-decoration:underline;">Datenschutzerklärung</a>&nbsp;und&nbsp;
+          <a href="/agb" target="_blank" style="color:#222; text-decoration:underline;">AGB</a>.
+        </div>
+        <div style="display:flex; gap:8px; flex-shrink:0;">
+          <button onclick="acceptCookies()" style="padding:8px 16px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; background:#222; color:#fff; border:2px solid #222;">OK</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-bar').style.display = 'none';
+      }
+      window.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('cookiesAccepted')) {
+          document.getElementById('cookie-bar').style.display = 'block';
+        }
+      });
+    </script>
+    <!-- ENDE COOKIE BANNER -->
     <div id="root"></div>
     <div style="text-align:center; padding:10px 16px; background:#0a0b0b; font-family:Arial, sans-serif; font-size:14px;">
       <a
