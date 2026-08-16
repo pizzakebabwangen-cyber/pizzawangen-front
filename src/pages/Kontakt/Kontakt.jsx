@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useEffect } from "react";
 import ContactForm from "../../component/ContactForm/ContactForm"
+import FaqSection from "../../component/FaqSection/FaqSection";
 import Delivery from "../../component/Delivery/Delivery";
 import Location from "../../component/Location/Location";
 
@@ -23,6 +24,7 @@ const Kontakt = () => {
   return (
     <div>
       <ContactForm />
+      <FaqSection />
       <Delivery />
       <Location />
     </div>

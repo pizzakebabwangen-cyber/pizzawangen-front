@@ -25,6 +25,12 @@ import toast from "react-hot-toast";
 
 const MEAL_BATCH = 6;
 
+const normalizeSearchText = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
 const Menue = () => {
   const server = import.meta.env.VITE_SERVER;
   const [categories, setCategories] = useState([]);
@@ -35,7 +41,11 @@ const Menue = () => {
   const [nameOfType, setNameOfType] = useState("");
   const [prodOfSubCats, setProdOfSubCats] = useState([]);
   const [mealBatchCount, setMealBatchCount] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+  const allProductsCacheRef = useRef(null);
   const deliveryMethod = useSelector((state) => state.delivery.deliverMethod);
   const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
@@ -134,6 +144,64 @@ useEffect(() => {
 
   const visibleMeals = prodOfSubCats.slice(0, mealBatchCount * MEAL_BATCH);
   const hasMoreMeals = visibleMeals.length < prodOfSubCats.length;
+  const trimmedSearch = searchQuery.trim();
+  const isSearchActive = trimmedSearch.length >= 2;
+  const mealsToShow = isSearchActive ? searchResults : visibleMeals;
+
+  useEffect(() => {
+    if (trimmedSearch.length < 2) {
+      setSearchResults([]);
+      setIsSearchLoading(false);
+      return undefined;
+    }
+    if (!categories.length) return undefined;
+
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      setIsSearchLoading(true);
+      try {
+        if (!allProductsCacheRef.current) {
+          const subIds = categories
+            .filter((cat) => cat.name !== "Offers" && cat.name !== "Bonus")
+            .flatMap((cat) => (cat.subCategory || []).map((sc) => sc.id))
+            .filter(Boolean);
+          const chunks = await Promise.all(
+            subIds.map(async (id) => {
+              const response = await fetch(
+                `${server}/api/Product/GetAllProductsBySubCategoryId?id=${id}`
+              );
+              const data = await response.json();
+              return data?.data || [];
+            })
+          );
+          const byId = new Map();
+          chunks.flat().forEach((product) => {
+            if (product?.id) byId.set(product.id, product);
+          });
+          allProductsCacheRef.current = sortProductsForMenu([...byId.values()]);
+        }
+
+        const needle = normalizeSearchText(trimmedSearch);
+        const filtered = allProductsCacheRef.current.filter((product) => {
+          const haystack = normalizeSearchText(
+            [product.name, product.description, product.description1].join(" ")
+          );
+          return haystack.includes(needle);
+        });
+        if (!cancelled) setSearchResults(filtered);
+      } catch (error) {
+        console.error("Menu search failed:", error);
+        if (!cancelled) setSearchResults([]);
+      } finally {
+        if (!cancelled) setIsSearchLoading(false);
+      }
+    }, 300);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [trimmedSearch, categories, server]);
 
   const getSelectedCat = (id) => {
     setSelectedCategory(id);
@@ -234,9 +302,32 @@ useEffect(() => {
           </div>
         </div>
 
+        <div className="menue-search-wrap">
+          <label htmlFor="menue-search" className="menue-search-label">
+            Suche im Menü
+          </label>
+          <input
+            id="menue-search"
+            type="search"
+            className="menue-search-input"
+            placeholder="z. B. Döner, Pizza, Getränke…"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            autoComplete="off"
+            enterKeyHint="search"
+          />
+          {isSearchLoading && (
+            <p className="menue-search-status">Suche läuft…</p>
+          )}
+          {isSearchActive && !isSearchLoading && searchResults.length === 0 && (
+            <p className="menue-search-status">Keine Treffer für «{trimmedSearch}».</p>
+          )}
+        </div>
+
         {/* show cats */}
+        {!isSearchActive && (
         <motion.div
-          initial={{ opacity: 0, y: 200 }}
+          initial={{ opacity: 0, y: 48 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="animated-component"
@@ -270,8 +361,10 @@ useEffect(() => {
             )}
           </div>
         </motion.div>
+        )}
 
         {/* show the subcats */}
+        {!isSearchActive && (
         <div className="cats" id="cats" ref={sectionRef2}>
           {selectedCategory && isLoading2 ? (
             <Spiner />
@@ -289,18 +382,28 @@ useEffect(() => {
               ))
           )}
         </div>
+        )}
         {/* show th meals  */}
         <motion.div
-          initial={{ opacity: 0, y: 200 }}
+          initial={{ opacity: 0, y: 48 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="animated-component"
         >
+          {(isSearchActive || selectedSubCategory) && (
           <div className="selectedSubCategory">
-            <h1>{nameOfType}</h1>
+            <h1>
+              {isSearchActive
+                ? `Suchergebnisse (${searchResults.length})`
+                : nameOfType}
+            </h1>
           </div>
+          )}
           <div className="cards" ref={sectionRef1}>
-            {visibleMeals.map((product, idx) => (
+            {isSearchActive && isSearchLoading ? (
+              <Spiner />
+            ) : (
+            mealsToShow.map((product, idx) => (
               <MealCard
                 key={product.id}
                 meal={product}
@@ -308,9 +411,10 @@ useEffect(() => {
                 extensionsData={extensionsData}
                 mealListIndex={idx}
               />
-            ))}
+            ))
+            )}
           </div>
-          {hasMoreMeals && (
+          {!isSearchActive && hasMoreMeals && (
             <div className="menue-load-more-wrap">
               <button
                 type="button"

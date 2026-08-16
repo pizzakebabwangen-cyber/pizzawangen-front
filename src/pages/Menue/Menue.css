@@ -1,4 +1,59 @@
 .menue-sec {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+
+  .menue-search-wrap {
+    width: min(560px, 100%);
+    margin: 20px auto 0;
+  }
+
+  .menue-search-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .menue-search-input {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(238, 124, 22, 0.45);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.35);
+    outline: none;
+  }
+
+  .menue-search-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(246, 111, 0, 0.25);
+  }
+
+  .menue-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .menue-search-status {
+    margin: 8px 0 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+  }
+
+  .container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .animated-component {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
   .menue-title-row {
     display: flex;
     flex-wrap: wrap;
@@ -51,6 +106,8 @@
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
     color: #ffffff;
     font-size: 0.95rem;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .menue-trust-row span:not(.menue-rating) {
@@ -89,9 +146,12 @@
   .cats {
     margin-top: 50px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-wrap: wrap;
     align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
     .btn {
       margin-top: 20px;
       display: flex;
@@ -131,9 +191,12 @@
   }
   .cards {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
   }
   .card-label {
     margin-top: 30px;
@@ -141,6 +204,7 @@
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 240px;
+    max-width: 100%;
     min-height: 220px;
     height: auto;
     transition: 0.3s;
@@ -207,6 +271,14 @@
 }
 
 @media (max-width: 768px) {
+  .menue-sec {
+    overflow-x: hidden;
+  }
+
+  .menue-sec .menue-search-wrap {
+    padding: 0 4px;
+  }
+
   .menue-sec h1 {
     font-size: 2.25rem;
     padding: 0 8px;
@@ -321,6 +393,19 @@
 
 /* Schmale Handys: Menü-Kacheln, Titelzeile, Unterkategorien */
 @media (max-width: 440px) {
+  .menue-sec {
+    overflow-x: hidden;
+  }
+
+  .menue-sec .menue-local-seo {
+    overflow-wrap: anywhere;
+  }
+
+  .menue-sec .menue-trust-row {
+    width: 100%;
+    border-radius: 14px;
+  }
+
   .menue-sec .menue-title-row {
     flex-direction: column;
     align-items: center;
