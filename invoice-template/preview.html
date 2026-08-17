@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice Preview — Just Eat Style</title>
+  <link rel="stylesheet" href="invoice-print-just-eat.css" />
+</head>
+<body style="margin:0;background:#1a1a2e;padding:24px 12px;">
+  <article class="invoice">
+    <header class="invoice-section">
+      <h1 class="invoice-brand">Wangen Pizza Kebab</h1>
+      <p class="invoice-title">Rechnung #5885</p>
+      <p class="invoice-customer-name">Saifeddin Mohammad Adnan</p>
+      <p class="invoice-customer-line">Zürcherstrasse 24</p>
+      <p class="invoice-customer-line">8853 Lachen SZ</p>
+      <p class="invoice-customer-line">Tel: 0766077955</p>
+      <p class="invoice-customer-line">28.04.2026 21:27</p>
+      <div class="invoice-meta-row">
+        <span class="invoice-tag">Lieferung</span>
+        <span class="invoice-tag">Barzahlung</span>
+      </div>
+      <p class="invoice-delivery-note">Gewünschter Liefertermin so schnell wie möglich</p>
+    </header>
+
+    <section class="invoice-qr">
+      <p class="invoice-qr-label">Kurier - QR scannen</p>
+      <div style="width:120px;height:120px;margin:0 auto;background:#eee;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666;">QR (unchanged)</div>
+      <p class="invoice-qr-address">Zürcherstrasse 24 8853 Lachen SZ</p>
+    </section>
+
+    <section class="invoice-section">
+      <div class="invoice-items-header">
+        <span class="invoice-items-count">3 Gerichte</span>
+        <span class="invoice-items-badge">Online</span>
+      </div>
+
+      <h2 class="invoice-category">Kebab</h2>
+      <div class="invoice-line">
+        <span class="invoice-line-main">1 x Döner im Taschenbrot</span>
+        <span class="invoice-line-price">14.00 CHF</span>
+      </div>
+      <div class="invoice-extra">
+        <span class="invoice-extra-name">Salat</span>
+        <span>0.00 CHF</span>
+      </div>
+      <div class="invoice-extra">
+        <span class="invoice-extra-name">Cocktailsauce</span>
+        <span>0.00 CHF</span>
+      </div>
+
+      <div class="invoice-line">
+        <span class="invoice-line-main">1 x Spezial Döner (mit Ei im Taschenbrot)</span>
+        <span class="invoice-line-price">16.00 CHF</span>
+      </div>
+
+      <div class="invoice-line">
+        <span class="invoice-line-main">1 x Spezial Döner (mit Ei im Fladenbrot)</span>
+        <span class="invoice-line-price">16.00 CHF</span>
+      </div>
+
+      <div class="invoice-note">Viel Sauce bitte. Danke.</div>
+    </section>
+
+    <section class="invoice-totals">
+      <div class="invoice-total-row">
+        <span>Zwischensumme</span>
+        <span>46.00 CHF</span>
+      </div>
+      <div class="invoice-total-row grand">
+        <span>Total CHF</span>
+        <span>46.00</span>
+      </div>
+    </section>
+
+    <footer class="invoice-footer">
+      <strong>Wangen Pizza Kebab</strong>
+      Zürcherstrasse 3 · 8855 Wangen<br />
+      +41 55 460 33 66 · info@pizzawangen.ch
+    </footer>
+  </article>
+</body>
+</html>
