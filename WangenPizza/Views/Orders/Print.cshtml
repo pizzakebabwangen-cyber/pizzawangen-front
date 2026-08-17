@@ -1,0 +1,156 @@
+@*
+  Just Eat style — replace old table invoice (Produkt | Anzahl | Total CHF).
+  QR: paste your existing Kurier QR markup inside .invoice-qr (do not remove section).
+*@
+@model dynamic
+
+@{
+    Layout = null;
+    var order = Model;
+    var items = (IEnumerable<dynamic>)(order?.OrderItems ?? order?.Items ?? order?.orderItems ?? Array.Empty<dynamic>());
+    var itemList = items.ToList();
+    var itemCount = itemList.Sum(i => (int)(i?.Quantity ?? i?.quantity ?? i?.Anzahl ?? 1));
+    var paymentLabel = (string)(order?.PaymentType ?? order?.PaymentTypeLabel ?? order?.Zahlungsart ?? "Online");
+    var deliveryNote = (string)(order?.DeliveryTimeNote ?? order?.DeliveryTime ?? order?.deliveryTime ?? "");
+    var notes = (string)(order?.Notes ?? order?.notes ?? order?.CustomerNote ?? "");
+    var subtotal = (decimal)(order?.Subtotal ?? order?.TotalPrice ?? order?.Total ?? 0m);
+    var grandTotal = (decimal)(order?.GrandTotal ?? order?.TotalPrice ?? order?.Total ?? subtotal);
+    var orderDate = (DateTime?)(order?.OrderDate ?? order?.CreatedAt ?? order?.BestelltAm) ?? DateTime.Now;
+
+    var grouped = itemList
+        .GroupBy(i => (string)(i?.CategoryName ?? i?.Category ?? i?.categoryName ?? "Bestellung"))
+        .OrderBy(g => g.Key);
+}
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rechnung #@(order?.OrderId ?? order?.Id)</title>
+  <link rel="stylesheet" href="~/css/invoice-print-just-eat.css" />
+</head>
+<body>
+  <article class="invoice">
+    <p class="invoice-status">@(order?.StatusLabel ?? "Bestellt")</p>
+
+    <div class="invoice-address-block">
+      <p class="invoice-address-line">@(order?.PostCode) @(order?.City), @(order?.Street) @(order?.Hausnummer)</p>
+      <p class="invoice-order-ref">OrderNr # @(order?.OrderId ?? order?.Id) · @paymentLabel</p>
+    </div>
+
+    <div class="invoice-customer-block">
+      <p class="invoice-customer-name">@(order?.Name ?? order?.CustomerName)</p>
+      @if (!string.IsNullOrWhiteSpace((string)(order?.Phone ?? order?.Tel)))
+      {
+        <p class="invoice-customer-line">@(order?.Phone ?? order?.Tel)</p>
+      }
+      @if (!string.IsNullOrWhiteSpace((string)(order?.Email)))
+      {
+        <p class="invoice-customer-line">@order.Email</p>
+      }
+      @if (!string.IsNullOrWhiteSpace((string)(order?.ConfirmationCode)))
+      {
+        <p class="invoice-customer-line">Bestätigungscode: @order.ConfirmationCode</p>
+      }
+      @if (!string.IsNullOrWhiteSpace((string)(order?.Floor)))
+      {
+        <div class="invoice-pill-row"><span class="invoice-pill">Floor: @order.Floor</span></div>
+      }
+      <p class="invoice-accepted">Bestellung angenommen um @orderDate.ToString("HH:mm") - @orderDate.ToString("dd MMM")</p>
+      @if (!string.IsNullOrWhiteSpace(deliveryNote))
+      {
+        <p class="invoice-accepted">@deliveryNote</p>
+      }
+    </div>
+
+    @* === QR: keep your existing QR code markup here === *@
+    <section class="invoice-qr">
+      @if (ViewBag.QrHtml != null)
+      {
+        @Html.Raw(ViewBag.QrHtml)
+      }
+      else
+      {
+        <p class="invoice-qr-label">Kurier - QR scannen</p>
+        @* <img src="@order.QrCodeUrl" alt="QR" /> *@
+      }
+      <p class="invoice-qr-address">@(order?.Street) @(order?.Hausnummer) @(order?.PostCode) @(order?.City)</p>
+    </section>
+
+    <section class="invoice-items-section">
+      <div class="invoice-items-header">
+        <span class="invoice-items-count">@itemCount Gerichte</span>
+        <span class="invoice-items-badge">@paymentLabel</span>
+      </div>
+
+      @foreach (var group in grouped)
+      {
+        <h2 class="invoice-category">@group.Key</h2>
+
+        @foreach (var item in group)
+        {
+          var qty = (int)(item?.Quantity ?? item?.quantity ?? item?.Anzahl ?? 1);
+          var name = (string)(item?.ProductName ?? item?.Name ?? item?.Produkt ?? "");
+          var lineTotal = (decimal)(item?.LineTotal ?? item?.Total ?? item?.Price ?? 0m);
+          var extras = (IEnumerable<dynamic>)(item?.Extensions ?? item?.Extras ?? item?.extensions ?? Array.Empty<dynamic>());
+
+          <div class="invoice-item-block">
+            <div class="invoice-line">
+              <span class="invoice-line-main">@qty <strong>@name</strong></span>
+              <span class="invoice-line-price">CHF @lineTotal.ToString("0.00")</span>
+            </div>
+
+            @foreach (var extra in extras)
+            {
+              var extraName = (string)(extra?.Name ?? extra?.name ?? extra);
+              var extraPrice = extra is string ? 0m : (decimal)(extra?.Price ?? extra?.price ?? 0m);
+              <div class="invoice-extra">
+                <span class="invoice-extra-name">@extraName</span>
+                <span>CHF @extraPrice.ToString("0.00")</span>
+              </div>
+            }
+
+            @{
+              var itemNote = (string)(item?.Note ?? item?.notes ?? "");
+            }
+            @if (!string.IsNullOrWhiteSpace(itemNote))
+            {
+              <div class="invoice-note">@itemNote</div>
+            }
+          </div>
+        }
+      }
+
+      @if (!string.IsNullOrWhiteSpace(notes))
+      {
+        <div class="invoice-note">@notes</div>
+      }
+    </section>
+
+    <section class="invoice-totals">
+      <div class="invoice-total-row">
+        <span>Zwischensumme</span>
+        <span>CHF @subtotal.ToString("0.00")</span>
+      </div>
+      <div class="invoice-total-row grand">
+        <span>Gesamt</span>
+        <span>CHF @grandTotal.ToString("0.00")</span>
+      </div>
+    </section>
+
+    <div class="invoice-actions">
+      <button type="button" class="invoice-print-btn" onclick="window.print()">
+        <span class="invoice-print-icon" aria-hidden="true">⎙</span>
+        Drucken
+      </button>
+    </div>
+
+    <footer class="invoice-footer">
+      <strong>Wangen Pizza Kebab</strong>
+      Zürcherstrasse 3 · 8855 Wangen<br />
+      +41 55 460 33 66 · info@pizzawangen.ch
+    </footer>
+  </article>
+</body>
+</html>

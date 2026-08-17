@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice Preview — Just Eat Style</title>
+  <link rel="stylesheet" href="invoice-print-just-eat.css" />
+</head>
+<body style="margin:0;background:#222;padding:24px 12px;">
+  <article class="invoice">
+    <p class="invoice-status">Zugestellt</p>
+
+    <div class="invoice-address-block">
+      <p class="invoice-address-line">8854 Galgenen, Zeughausstrasse 48c</p>
+      <p class="invoice-order-ref">OrderNr # 6306 · Online</p>
+    </div>
+
+    <div class="invoice-customer-block">
+      <p class="invoice-customer-name">Kevin Goldmann</p>
+      <p class="invoice-customer-line">+41796151794</p>
+      <p class="invoice-customer-line">Bestätigungscode: 033422709</p>
+      <div class="invoice-pill-row">
+        <span class="invoice-pill">Floor: 3</span>
+      </div>
+      <p class="invoice-accepted">Bestellung angenommen um 19:27 - 10 Jul</p>
+    </div>
+
+    <section class="invoice-qr">
+      <p class="invoice-qr-label">Kurier - QR scannen</p>
+      <div style="width:120px;height:120px;margin:0 auto;background:#eee;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666;">QR (unchanged)</div>
+      <p class="invoice-qr-address">Zeughausstrasse 46 8854 Galgenen</p>
+    </section>
+
+    <section class="invoice-items-section">
+      <div class="invoice-items-header">
+        <span class="invoice-items-count">3 Gerichte</span>
+        <span class="invoice-items-badge">Online</span>
+      </div>
+
+      <h2 class="invoice-category">Kebab</h2>
+
+      <div class="invoice-item-block">
+        <div class="invoice-line">
+          <span class="invoice-line-main">1 <strong>Döner im Fladenbrot</strong></span>
+          <span class="invoice-line-price">CHF 15.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Salat</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Tomaten</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Joghurtsauce</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-note">Viel Sauce Bitte. Danke</div>
+      </div>
+
+      <div class="invoice-item-block">
+        <div class="invoice-line">
+          <span class="invoice-line-main">1 <strong>Döner im Taschenbrot</strong></span>
+          <span class="invoice-line-price">CHF 15.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Zwiebeln</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Cocktailsauce</span>
+          <span>CHF 0.00</span>
+        </div>
+        <div class="invoice-note">Viel Sauce Bitte. Danke</div>
+      </div>
+
+      <h2 class="invoice-category">Snacks</h2>
+
+      <div class="invoice-item-block">
+        <div class="invoice-line">
+          <span class="invoice-line-main">1 <strong>Portion Pommes Frites</strong></span>
+          <span class="invoice-line-price">CHF 9.00</span>
+        </div>
+        <div class="invoice-extra">
+          <span class="invoice-extra-name">Sauce, scharf</span>
+          <span>CHF 0.00</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="invoice-totals">
+      <div class="invoice-total-row">
+        <span>Zwischensumme</span>
+        <span>CHF 39.00</span>
+      </div>
+      <div class="invoice-total-row grand">
+        <span>Gesamt</span>
+        <span>CHF 39.00</span>
+      </div>
+    </section>
+
+    <div class="invoice-actions">
+      <button type="button" class="invoice-print-btn" onclick="window.print()">
+        <span class="invoice-print-icon" aria-hidden="true">⎙</span>
+        Drucken
+      </button>
+    </div>
+
+    <footer class="invoice-footer">
+      <strong>Wangen Pizza Kebab</strong>
+      Zürcherstrasse 3 · 8855 Wangen<br />
+      +41 55 460 33 66 · info@pizzawangen.ch
+    </footer>
+  </article>
+</body>
+</html>

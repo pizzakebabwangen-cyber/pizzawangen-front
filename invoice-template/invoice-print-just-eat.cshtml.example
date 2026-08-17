@@ -1,0 +1,125 @@
+@*
+  Just Eat style invoice — paste into PizzaWangen-alles Print/Email view.
+
+  RULES:
+  - Do NOT modify the QR block (copy your existing Kurier QR markup into invoice-qr).
+  - Main item: one row with quantity + name + price.
+  - Extras/sauces: indented rows only — NO Anzahl column per extra (fixes 1 1 1 1 bug).
+*@
+@model YourOrderPrintViewModel
+
+<link rel="stylesheet" href="~/css/invoice-print-just-eat.css" />
+
+<article class="invoice">
+  @if (!string.IsNullOrWhiteSpace(Model.StatusLabel))
+  {
+    <p class="invoice-status">@Model.StatusLabel</p>
+  }
+
+  <div class="invoice-address-block">
+    <p class="invoice-address-line">@Model.PostCode @Model.City, @Model.Street @Model.Hausnummer</p>
+    <p class="invoice-order-ref">OrderNr # @Model.OrderId · @Model.PaymentTypeLabel</p>
+  </div>
+
+  <div class="invoice-customer-block">
+    <p class="invoice-customer-name">@Model.CustomerName</p>
+    <p class="invoice-customer-line">@Model.Phone</p>
+    @if (!string.IsNullOrWhiteSpace(Model.ConfirmationCode))
+    {
+      <p class="invoice-customer-line">Bestätigungscode: @Model.ConfirmationCode</p>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.Floor))
+    {
+      <div class="invoice-pill-row">
+        <span class="invoice-pill">Floor: @Model.Floor</span>
+      </div>
+    }
+    <p class="invoice-accepted">Bestellung angenommen um @Model.OrderDate.ToString("HH:mm") - @Model.OrderDate.ToString("dd MMM")</p>
+  </div>
+
+  @* === QR: DO NOT CHANGE — paste existing working QR markup here === *@
+  <section class="invoice-qr">
+    @* @Html.Raw(Model.ExistingQrBlockHtml) or your current partial *@
+    <p class="invoice-qr-label">Kurier - QR scannen</p>
+    @* <img src="@Model.QrCodeUrl" alt="QR" /> *@
+    <p class="invoice-qr-address">@Model.Street @Model.Hausnummer @Model.PostCode @Model.City</p>
+  </section>
+
+  <section class="invoice-items-section">
+    <div class="invoice-items-header">
+      <span class="invoice-items-count">@Model.ItemCount Gerichte</span>
+      <span class="invoice-items-badge">@Model.PaymentTypeLabel</span>
+    </div>
+
+    @foreach (var group in Model.ItemsByCategory)
+    {
+      <h2 class="invoice-category">@group.CategoryName</h2>
+
+      @foreach (var item in group.Items)
+      {
+        <div class="invoice-item-block">
+          <div class="invoice-line">
+            <span class="invoice-line-main">@item.Quantity <strong>@item.Name</strong></span>
+            <span class="invoice-line-price">CHF @item.LineTotal.ToString("0.00")</span>
+          </div>
+
+          @foreach (var extra in item.Extras)
+          {
+            <div class="invoice-extra">
+              <span class="invoice-extra-name">@extra.Name</span>
+              <span class="invoice-extra-price">CHF @extra.Price.ToString("0.00")</span>
+            </div>
+          }
+
+          @if (!string.IsNullOrWhiteSpace(item.Note))
+          {
+            <div class="invoice-note">@item.Note</div>
+          }
+        </div>
+      }
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.CustomerNote))
+    {
+      <div class="invoice-note">@Model.CustomerNote</div>
+    }
+  </section>
+
+  <section class="invoice-totals">
+    <div class="invoice-total-row">
+      <span>Zwischensumme</span>
+      <span>CHF @Model.Subtotal.ToString("0.00")</span>
+    </div>
+    @if (Model.Discount > 0)
+    {
+      <div class="invoice-total-row">
+        <span>Rabatt</span>
+        <span>-CHF @Model.Discount.ToString("0.00")</span>
+      </div>
+    }
+    @if (Model.VoucherDeduction > 0)
+    {
+      <div class="invoice-total-row">
+        <span>Wertgutschein</span>
+        <span>-CHF @Model.VoucherDeduction.ToString("0.00")</span>
+      </div>
+    }
+    <div class="invoice-total-row grand">
+      <span>Gesamt</span>
+      <span>CHF @Model.GrandTotal.ToString("0.00")</span>
+    </div>
+  </section>
+
+  <div class="invoice-actions">
+    <button type="button" class="invoice-print-btn" onclick="window.print()">
+      <span class="invoice-print-icon" aria-hidden="true">⎙</span>
+      Drucken
+    </button>
+  </div>
+
+  <footer class="invoice-footer">
+    <strong>Wangen Pizza Kebab</strong>
+    Zürcherstrasse 3 · 8855 Wangen<br />
+    +41 55 460 33 66 · info@pizzawangen.ch
+  </footer>
+</article>
