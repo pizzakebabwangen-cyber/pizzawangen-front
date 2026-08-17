@@ -1,0 +1,265 @@
+.tracking-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  padding: 40px 20px;
+}
+
+.tracking-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.tracking-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* Form Styles */
+.tracking-form {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 600;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #ff6b35;
+}
+
+.btn-tracking {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-tracking:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-tracking:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Error Message */
+.tracking-error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Loading Spinner */
+.tracking-loading {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #ff6b35;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Order Result */
+.tracking-result {
+  background: #fff;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+}
+
+.order-header {
+  text-align: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.order-header h2 {
+  color: #333;
+  margin: 0 0 5px 0;
+  font-size: 24px;
+}
+
+.customer-name {
+  color: #666;
+  margin: 0;
+}
+
+/* Status Timeline */
+.status-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 25px;
+}
+
+.status-step {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding: 12px 0;
+}
+
+.step-icon {
+  font-size: 32px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.step-label {
+  flex: 1;
+  padding: 8px 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #999;
+  transition: all 0.3s;
+}
+
+.status-step.completed .step-label {
+  color: #333;
+}
+
+.status-step.current .step-label {
+  color: #ff6b35;
+  font-weight: 700;
+}
+
+.step-line {
+  position: absolute;
+  left: 24px;
+  top: 50px;
+  width: 2px;
+  height: 30px;
+  background: #e0e0e0;
+}
+
+.step-line.filled {
+  background: #4caf50;
+}
+
+/* Current Status Message */
+.current-status {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  color: #e65100;
+  padding: 18px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.current-status.delivered {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+}
+
+/* Delivery Info */
+.delivery-info {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Empty State */
+.tracking-empty {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+/* Help Section */
+.tracking-help {
+  background: #f0f4f8;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.tracking-help h3 {
+  color: #333;
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.tracking-help ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .tracking-container {
+    padding: 20px;
+  }
+  
+  .tracking-title {
+    font-size: 24px;
+  }
+  
+  .step-icon {
+    font-size: 26px;
+    min-width: 40px;
+  }
+  
+  .step-line {
+    left: 20px;
+  }
+}

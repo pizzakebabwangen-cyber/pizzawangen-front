@@ -25,6 +25,7 @@ import { ProtectedRoute } from "./component/ProtectedRoute/ProtectedRoute";
 import Payment from "./pages/Payment/Payment";
 import { useSelector } from "react-redux";
 import SuccessPage from "./pages/SuccessPage/SuccessPage";
+import OrderTracking from "./pages/OrderTracking/OrderTracking";
 import Delivery from "./component/Delivery/Delivery";
 import Impressum from "./component/Policy&Info/Impressum";
 import Datenschutzbestimmungen from "./component/Policy&Info/Datenschutzbestimmungen";
@@ -89,6 +90,7 @@ function App() {
         <Route path="/kontakt" element={<Kontakt />} />
         <Route path="/success/:orderId?" element={<SuccessPage />} />
         <Route path="/failed-payment" element={<FailedPayment />} />
+        <Route path="/order-tracking" element={<OrderTracking />} />
 
         <Route
           path="/cart"
