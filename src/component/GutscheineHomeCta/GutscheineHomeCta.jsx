@@ -102,6 +102,20 @@ function normalizeMenuOffer(data) {
   };
 }
 
+/** Wird angezeigt, solange /api/Cart/active-menu-offer kein aktives Angebot liefert. */
+const FALLBACK_MENU_OFFER = {
+  active: true,
+  title: "Herbst-Aktion 2026",
+  value: 15,
+  code: "Wangen15",
+  expiryDate: "30.09.2026",
+  lastDay: new Date(2026, 8, 30, 23, 59, 59),
+};
+
+function fallbackMenuOffer() {
+  return new Date() <= FALLBACK_MENU_OFFER.lastDay ? FALLBACK_MENU_OFFER : null;
+}
+
 /**
  * @param {{ variant?: "home" | "menueInline" }} props
  * home: breiter Streifen unter Header (Startseite)
@@ -118,10 +132,10 @@ const GutscheineHomeCta = ({ variant = "home" }) => {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (cancelled) return;
-        setMenuOffer(normalizeMenuOffer(data));
+        setMenuOffer(normalizeMenuOffer(data) || fallbackMenuOffer());
       })
       .catch(() => {
-        if (!cancelled) setMenuOffer(null);
+        if (!cancelled) setMenuOffer(fallbackMenuOffer());
       });
 
     return () => {
