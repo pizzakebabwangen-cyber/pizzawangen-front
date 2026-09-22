@@ -1,0 +1,52 @@
+// ============================================================
+// PASTE into WangenPizza Admin → CartController (or Discount service)
+// Fixes: /api/Cart/active-menu-offer returns { active:false } even when
+// DiscountCode is Aktiv=Ja + show on menu + Fällig bis in the future.
+//
+// Do NOT change other routes. Replace ONLY the ActiveMenuOffer action.
+// ============================================================
+
+/*
+[HttpGet("active-menu-offer")]
+[AllowAnonymous]
+public async Task<IActionResult> ActiveMenuOffer()
+{
+    var today = DateTime.Today; // local restaurant date (CH)
+
+    // Adjust DbSet / entity names to your project (DiscountCode / Bonusnummer / …)
+    var offer = await _context.DiscountCodes
+        .AsNoTracking()
+        .Where(d =>
+            d.IsActive
+            // IMPORTANT: many saves set IsActive but forget ShowOnMenu —
+            // treat missing/false ShowOnMenu as true when IsActive (or OR both flags)
+            && (d.ShowOnMenu || d.IsActive)
+            && d.ExpiryDate.Date >= today
+            && d.Percent > 0
+            && !string.IsNullOrWhiteSpace(d.Code))
+        .OrderByDescending(d => d.ExpiryDate)
+        .Select(d => new
+        {
+            active = true,
+            title = d.Title ?? d.AngebotsTitel ?? "Angebot",
+            value = d.Percent,
+            code = d.Code.Trim(),
+            expiryDate = d.ExpiryDate.ToString("dd.MM.yyyy")
+        })
+        .FirstOrDefaultAsync();
+
+    if (offer == null)
+        return Ok(new { active = false });
+
+    return Ok(offer);
+}
+*/
+
+// Also when SAVING DiscountCode (Create/Edit):
+//   entity.IsActive = true;           // from Aktiv
+//   entity.ShowOnMenu = model.ShowOnMenu; // checkbox «Auf der Menü-Seite anzeigen»
+//   entity.ExpiryDate = DateTime.ParseExact(..., "dd.MM.yyyy", …).Date;
+//
+// After deploying this action: GET https://admin.pizzawangen.ch/api/Cart/active-menu-offer
+// must return e.g.:
+// { "active":true, "title":"…", "value":15, "code":"Wangen15", "expiryDate":"30.09.2026" }

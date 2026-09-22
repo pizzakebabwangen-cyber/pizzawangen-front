@@ -58,6 +58,50 @@ function GutscheineStarSvg({ compact = false }) {
   );
 }
 
+/** Normalisiert API-Antwort (camelCase/PascalCase) für Menü-Rabattkarte. */
+function normalizeMenuOffer(data) {
+  if (!data || typeof data !== "object") return null;
+
+  const activeRaw = data.active ?? data.Active ?? data.isActive ?? data.IsActive;
+  const code = String(data.code ?? data.Code ?? data.bonusNr ?? data.BonusNr ?? "").trim();
+  const valueRaw = data.value ?? data.Value ?? data.rabatt ?? data.Rabatt ?? data.percent ?? data.Percent;
+  const value = Number(valueRaw);
+  const title = String(
+    data.title ?? data.Title ?? data.angebotsTitel ?? data.AngebotsTitel ?? "Angebot"
+  ).trim();
+  const expiryDate = String(
+    data.expiryDate ??
+      data.ExpiryDate ??
+      data.faelligBis ??
+      data.FaelligBis ??
+      data.validUntil ??
+      data.ValidUntil ??
+      ""
+  ).trim();
+
+  const explicitlyActive =
+    activeRaw === true ||
+    activeRaw === 1 ||
+    String(activeRaw).toLowerCase() === "true" ||
+    String(activeRaw).toLowerCase() === "ja";
+
+  // Manche Backends liefern den Code ohne active:true — dann trotzdem anzeigen,
+  // wenn Code + Prozent vorhanden sind.
+  const hasOfferPayload = Boolean(code) && Number.isFinite(value) && value > 0;
+  if (!explicitlyActive && !hasOfferPayload) return null;
+  if (activeRaw === false && !hasOfferPayload) return null;
+  // Nur { active:false } ohne Daten → nichts anzeigen
+  if (activeRaw === false && !code) return null;
+
+  return {
+    active: true,
+    title: title || "Angebot",
+    value,
+    code,
+    expiryDate,
+  };
+}
+
 /**
  * @param {{ variant?: "home" | "menueInline" }} props
  * home: breiter Streifen unter Header (Startseite)
@@ -74,7 +118,7 @@ const GutscheineHomeCta = ({ variant = "home" }) => {
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (cancelled) return;
-        setMenuOffer(data?.active ? data : null);
+        setMenuOffer(normalizeMenuOffer(data));
       })
       .catch(() => {
         if (!cancelled) setMenuOffer(null);
@@ -100,7 +144,9 @@ const GutscheineHomeCta = ({ variant = "home" }) => {
             <span className="fruehlings-aktion-eyebrow">{menuOfferTitle}</span>
             <strong>{menuOffer.value}% Rabatt</strong>
             <span className="fruehlings-aktion-code">Code: {menuOffer.code}</span>
-            <span className="fruehlings-aktion-date">bis {menuOffer.expiryDate}</span>
+            {menuOffer.expiryDate ? (
+              <span className="fruehlings-aktion-date">bis {menuOffer.expiryDate}</span>
+            ) : null}
             <span className="fruehlings-aktion-hint">Code an der Kasse eingeben</span>
           </div>
         )}

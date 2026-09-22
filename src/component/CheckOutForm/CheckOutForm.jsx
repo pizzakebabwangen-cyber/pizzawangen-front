@@ -1762,8 +1762,10 @@ const CheckOutForm = () => {
                   const gutscheinTrim = String(
                     formData.gutscheinCode || ""
                   ).trim();
+                  /* Rabattcode (z. B. Wangen15) nur in discountCode — nicht zusätzlich als
+                   * gutscheinCode senden, sonst lehnt das Backend den %-Rabatt oft ab. */
                   const gutscheinForApi =
-                    payWay === 1 ? "" : discountTrim || gutscheinTrim;
+                    payWay === 1 ? "" : gutscheinTrim;
 
                   /* Kein ...formData: verhindert doppelte / veraltete Keys (z. B. gutscheinCode = Rabatt bei Bar). */
                   const payload = {
