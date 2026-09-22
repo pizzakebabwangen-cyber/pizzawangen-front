@@ -119,7 +119,7 @@
       });
     </script>
     <!-- END Google Merchant store widget -->
-    <script type="module" crossorigin src="/assets/index-BAoPtRyi.js?v=wangen15"></script>
+    <script type="module" crossorigin src="/assets/index-BAoPtRyi.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Ba3sMmwA.css">
   <style>
     #cookie-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); z-index:99999; justify-content:center; align-items:center; }
@@ -179,6 +179,49 @@
       if (window.history && 'scrollRestoration' in window.history) {
         window.history.scrollRestoration = 'manual';
       }
+    </script>
+    <script>
+      (function () {
+        var lastDay = new Date(2026, 8, 30, 23, 59, 59);
+        function placeOfferCard() {
+          if (new Date() > lastDay) return;
+          var link = document.querySelector(".gutscheine-menue-voucher-link");
+          if (!link) return;
+          var wrap = link.closest(".gutscheine-menue-inline-wrap") || link.parentElement;
+          if (!wrap) return;
+          wrap.classList.add("gutscheine-menue-inline-wrap--with-offer");
+          if (wrap.querySelector(".fruehlings-aktion-menue-card")) return;
+          var card = document.createElement("div");
+          card.className = "fruehlings-aktion-menue-card";
+          card.setAttribute("aria-label", "Herbst-Aktion 2026: 15 Prozent Rabatt mit Code Wangen15");
+          card.innerHTML =
+            '<span class="fruehlings-aktion-eyebrow">Herbst-Aktion 2026</span>' +
+            "<strong>15% Rabatt</strong>" +
+            '<span class="fruehlings-aktion-code">Code: Wangen15</span>' +
+            '<span class="fruehlings-aktion-date">bis 30.09.2026</span>' +
+            '<span class="fruehlings-aktion-hint">Code an der Kasse eingeben</span>';
+          wrap.insertBefore(card, link);
+        }
+        var queued = false;
+        function scheduleOfferCard() {
+          if (queued) return;
+          queued = true;
+          setTimeout(function () {
+            queued = false;
+            placeOfferCard();
+          }, 60);
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", scheduleOfferCard);
+        } else {
+          scheduleOfferCard();
+        }
+        var root = document.getElementById("root");
+        if (root && window.MutationObserver) {
+          new MutationObserver(scheduleOfferCard).observe(root, { childList: true, subtree: true });
+        }
+        setInterval(placeOfferCard, 1200);
+      })();
     </script>
 
   
