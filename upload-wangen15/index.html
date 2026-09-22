@@ -182,45 +182,83 @@
     </script>
     <script>
       (function () {
-        var lastDay = new Date(2026, 8, 30, 23, 59, 59);
-        function placeOfferCard() {
-          if (new Date() > lastDay) return;
+        function esc(s) {
+          return String(s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+          });
+        }
+        function readOffer(data) {
+          if (!data || typeof data !== "object") return null;
+          var activeRaw = data.active != null ? data.active : data.Active;
+          if (activeRaw == null) activeRaw = data.isActive != null ? data.isActive : data.IsActive;
+          var code = String(data.code || data.Code || data.bonusNr || data.BonusNr || "").trim();
+          var valueRaw = data.value != null ? data.value : data.Value;
+          if (valueRaw == null) valueRaw = data.rabatt != null ? data.rabatt : data.Rabatt;
+          if (valueRaw == null) valueRaw = data.percent != null ? data.percent : data.Percent;
+          var value = Number(valueRaw);
+          var title = String(data.title || data.Title || data.angebotsTitel || data.AngebotsTitel || "Angebot").trim();
+          var expiry = String(data.expiryDate || data.ExpiryDate || data.faelligBis || data.FaelligBis || "").trim();
+          var on = activeRaw === true || activeRaw === 1 || String(activeRaw).toLowerCase() === "true" || String(activeRaw).toLowerCase() === "ja";
+          if (!on || !code || !(value > 0)) return null;
+          return { title: title || "Angebot", value: value, code: code, expiry: expiry };
+        }
+        var offer = null;
+        var loaded = false;
+        var key = "";
+        function apply() {
+          if (!loaded) return;
           var link = document.querySelector(".gutscheine-menue-voucher-link");
+          var cards = Array.prototype.slice.call(document.querySelectorAll(".fruehlings-aktion-menue-card"));
+          if (!offer) {
+            cards.forEach(function (card) { card.remove(); });
+            document.querySelectorAll(".gutscheine-menue-inline-wrap--with-offer").forEach(function (wrap) {
+              wrap.classList.remove("gutscheine-menue-inline-wrap--with-offer");
+            });
+            key = "";
+            return;
+          }
           if (!link) return;
           var wrap = link.closest(".gutscheine-menue-inline-wrap") || link.parentElement;
           if (!wrap) return;
           wrap.classList.add("gutscheine-menue-inline-wrap--with-offer");
-          if (wrap.querySelector(".fruehlings-aktion-menue-card")) return;
-          var card = document.createElement("div");
-          card.className = "fruehlings-aktion-menue-card";
-          card.setAttribute("aria-label", "Herbst-Aktion 2026: 15 Prozent Rabatt mit Code Wangen15");
+          var nextKey = offer.title + "|" + offer.value + "|" + offer.code + "|" + offer.expiry;
+          var card = cards.find(function (item) { return wrap.contains(item); }) || cards[0] || null;
+          cards.forEach(function (item) { if (item !== card) item.remove(); });
+          if (!card) {
+            card = document.createElement("div");
+            card.className = "fruehlings-aktion-menue-card";
+            wrap.insertBefore(card, link);
+          } else if (card.parentElement !== wrap) {
+            wrap.insertBefore(card, link);
+          }
+          if (key === nextKey && card.textContent.indexOf(offer.code) !== -1) return;
+          card.setAttribute("aria-label", offer.title + ": " + offer.value + " Prozent Rabatt mit Code " + offer.code);
           card.innerHTML =
-            '<span class="fruehlings-aktion-eyebrow">Herbst-Aktion 2026</span>' +
-            "<strong>15% Rabatt</strong>" +
-            '<span class="fruehlings-aktion-code">Code: Wangen15</span>' +
-            '<span class="fruehlings-aktion-date">bis 30.09.2026</span>' +
+            '<span class="fruehlings-aktion-eyebrow">' + esc(offer.title) + "</span>" +
+            "<strong>" + esc(String(offer.value)) + "% Rabatt</strong>" +
+            '<span class="fruehlings-aktion-code">Code: ' + esc(offer.code) + "</span>" +
+            (offer.expiry ? '<span class="fruehlings-aktion-date">bis ' + esc(offer.expiry) + "</span>" : "") +
             '<span class="fruehlings-aktion-hint">Code an der Kasse eingeben</span>';
-          wrap.insertBefore(card, link);
+          key = nextKey;
         }
+        function load() {
+          fetch("https://admin.pizzawangen.ch/api/Cart/active-menu-offer", { cache: "no-store" })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (data) { offer = readOffer(data); loaded = true; apply(); })
+            .catch(function () { offer = null; loaded = true; apply(); });
+        }
+        load();
+        setInterval(load, 20000);
         var queued = false;
-        function scheduleOfferCard() {
+        function schedule() {
           if (queued) return;
           queued = true;
-          setTimeout(function () {
-            queued = false;
-            placeOfferCard();
-          }, 60);
-        }
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", scheduleOfferCard);
-        } else {
-          scheduleOfferCard();
+          setTimeout(function () { queued = false; apply(); }, 80);
         }
         var root = document.getElementById("root");
         if (root && window.MutationObserver) {
-          new MutationObserver(scheduleOfferCard).observe(root, { childList: true, subtree: true });
+          new MutationObserver(schedule).observe(root, { childList: true, subtree: true });
         }
-        setInterval(placeOfferCard, 1200);
       })();
     </script>
 
