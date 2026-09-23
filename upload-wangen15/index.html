@@ -136,6 +136,22 @@
     .cookie-btn-outline:hover { background:#f5f5f5; }
     .cookie-btn-primary { background:#C8A45A; color:#fff; border:2px solid #C8A45A; }
     .cookie-btn-primary:hover { background:#b8934f; border-color:#b8934f; }
+    /* iPhone: overflow-x:hidden على أقسام المنيو يحوّل الصفحة لحاوية تمرير عالقة عند النزول */
+    @media (max-width: 880px) {
+      html, body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: auto;
+      }
+      .menue-sec,
+      .menue-sec .container,
+      .menue-sec .animated-component {
+        overflow: visible !important;
+      }
+      body:has(.menue-mobile-cart-bar) {
+        padding-bottom: calc(96px + env(safe-area-inset-bottom));
+      }
+    }
   </style>
   </head>
   <body>

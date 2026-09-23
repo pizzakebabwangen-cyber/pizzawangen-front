@@ -1,7 +1,7 @@
 .menue-sec {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 
   .menue-search-wrap {
     width: min(560px, 100%);
@@ -46,12 +46,12 @@
 
   .container {
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .animated-component {
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .menue-title-row {
@@ -272,7 +272,7 @@
 
 @media (max-width: 768px) {
   .menue-sec {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .menue-sec .menue-search-wrap {
@@ -323,7 +323,11 @@
   }
 
   .menue-sec--mobile-cart {
-    padding-bottom: 92px;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+
+  body:has(.menue-mobile-cart-bar) {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
   }
 
   .menue-mobile-cart-bar {
@@ -394,7 +398,7 @@
 /* Schmale Handys: Menü-Kacheln, Titelzeile, Unterkategorien */
 @media (max-width: 440px) {
   .menue-sec {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .menue-sec .menue-local-seo {
