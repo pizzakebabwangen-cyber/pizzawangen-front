@@ -125,11 +125,17 @@ const buildPhotonPlzOrtOnlyQuery = (postBox, cityField) => {
   return [plz, formatOrtForSearch(ort)].filter(Boolean).join(" ").trim();
 };
 
+/** 24, 24a, 1.1, 3a.1 — geo.admin hängt oft «.1» an die Hausnummer. */
+const SWISS_HOUSE_NUMBER = String.raw`\d+[a-zA-Z]?(?:\.\d+[a-zA-Z]?)?(?:\s*[-/]\s*\d+[a-zA-Z]?(?:\.\d+[a-zA-Z]?)?)?`;
+const SWISS_HOUSE_NUMBER_RE = new RegExp(`^${SWISS_HOUSE_NUMBER}$`);
+const SWISS_HOUSE_NUMBER_END_RE = new RegExp(`^(.+?)\\s+(${SWISS_HOUSE_NUMBER})$`);
+const SWISS_HOUSE_NUMBER_START_RE = new RegExp(`^(${SWISS_HOUSE_NUMBER})\\s+(.+)$`);
+
 const splitStreetAndHouseNumber = (value) => {
   const raw = String(value || "").replace(/,/g, " ").replace(/\s+/g, " ").trim();
   if (!raw) return { street: "", houseNumber: "" };
 
-  const endMatch = raw.match(/^(.+?)\s+(\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?)$/);
+  const endMatch = raw.match(SWISS_HOUSE_NUMBER_END_RE);
   if (endMatch) {
     return {
       street: endMatch[1].trim(),
@@ -137,7 +143,7 @@ const splitStreetAndHouseNumber = (value) => {
     };
   }
 
-  const startMatch = raw.match(/^(\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?)\s+(.+)$/);
+  const startMatch = raw.match(SWISS_HOUSE_NUMBER_START_RE);
   if (startMatch) {
     return {
       street: startMatch[2].trim(),
@@ -148,6 +154,28 @@ const splitStreetAndHouseNumber = (value) => {
   return { street: raw, houseNumber: "" };
 };
 
+/** Strasse ohne Hausnummer, Nummer nur in houseNumber — auch wenn sie doppelt angehängt ist. */
+const separateStreetAndHouse = (street, houseNumber) => {
+  let name = String(street || "").replace(/,/g, " ").replace(/\s+/g, " ").trim();
+  let hn = String(houseNumber || "").replace(/\s+/g, "").trim();
+  if (hn) {
+    const escaped = hn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const stripped = name.replace(new RegExp(`(?:\\s+${escaped})+$`, "i"), "").trim();
+    if (stripped) name = stripped;
+  }
+  const split = splitStreetAndHouseNumber(name);
+  if (split.houseNumber) {
+    name = split.street;
+    if (!hn) hn = split.houseNumber;
+    if (hn) {
+      const escaped = hn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const stripped = name.replace(new RegExp(`(?:\\s+${escaped})+$`, "i"), "").trim();
+      if (stripped) name = stripped;
+    }
+  }
+  return { street: name, houseNumber: hn };
+};
+
 const splitGeoDisplayAddress = (value) => {
   const parts = String(value || "")
     .split(",")
@@ -155,15 +183,12 @@ const splitGeoDisplayAddress = (value) => {
     .filter(Boolean);
   if (!parts.length) return { street: "", houseNumber: "" };
 
-  const firstIsHouseNumber = /^\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?$/.test(parts[0]);
+  const firstIsHouseNumber = SWISS_HOUSE_NUMBER_RE.test(parts[0]);
   if (firstIsHouseNumber && parts[1]) {
-    return {
-      street: parts[1],
-      houseNumber: parts[0].replace(/\s+/g, ""),
-    };
+    return separateStreetAndHouse(parts[1], parts[0].replace(/\s+/g, ""));
   }
 
-  return splitStreetAndHouseNumber(parts[0]);
+  return separateStreetAndHouse(parts[0], "");
 };
 
 const normalizeStreetSearchText = (value) =>
@@ -176,19 +201,21 @@ const normalizeStreetSearchText = (value) =>
 const removeLeadingHouseNumber = (value) =>
   String(value || "")
     .trim()
-    .replace(/^\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?\s+/, "")
+    .replace(new RegExp(`^${SWISS_HOUSE_NUMBER}\\s+`), "")
     .trim();
+
+const streetNameOnly = (value) => separateStreetAndHouse(value, "").street;
 
 const getPhotonStreetSearchName = (feature) => {
   const p = feature?.properties || {};
   const fromStreet = String(p.street || "").trim();
-  if (fromStreet) return fromStreet;
+  if (fromStreet) return streetNameOnly(fromStreet);
 
   const fromName = removeLeadingHouseNumber(p.name);
-  if (fromName) return fromName;
+  if (fromName) return streetNameOnly(fromName);
 
   const addr = photonFeatureToAddress(feature);
-  return removeLeadingHouseNumber(addr.streetOnly || addr.line1);
+  return streetNameOnly(removeLeadingHouseNumber(addr.streetOnly || addr.line1));
 };
 
 const photonFeatureMatchesTypedStreet = (feature, typed) => {
@@ -238,28 +265,16 @@ const extractStreetFromGeoAdminLabel = (label) => {
   if (!raw) return "";
   const withoutLoc = raw.replace(/\s+\d{4}\s+.+$/, "").trim();
   const withoutNum = withoutLoc
-    .replace(/\s+\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?$/, "")
+    .replace(new RegExp(`\\s+${SWISS_HOUSE_NUMBER}$`), "")
     .trim();
   return withoutNum.replace(/\s+#\s*$/, "").trim();
 };
 
-const extractHouseNumberFromGeoAdminLabel = (label) => {
-  const raw = stripHtmlTags(label);
-  if (!raw) return "";
-  const withoutLoc = raw.replace(/\s+\d{4}\s+.+$/, "").trim();
-  const match = withoutLoc.match(/\s+(\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?)$/);
-  return match ? match[1].replace(/\s+/g, "") : "";
-};
-
-const geoAdminRowToPhotonFeature = (attrs, street, zipcode, city) => {
-  const hnFromAttrs = String(attrs?.num ?? "").trim();
-  const hnFromLabel = extractHouseNumberFromGeoAdminLabel(attrs?.label);
-  const housenumber =
-    hnFromAttrs && hnFromAttrs !== "0" ? hnFromAttrs : hnFromLabel;
+const geoAdminRowToPhotonFeature = (_attrs, street, zipcode, city) => {
   return {
     properties: {
-      street: stripHtmlTags(street),
-      housenumber: stripHtmlTags(housenumber),
+      street: streetNameOnly(stripHtmlTags(street)),
+      housenumber: "",
       postcode: stripHtmlTags(zipcode),
       city: stripHtmlTags(city),
       countrycode: "ch",
@@ -751,23 +766,27 @@ const CheckOutForm = () => {
         setStreetSuggestions([]);
         setStreetSuggestOpen(false);
         setStreetSearchNoHits(false);
-        setFormData((prev) => ({
-          ...prev,
-          street:
+        setFormData((prev) => {
+          const separated = separateStreetAndHouse(
             fullAddressSplit.street ||
-            split.street ||
-            String(parsed?.street || "").trim() ||
-            String(prev.street || "").trim(),
-          hausnummer:
+              split.street ||
+              String(parsed?.street || "").trim() ||
+              String(prev.street || "").trim(),
             fullAddressSplit.houseNumber ||
-            String(parsed?.houseNumber || "").trim() ||
-            split.houseNumber ||
-            String(prev.hausnummer || "").trim(),
-          postBox: String(parsed?.postcode || "").trim() || String(prev.postBox || "").trim(),
-          city:
-            [parsed?.postcode, parsed?.city].filter(Boolean).join(" ").trim() ||
-            String(prev.city || "").trim(),
-        }));
+              String(parsed?.houseNumber || "").trim() ||
+              split.houseNumber ||
+              String(prev.hausnummer || "").trim()
+          );
+          return {
+            ...prev,
+            street: separated.street,
+            hausnummer: separated.houseNumber,
+            postBox: String(parsed?.postcode || "").trim() || String(prev.postBox || "").trim(),
+            city:
+              [parsed?.postcode, parsed?.city].filter(Boolean).join(" ").trim() ||
+              String(prev.city || "").trim(),
+          };
+        });
         return;
       }
 
@@ -781,10 +800,14 @@ const CheckOutForm = () => {
       setStreetSuggestOpen(false);
       setStreetSearchNoHits(false);
       setFormData((prev) => {
+        const separated = separateStreetAndHouse(
+          fullAddressSplit.street || split.street || String(prev.street || "").trim(),
+          fullAddressSplit.houseNumber || split.houseNumber || String(prev.hausnummer || "").trim()
+        );
         return {
           ...prev,
-          street: fullAddressSplit.street || split.street || String(prev.street || "").trim(),
-          hausnummer: fullAddressSplit.houseNumber || split.houseNumber || String(prev.hausnummer || "").trim(),
+          street: separated.street,
+          hausnummer: separated.houseNumber,
         };
       });
     } catch (_) {}
@@ -1026,19 +1049,19 @@ const CheckOutForm = () => {
   }, [formData.street, formData.postBox, formData.city, deliveryData]);
 
   const applyStreetSuggestion = (feature) => {
-    const { line1, postBox, plzOrt, streetOnly, houseNumber } = photonFeatureToAddress(feature);
+    const { line1, postBox, plzOrt, streetOnly } = photonFeatureToAddress(feature);
     const cleanPlzOrt =
       buildCleanPlzOrt(postBox, feature?.properties?.city) ||
       buildPhotonPlzOrtOnlyQuery(formData.postBox, formData.city) ||
       plzOrt;
+    const streetName = streetNameOnly(streetOnly || line1 || "");
     skipStreetFetchRef.current = true;
     setStreetSuggestions([]);
     setStreetSuggestOpen(false);
     setStreetSearchNoHits(false);
     setFormData((prev) => ({
       ...prev,
-      street: streetOnly || line1 || prev.street,
-      hausnummer: houseNumber || "",
+      street: streetName || prev.street,
       postBox: postBox || prev.postBox,
       city: cleanPlzOrt || prev.city,
     }));
@@ -1183,8 +1206,8 @@ const CheckOutForm = () => {
               {streetSuggestOpen && streetSuggestions.length > 0 && (
                 <ul className="street-suggestions" role="listbox">
                   {streetSuggestions.map((f, idx) => {
-                    const { label, streetOnly, line1 } = photonFeatureToAddress(f);
-                    const display = streetOnly || line1 || label;
+                    const { streetOnly, line1 } = photonFeatureToAddress(f);
+                    const display = streetNameOnly(streetOnly || line1 || "");
                     return (
                       <li
                         key={`${f?.properties?.osm_id ?? idx}-${idx}`}
@@ -1766,12 +1789,16 @@ const CheckOutForm = () => {
                     payWay === 1 ? "" : discountTrim || gutscheinTrim;
 
                   /* Kein ...formData: verhindert doppelte / veraltete Keys (z. B. gutscheinCode = Rabatt bei Bar). */
+                  const separatedAddress = separateStreetAndHouse(
+                    formData.street,
+                    formData.hausnummer
+                  );
                   const payload = {
                     userId: uid,
                     salute: formData.salute,
                     name: formData.name,
-                    street: formData.street,
-                    hausnummer: formData.hausnummer,
+                    street: separatedAddress.street,
+                    hausnummer: separatedAddress.houseNumber,
                     city: cityMerged,
                     postBox: postBoxMerged,
                     email: formData.email,
