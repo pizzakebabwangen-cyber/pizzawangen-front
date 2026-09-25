@@ -218,16 +218,22 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                     <div className="base-ingredients">
                       <h3>Bestehende Zutaten entfernen</h3>
                       <div className="toppings">
-                        {baseIngredients.map((name) => (
-                          <label key={name}>
-                            <input
-                              type="checkbox"
-                              checked={!removedIngredients.includes(name)}
-                              onChange={() => toggleIngredient(name)}
-                            />
-                            {name}
-                          </label>
-                        ))}
+                        {baseIngredients.map((name) => {
+                          const removed = removedIngredients.includes(name);
+                          return (
+                            <label
+                              key={name}
+                              className={removed ? "is-removed" : undefined}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={!removed}
+                                onChange={() => toggleIngredient(name)}
+                              />
+                              <span>{name}</span>
+                            </label>
+                          );
+                        })}
                       </div>
                     </div>
                   )}

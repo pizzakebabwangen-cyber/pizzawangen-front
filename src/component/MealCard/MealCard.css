@@ -332,6 +332,11 @@
     margin: 8px 0 12px;
   }
 
+  .base-ingredients .is-removed span {
+    text-decoration: line-through;
+    color: #666;
+  }
+
   .item-note {
     display: flex;
     flex-direction: column;
