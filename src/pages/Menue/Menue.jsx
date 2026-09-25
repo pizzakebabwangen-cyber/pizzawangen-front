@@ -74,10 +74,9 @@ const Menue = () => {
       ? Math.max(0, deliveryMinimum - mobileCartTotal)
       : null;
   const plzLabel = String(savedPostcode).match(/\d{4}/)?.[0] || "";
-  const minimumHint = !isDeliveryOrPreorder(deliveryMethod)
-    ? ""
-    : deliveryMinimum == null
-      ? "PLZ wählen, dann sehen Sie den Mindestbestellwert."
+  const minimumHint =
+    cartItemsCount <= 0 || !isDeliveryOrPreorder(deliveryMethod) || deliveryMinimum == null
+      ? ""
       : minimumMissing > 0
         ? `Noch CHF ${minimumMissing.toFixed(2)} bis zum Mindestbestellwert${
             plzLabel ? ` (PLZ ${plzLabel})` : ""
