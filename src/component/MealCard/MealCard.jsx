@@ -29,7 +29,6 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
   });
   const [selectedExtensions, setSelectedExtensions] = useState([]);
   const [removedIngredients, setRemovedIngredients] = useState([]);
-  const [itemNote, setItemNote] = useState("");
   const [modalSession, setModalSession] = useState(0);
   const [addQuantity, setAddQuantity] = useState(1);
   const dispatch = useDispatch();
@@ -74,7 +73,6 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
     setAddQuantity(1);
     setSelectedExtensions([]);
     setRemovedIngredients([]);
-    setItemNote("");
     setModalSession((n) => n + 1);
     setOpen(true);
   };
@@ -111,11 +109,7 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
       price: 0,
       categoryId,
     }));
-    const note = itemNote.trim().slice(0, 140);
-    const noteLine = note
-      ? [{ name: `Notiz: ${note}`, price: 0, categoryId }]
-      : [];
-    return [...selectedExtensions, ...removals, ...noteLine];
+    return [...selectedExtensions, ...removals];
   };
 
   return (
@@ -230,23 +224,25 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                                 checked={!removed}
                                 onChange={() => toggleIngredient(name)}
                               />
-                              <span>{name}</span>
+                              <span
+                                style={
+                                  removed
+                                    ? {
+                                        textDecoration: "line-through",
+                                        textDecorationThickness: "2px",
+                                        color: "#444",
+                                      }
+                                    : undefined
+                                }
+                              >
+                                {name}
+                              </span>
                             </label>
                           );
                         })}
                       </div>
                     </div>
                   )}
-                  <label className="item-note">
-                    Kommentar
-                    <input
-                      type="text"
-                      maxLength={140}
-                      value={itemNote}
-                      placeholder="z. B. ohne Zwiebeln"
-                      onChange={(e) => setItemNote(e.target.value)}
-                    />
-                  </label>
                   {meal.extensions && <h1>extras :</h1>}
                   <div className="toppings" key={modalSession}>
                     {extensionsData &&

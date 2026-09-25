@@ -320,8 +320,7 @@
     font-size: 1.5em;
   }
 
-  .base-ingredients h3,
-  .item-note {
+  .base-ingredients h3 {
     color: #111;
     font-size: 1.05rem;
     font-weight: 700;
@@ -332,27 +331,11 @@
     margin: 8px 0 12px;
   }
 
-  .base-ingredients .is-removed span {
+  .base-ingredients label.is-removed,
+  .base-ingredients label.is-removed span {
     text-decoration: line-through;
-    color: #666;
-  }
-
-  .item-note {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin: 4px 0 16px;
-  }
-
-  .item-note input {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 1rem;
-    color: #111;
-    background: #fff;
+    text-decoration-thickness: 2px;
+    color: #444;
   }
 
   .toppings {
