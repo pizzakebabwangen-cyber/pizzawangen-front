@@ -35,17 +35,22 @@ const joinStreetAndHouse = (street, houseNumber) =>
     .join(" ")
     .trim();
 
+const SWISS_HOUSE_NUMBER = String.raw`\d+[a-zA-Z]?(?:\.\d+[a-zA-Z]?)?(?:\s*[-/]\s*\d+[a-zA-Z]?(?:\.\d+[a-zA-Z]?)?)?`;
+const SWISS_HOUSE_NUMBER_RE = new RegExp(`^${SWISS_HOUSE_NUMBER}$`);
+const SWISS_HOUSE_NUMBER_END_RE = new RegExp(`^(.+?)\\s+(${SWISS_HOUSE_NUMBER})$`);
+const SWISS_HOUSE_NUMBER_START_RE = new RegExp(`^(${SWISS_HOUSE_NUMBER})\\s+(.+)$`);
+
 const splitStreetAndHouseNumber = (value) => {
   const raw = String(value || "").replace(/,/g, " ").replace(/\s+/g, " ").trim();
   if (!raw) return { street: "", houseNumber: "" };
-  const endMatch = raw.match(/^(.+?)\s+(\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?)$/);
+  const endMatch = raw.match(SWISS_HOUSE_NUMBER_END_RE);
   if (endMatch) {
     return {
       street: endMatch[1].trim(),
       houseNumber: endMatch[2].replace(/\s+/g, "").trim(),
     };
   }
-  const startMatch = raw.match(/^(\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?)\s+(.+)$/);
+  const startMatch = raw.match(SWISS_HOUSE_NUMBER_START_RE);
   if (startMatch) {
     return {
       street: startMatch[2].trim(),
@@ -55,6 +60,27 @@ const splitStreetAndHouseNumber = (value) => {
   return { street: raw, houseNumber: "" };
 };
 
+const separateStreetAndHouse = (street, houseNumber) => {
+  let name = String(street || "").replace(/,/g, " ").replace(/\s+/g, " ").trim();
+  let hn = String(houseNumber || "").replace(/\s+/g, "").trim();
+  if (hn) {
+    const escaped = hn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const stripped = name.replace(new RegExp(`(?:\\s+${escaped})+$`, "i"), "").trim();
+    if (stripped) name = stripped;
+  }
+  const split = splitStreetAndHouseNumber(name);
+  if (split.houseNumber) {
+    name = split.street;
+    if (!hn) hn = split.houseNumber;
+    if (hn) {
+      const escaped = hn.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const stripped = name.replace(new RegExp(`(?:\\s+${escaped})+$`, "i"), "").trim();
+      if (stripped) name = stripped;
+    }
+  }
+  return { street: name, houseNumber: hn };
+};
+
 const splitNominatimDisplayName = (displayName) => {
   const parts = String(displayName || "")
     .split(",")
@@ -62,7 +88,7 @@ const splitNominatimDisplayName = (displayName) => {
     .filter(Boolean);
   const first = parts[0] || "";
   const second = parts[1] || "";
-  const firstIsHouseNumber = /^\d+[a-zA-Z]?(?:\s*[-/]\s*\d+[a-zA-Z]?)?$/.test(first);
+  const firstIsHouseNumber = SWISS_HOUSE_NUMBER_RE.test(first);
 
   if (firstIsHouseNumber && second) {
     return {
@@ -470,6 +496,10 @@ const DeliveryMethod = () => {
         setGeoResolvedLine("");
         return;
       }
+
+      const separated = separateStreetAndHouse(street, houseNumber);
+      street = separated.street;
+      houseNumber = separated.houseNumber;
 
       const displayLine = buildGeoDisplayLine({
         street,

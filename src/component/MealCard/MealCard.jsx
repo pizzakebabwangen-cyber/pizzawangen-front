@@ -15,12 +15,21 @@ import { isDeliveryOrPreorder } from "../../utils/isDeliveryOrPreorder";
 import { getDeliveryUnitChf, getPickupUnitChf } from "../../utils/productPrices";
 import WebRootImage from "../WebRootImage/WebRootImage.jsx";
 
+const parseBaseIngredients = (description) =>
+  String(description || "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 1 && part.length <= 48)
+    .slice(0, 12);
+
 const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
   const [selectedExtensions, setSelectedExtensions] = useState([]);
+  const [removedIngredients, setRemovedIngredients] = useState([]);
+  const [modalSession, setModalSession] = useState(0);
   const [addQuantity, setAddQuantity] = useState(1);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -55,8 +64,16 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
     [baseUnitPriceChf, extensionsUnitTotalChf, addQuantity]
   );
 
+  const baseIngredients = useMemo(
+    () => parseBaseIngredients(meal?.description),
+    [meal?.description]
+  );
+
   const showModal = () => {
     setAddQuantity(1);
+    setSelectedExtensions([]);
+    setRemovedIngredients([]);
+    setModalSession((n) => n + 1);
     setOpen(true);
   };
   const showPause = () => {
@@ -75,6 +92,24 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
         ? prevToppings.filter((t) => t !== topping)
         : [...prevToppings, topping]
     );
+  };
+
+  const toggleIngredient = (name) => {
+    setRemovedIngredients((prev) =>
+      prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
+    );
+  };
+
+  const buildCartExtensions = () => {
+    const categoryId = Number(
+      meal?.subCategory?.categoryId ?? meal?.subCategory?.CategoryId ?? 0
+    );
+    const removals = removedIngredients.map((name) => ({
+      name: `ohne ${name}`,
+      price: 0,
+      categoryId,
+    }));
+    return [...selectedExtensions, ...removals];
   };
 
   return (
@@ -173,8 +208,43 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                   <h1>{meal.name}</h1>
                   <p className="price"> CHF {baseUnitPriceChf.toFixed(2)}</p>
                   <p>{meal.description1}</p>
+                  {baseIngredients.length > 0 && (
+                    <div className="base-ingredients">
+                      <h3>Bestehende Zutaten entfernen</h3>
+                      <div className="toppings">
+                        {baseIngredients.map((name) => {
+                          const removed = removedIngredients.includes(name);
+                          return (
+                            <label
+                              key={name}
+                              className={removed ? "is-removed" : undefined}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={!removed}
+                                onChange={() => toggleIngredient(name)}
+                              />
+                              <span
+                                style={
+                                  removed
+                                    ? {
+                                        textDecoration: "line-through",
+                                        textDecorationThickness: "2px",
+                                        color: "#444",
+                                      }
+                                    : undefined
+                                }
+                              >
+                                {name}
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                   {meal.extensions && <h1>extras :</h1>}
-                  <div className="toppings">
+                  <div className="toppings" key={modalSession}>
                     {extensionsData &&
                       extensionsData
                         ?.filter(
@@ -236,7 +306,7 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                     dispatch(
                       addMeal({
                         meal,
-                        selectedExtensions,
+                        selectedExtensions: buildCartExtensions(),
                         quantity: addQuantity,
                       })
                     );
