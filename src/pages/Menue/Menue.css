@@ -266,6 +266,97 @@
   }
 }
 
+.menue-with-side {
+  width: min(1280px, 100%);
+  margin: 0 auto;
+}
+
+.menue-side-cart {
+  display: none;
+}
+
+@media (min-width: 980px) {
+  .menue-with-side {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 0 12px 24px;
+    box-sizing: border-box;
+  }
+
+  .menue-side-cart {
+    display: block;
+    position: sticky;
+    top: 16px;
+    width: 280px;
+    flex: 0 0 280px;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+    background: #fff;
+    color: #111;
+    border-radius: 14px;
+    padding: 14px 14px 16px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  }
+
+  .menue-side-cart h2 {
+    margin: 0 0 10px;
+    font-size: 1.25rem;
+    color: #111;
+    text-align: left;
+  }
+
+  .menue-side-empty,
+  .menue-side-total,
+  .menue-side-minimum {
+    margin: 0 0 10px;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  .menue-side-total {
+    font-weight: 800;
+    font-size: 1.15rem;
+  }
+
+  .menue-side-minimum {
+    color: #9a3412;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .menue-side-items {
+    list-style: none;
+    margin: 0 0 12px;
+    padding: 0;
+  }
+
+  .menue-side-items li {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.92rem;
+  }
+
+  .menue-side-order {
+    width: 100%;
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 10px;
+    background: #111;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .menue-side-order:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
 .menue-mobile-cart-bar {
   display: none;
 }
@@ -349,12 +440,22 @@
   .menue-mobile-cart-total {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     min-width: 0;
     color: #111827;
     font-size: 1.05rem;
     font-weight: 900;
     white-space: nowrap;
+  }
+
+  .menue-mobile-cart-hint {
+    flex: 1 0 100%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9a3412;
+    white-space: normal;
+    line-height: 1.25;
   }
 
   .menue-mobile-cart-icon {

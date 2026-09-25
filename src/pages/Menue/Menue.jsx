@@ -20,6 +20,7 @@ import useGetDelivery from "../../hooks/useGetDelivery.jsx";
 import {
   DELIVERY_POSTCODE_STORAGE_KEY,
   getDeliveryMinimumBlock,
+  getMinimumOrderForPlz,
 } from "../../utils/deliveryMinimum.js";
 import toast from "react-hot-toast";
 
@@ -50,6 +51,11 @@ const Menue = () => {
   const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const { deliveryData, getDelivery } = useGetDelivery();
+  const [savedPostcode, setSavedPostcode] = useState(() =>
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem(DELIVERY_POSTCODE_STORAGE_KEY) || ""
+      : ""
+  );
   const cartItemsCount = Array.isArray(cart?.items)
     ? cart.items.reduce((sum, item) => sum + Number(item?.quantity || 0), 0)
     : 0;
@@ -61,6 +67,22 @@ const Menue = () => {
         return sum + Number(lineTotal || 0);
       }, 0)
     : 0;
+
+  const deliveryMinimum = getMinimumOrderForPlz(deliveryData, savedPostcode);
+  const minimumMissing =
+    isDeliveryOrPreorder(deliveryMethod) && deliveryMinimum != null
+      ? Math.max(0, deliveryMinimum - mobileCartTotal)
+      : null;
+  const plzLabel = String(savedPostcode).match(/\d{4}/)?.[0] || "";
+  const minimumHint = !isDeliveryOrPreorder(deliveryMethod)
+    ? ""
+    : deliveryMinimum == null
+      ? "PLZ wählen, dann sehen Sie den Mindestbestellwert."
+      : minimumMissing > 0
+        ? `Noch CHF ${minimumMissing.toFixed(2)} bis zum Mindestbestellwert${
+            plzLabel ? ` (PLZ ${plzLabel})` : ""
+          }.`
+        : "Mindestbestellwert erreicht.";
 
   const sectionRef1 = useRef(null); // Ref for categories
   const sectionRef2 = useRef(null); // Ref for meals
@@ -75,6 +97,18 @@ const Menue = () => {
 
   useEffect(() => {
     scrollToTop();
+  }, []);
+
+  useEffect(() => {
+    const readPostcode = () => {
+      setSavedPostcode(localStorage.getItem(DELIVERY_POSTCODE_STORAGE_KEY) || "");
+    };
+    window.addEventListener("focus", readPostcode);
+    const timer = window.setInterval(readPostcode, 1500);
+    return () => {
+      window.removeEventListener("focus", readPostcode);
+      window.clearInterval(timer);
+    };
   }, []);
 
   useEffect(() => {
@@ -276,6 +310,7 @@ useEffect(() => {
       className={`menue-sec${cartItemsCount > 0 ? " menue-sec--mobile-cart" : ""}`}
     >
       {!deliveryMethod && <DeliveryMethod />}
+      <div className="menue-with-side">
       <div className="container">
         <div className="menue-title-row">
           <h1 className="menue-page-heading">
@@ -427,11 +462,47 @@ useEffect(() => {
           )}
         </motion.div>
       </div>
+      <aside className="menue-side-cart" aria-label="Warenkorb">
+        <h2>Warenkorb</h2>
+        {cartItemsCount === 0 ? (
+          <p className="menue-side-empty">Noch keine Artikel.</p>
+        ) : (
+          <ul className="menue-side-items">
+            {cart.items.map((item, index) => {
+              const lineTotal = isDeliveryOrPreorder(deliveryMethod)
+                ? item?.totalPrice
+                : item?.totalPriceWithoutDelivery;
+              return (
+                <li key={`${item.productId}-${index}`}>
+                  <span>
+                    {item.quantity}× {item.name}
+                  </span>
+                  <span>CHF {Number(lineTotal || 0).toFixed(2)}</span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        <p className="menue-side-total">CHF {mobileCartTotal.toFixed(2)}</p>
+        {minimumHint && <p className="menue-side-minimum">{minimumHint}</p>}
+        <button
+          type="button"
+          className="menue-side-order"
+          onClick={goDirectlyToCheckout}
+          disabled={isStartingCheckout || cartItemsCount === 0}
+        >
+          {isStartingCheckout ? "Bitte warten..." : "Bestellen"}
+        </button>
+      </aside>
+      </div>
       {cartItemsCount > 0 && (
         <div className="menue-mobile-cart-bar" aria-label="Warenkorb">
           <div className="menue-mobile-cart-total">
             <span className="menue-mobile-cart-icon">Warenkorb</span>
             <span>CHF {mobileCartTotal.toFixed(2)}</span>
+            {minimumHint && (
+              <span className="menue-mobile-cart-hint">{minimumHint}</span>
+            )}
           </div>
           <button
             type="button"
