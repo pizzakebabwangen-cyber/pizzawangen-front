@@ -1,3 +1,16 @@
+.temp-close-line {
+  margin: 12px auto 16px;
+  max-width: 720px;
+  background: #fff4d6;
+  color: #3d2a00;
+  border: 1px solid #e2b340;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+}
+
 .menue-sec {
   width: 100%;
   max-width: 100%;

@@ -25,7 +25,7 @@ const AvailabilityService = {
     const preorder =
       preorderRaw !== undefined ? preorderRaw === true : true;
 
-    const pickupBoosted = pickupBool || isMoDoLieferpauseZuerich();
+    const pickupBoosted = preorder === false ? false : pickupBool || isMoDoLieferpauseZuerich();
     const rawMsg = String(data.message || data.Message || "");
     const message = preorder ? "" : rawMsg;
 

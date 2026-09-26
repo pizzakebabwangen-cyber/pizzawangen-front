@@ -609,6 +609,9 @@ const DeliveryMethod = () => {
         className="container"
       >
         <h2 id="delivery-choice-title">{greeting}</h2>
+        {ready && !isPreorderAllowed && message ? (
+          <p className="temp-close-line" role="status">{message}</p>
+        ) : null}
 
         <div className="methods methods-primary">
           <div

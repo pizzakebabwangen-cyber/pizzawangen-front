@@ -7,6 +7,7 @@ const HolidayPopUp = ({
   handleCancelPause,
   pausetill,
   pausefrom,
+  line,
 }) => {
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -33,7 +34,10 @@ const HolidayPopUp = ({
                   className="logo"
                 />
               </div>
-              {pausetyp == 1 && (
+              {line ? (
+                <p style={{ textAlign: "center", fontSize: "1rem" }}>{line}</p>
+              ) : null}
+              {!line && pausetyp == 1 && (
                 <>
                   <p
                     style={{
@@ -58,7 +62,7 @@ const HolidayPopUp = ({
                   </p>
                 </>
               )}
-              {pausetyp == 1 ? (
+              {line ? null : pausetyp == 1 ? (
                 <p style={{ textAlign: "start",fontSize:"1rem" }}>vielen Dank</p>
               ) : (
                 <p style={{ textAlign: "center",fontSize:"1rem" }}>

@@ -23,6 +23,7 @@ import {
   getMinimumOrderForPlz,
 } from "../../utils/deliveryMinimum.js";
 import toast from "react-hot-toast";
+import { useAvailability } from "../../context/AvailabilityContext.jsx";
 
 const MEAL_BATCH = 6;
 
@@ -48,6 +49,8 @@ const Menue = () => {
   const [isStartingCheckout, setIsStartingCheckout] = useState(false);
   const allProductsCacheRef = useRef(null);
   const deliveryMethod = useSelector((state) => state.delivery.deliverMethod);
+  const { isPreorderAllowed, message: pauseMessage, ready: availabilityReady } = useAvailability();
+  const tempCloseLine = availabilityReady && isPreorderAllowed === false ? pauseMessage : "";
   const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const { deliveryData, getDelivery } = useGetDelivery();
@@ -311,6 +314,9 @@ useEffect(() => {
       {!deliveryMethod && <DeliveryMethod />}
       <div className="menue-with-side">
       <div className="container">
+        {tempCloseLine ? (
+          <p className="temp-close-line" role="status">{tempCloseLine}</p>
+        ) : null}
         <div className="menue-title-row">
           <h1 className="menue-page-heading">
             <span className="highlight">Unser </span>Menü
