@@ -194,3 +194,19 @@ section {
   font-size: .8rem;
   
 }
+
+.site-pause-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300000;
+  background: #fff4d6;
+  color: #3d2a00;
+  border-bottom: 2px solid #e2b340;
+  padding: 14px 18px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.45;
+  font-size: 16px;
+}

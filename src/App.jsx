@@ -42,7 +42,7 @@ function App() {
     readCheckoutUnlockedFlag()
   );
   const { isCheckedOut } = useSelector((state) => state.Auth);
-  const { isPreorderAllowed, ready } = useAvailability();
+  const { isPreorderAllowed, ready, message: pauseMessage } = useAvailability();
   const location = useLocation();
 
   useEffect(() => {
@@ -72,8 +72,13 @@ function App() {
     document.documentElement.classList.toggle("browse-only", !isPreorderAllowed);
   }, [ready, isPreorderAllowed]);
 
+  const showPauseLine = ready && isPreorderAllowed === false && !!pauseMessage;
+
   return (
     <>
+      {showPauseLine ? (
+        <div className="site-pause-banner" role="status">{pauseMessage}</div>
+      ) : null}
       <ScrollToTop />
       <Nav />
       <Routes>

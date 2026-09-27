@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FaCartShopping } from "react-icons/fa6";
 import toast from "react-hot-toast";
+import { useAvailability } from "../../context/AvailabilityContext.jsx";
 import { addMeal } from "../../reduxTool/CartSlice";
 import "./MealCard.css";
 import Image from "../../assets/images/paner.png";
@@ -14,6 +15,19 @@ import HolidayPopUp from "../holidayPopUp/HolidayPopUp";
 import { isDeliveryOrPreorder } from "../../utils/isDeliveryOrPreorder";
 import { getDeliveryUnitChf, getPickupUnitChf } from "../../utils/productPrices";
 import WebRootImage from "../WebRootImage/WebRootImage.jsx";
+
+const PIZZA_CATEGORY_ID = 37;
+
+const isPizzaSection = (meal) => {
+  const categoryName = String(
+    meal?.subCategory?.category?.name || meal?.subCategory?.Category?.name || ""
+  ).toLowerCase();
+  if (categoryName.includes("pizza")) return true;
+  const categoryId = Number(
+    meal?.subCategory?.categoryId ?? meal?.subCategory?.CategoryId ?? 0
+  );
+  return categoryId === PIZZA_CATEGORY_ID;
+};
 
 const parseBaseIngredients = (description) =>
   String(description || "")
@@ -65,8 +79,8 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
   );
 
   const baseIngredients = useMemo(
-    () => parseBaseIngredients(meal?.description),
-    [meal?.description]
+    () => (isPizzaSection(meal) ? parseBaseIngredients(meal?.description) : []),
+    [meal]
   );
 
   const showModal = () => {
@@ -76,6 +90,8 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
     setModalSession((n) => n + 1);
     setOpen(true);
   };
+  const { isPreorderAllowed, message: pauseMessage, ready: availabilityReady } = useAvailability();
+  const tempClosed = availabilityReady && isPreorderAllowed === false && !!pauseMessage;
   const showPause = () => {
     setOpenPause(true);
   };
@@ -122,11 +138,9 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
           transition={{ duration: 0.6 }}
           className="animated-component"
           onClick={
-            companyData?.data?.pausetyp == 1
+            tempClosed || companyData?.data?.pausetyp == 1 || companyData?.data?.pausetyp == 2
               ? showPause
-              : companyData?.data?.pausetyp == 2
-                ? showPause
-                : showModal
+              : showModal
           }
         >
           <WebRootImage
@@ -332,6 +346,7 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
             handleCancelPause={handleCancelPause}
             pausetill={companyData?.data?.pausetill}
             pausefrom={companyData?.data?.pausefrom}
+            line={tempClosed ? pauseMessage : ""}
           />
         </>
       )}
