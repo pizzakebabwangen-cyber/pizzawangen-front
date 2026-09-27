@@ -16,6 +16,19 @@ import { isDeliveryOrPreorder } from "../../utils/isDeliveryOrPreorder";
 import { getDeliveryUnitChf, getPickupUnitChf } from "../../utils/productPrices";
 import WebRootImage from "../WebRootImage/WebRootImage.jsx";
 
+const PIZZA_CATEGORY_ID = 37;
+
+const isPizzaSection = (meal) => {
+  const categoryName = String(
+    meal?.subCategory?.category?.name || meal?.subCategory?.Category?.name || ""
+  ).toLowerCase();
+  if (categoryName.includes("pizza")) return true;
+  const categoryId = Number(
+    meal?.subCategory?.categoryId ?? meal?.subCategory?.CategoryId ?? 0
+  );
+  return categoryId === PIZZA_CATEGORY_ID;
+};
+
 const parseBaseIngredients = (description) =>
   String(description || "")
     .split(",")
@@ -66,8 +79,8 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
   );
 
   const baseIngredients = useMemo(
-    () => parseBaseIngredients(meal?.description),
-    [meal?.description]
+    () => (isPizzaSection(meal) ? parseBaseIngredients(meal?.description) : []),
+    [meal]
   );
 
   const showModal = () => {
