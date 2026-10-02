@@ -10,6 +10,18 @@ import { AvailabilityProvider } from "./context/AvailabilityContext.jsx";
 /** Entspricht Vite `base` (z. B. `/site1/` → Router unter `/site1`). */
 const routerBasename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
 
+/** Ordner /order-tracking/index.html (IIS ohne SPA-Rewrite) auf die Tracking-Route legen. */
+if (typeof window !== "undefined") {
+  const path = window.location.pathname.replace(/\/index\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path === "/order-tracking" && window.location.pathname !== "/order-tracking") {
+    window.history.replaceState(
+      null,
+      "",
+      "/order-tracking" + window.location.search + window.location.hash
+    );
+  }
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(
 
 

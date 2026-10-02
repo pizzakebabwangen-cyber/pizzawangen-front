@@ -163,7 +163,7 @@ const Footer = () => {
               <Link to="/impressum"><p>Impressum</p></Link>
               <Link to="/Datenschutzbestimmungen"><p>Datenschutzbestimmungen</p></Link>
               <Link to="/agb"><p>AGB</p></Link>
-              <a href="/order-tracking"><p>Bestellung verfolgen</p></a>
+              <Link to="/order-tracking"><p>Bestellung verfolgen</p></Link>
             </div>
           </div>
 
