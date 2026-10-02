@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './OrderTracking.css';
 
-const API_BASE_URL = "https://pizzawangen.runasp.net";
+const API_BASE_URL = (
+  import.meta.env.VITE_SERVER || "https://admin.pizzawangen.ch"
+).replace(/\/+$/, "");
 
 const OrderTracking = () => {
   const [searchParams] = useSearchParams();
-  const [orderId, setOrderId] = useState(searchParams.get('id') || '');
+  const linkedId = (searchParams.get('id') || '').trim();
+  const [orderId, setOrderId] = useState(linkedId);
   const [orderData, setOrderData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(linkedId));
   const [error, setError] = useState('');
   const [manualSearch, setManualSearch] = useState(false);
 
@@ -35,8 +38,13 @@ const OrderTracking = () => {
     setOrderData(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/Order/${id}/status`);
-      
+      const response = await fetch(`${API_BASE_URL}/api/Order/${encodeURIComponent(id)}/status`);
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        setError("Die Bestellung konnte nicht geladen werden. Bitte die Nummer prüfen.");
+        return;
+      }
+
       if (!response.ok) {
         if (response.status === 404) {
           setError('Bestellung nicht gefunden. Bitte überprüfen Sie Ihre Bestellnummer.');
@@ -54,6 +62,17 @@ const OrderTracking = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const scrollUp = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    scrollUp();
+    const timer = window.setTimeout(scrollUp, 50);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // Auto-fetch if ID is in URL
   useEffect(() => {
@@ -79,8 +98,8 @@ const OrderTracking = () => {
     <div className="tracking-page">
       <div className="tracking-container">
         <h1 className="tracking-title">📦 Bestellung verfolgen</h1>
-        
-        {/* Search Form */}
+
+        {linkedId ? null : (
         <form onSubmit={handleSubmit} className="tracking-form">
           <div className="form-group">
             <label htmlFor="orderId">Bestellnummer eingeben:</label>
@@ -97,6 +116,7 @@ const OrderTracking = () => {
             {loading ? 'Laden...' : 'Suchen'}
           </button>
         </form>
+        )}
 
         {/* Error Message */}
         {error && (
@@ -170,7 +190,7 @@ const OrderTracking = () => {
           </div>
         )}
 
-        {/* Instructions */}
+        {linkedId ? null : (
         <div className="tracking-help">
           <h3>Wie funktioniert's?</h3>
           <ol>
@@ -179,6 +199,7 @@ const OrderTracking = () => {
             <li>Verfolgen Sie den Status Ihrer Bestellung in Echtzeit</li>
           </ol>
         </div>
+        )}
       </div>
     </div>
   );
