@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './OrderTracking.css';
 
-const API_BASE_URL = "https://pizzawangen.runasp.net";
+const API_BASE_URL = (
+  import.meta.env.VITE_SERVER || "https://admin.pizzawangen.ch"
+).replace(/\/+$/, "");
 
 const OrderTracking = () => {
   const [searchParams] = useSearchParams();
@@ -35,8 +37,13 @@ const OrderTracking = () => {
     setOrderData(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/Order/${id}/status`);
-      
+      const response = await fetch(`${API_BASE_URL}/api/Order/${encodeURIComponent(id)}/status`);
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        setError("Die Bestellung konnte nicht geladen werden. Bitte die Nummer prüfen.");
+        return;
+      }
+
       if (!response.ok) {
         if (response.status === 404) {
           setError('Bestellung nicht gefunden. Bitte überprüfen Sie Ihre Bestellnummer.');
