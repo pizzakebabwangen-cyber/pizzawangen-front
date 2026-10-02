@@ -62,6 +62,17 @@ const OrderTracking = () => {
     }
   };
 
+  useEffect(() => {
+    const scrollUp = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+    scrollUp();
+    const timer = window.setTimeout(scrollUp, 50);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   // Auto-fetch if ID is in URL
   useEffect(() => {
     const idFromUrl = searchParams.get('id');

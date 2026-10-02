@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, search, hash } = useLocation();
 
   useEffect(() => {
     if (typeof window.history !== "undefined" && "scrollRestoration" in window.history) {
@@ -22,7 +22,7 @@ export default function ScrollToTop() {
       clearTimeout(t2);
       clearTimeout(t3);
     };
-  }, [pathname]);
+  }, [pathname, search, hash]);
 
   return null;
 }

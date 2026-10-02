@@ -73,6 +73,13 @@ function App() {
   }, [ready, isPreorderAllowed]);
 
   const showPauseLine = ready && isPreorderAllowed === false && !!pauseMessage;
+  const trackingPath = (location.pathname || "/")
+    .replace(/\/index\.html$/i, "")
+    .replace(/\/+$/, "") || "/";
+  const showTracking =
+    trackingPath === "/order-tracking" ||
+    new URLSearchParams(location.search).get("verfolgen") === "1" ||
+    location.hash === "#verfolgen";
 
   return (
     <>
@@ -81,7 +88,8 @@ function App() {
       ) : null}
       <ScrollToTop />
       <Nav />
-      <Routes>
+      {showTracking ? <OrderTracking /> : null}
+      {showTracking ? null : <Routes>
         <Route
           path="/"
           element={<Home />}
@@ -124,7 +132,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgetPass" element={<ForgetPassPage />} />
         <Route path="/resetPassword" element={<ResetPassPage />} />
-      </Routes>
+      </Routes>}
       <Footer />
     </>
   );
