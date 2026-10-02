@@ -78,6 +78,7 @@ function App() {
     .replace(/\/+$/, "") || "/";
   const showTracking =
     trackingPath === "/order-tracking" ||
+    trackingPath === "/bestellung-verfolgen" ||
     new URLSearchParams(location.search).get("verfolgen") === "1" ||
     location.hash === "#verfolgen";
 

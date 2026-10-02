@@ -8,9 +8,10 @@ const API_BASE_URL = (
 
 const OrderTracking = () => {
   const [searchParams] = useSearchParams();
-  const [orderId, setOrderId] = useState(searchParams.get('id') || '');
+  const linkedId = (searchParams.get('id') || '').trim();
+  const [orderId, setOrderId] = useState(linkedId);
   const [orderData, setOrderData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(Boolean(linkedId));
   const [error, setError] = useState('');
   const [manualSearch, setManualSearch] = useState(false);
 
@@ -97,8 +98,8 @@ const OrderTracking = () => {
     <div className="tracking-page">
       <div className="tracking-container">
         <h1 className="tracking-title">📦 Bestellung verfolgen</h1>
-        
-        {/* Search Form */}
+
+        {linkedId ? null : (
         <form onSubmit={handleSubmit} className="tracking-form">
           <div className="form-group">
             <label htmlFor="orderId">Bestellnummer eingeben:</label>
@@ -115,6 +116,7 @@ const OrderTracking = () => {
             {loading ? 'Laden...' : 'Suchen'}
           </button>
         </form>
+        )}
 
         {/* Error Message */}
         {error && (
@@ -188,7 +190,7 @@ const OrderTracking = () => {
           </div>
         )}
 
-        {/* Instructions */}
+        {linkedId ? null : (
         <div className="tracking-help">
           <h3>Wie funktioniert's?</h3>
           <ol>
@@ -197,6 +199,7 @@ const OrderTracking = () => {
             <li>Verfolgen Sie den Status Ihrer Bestellung in Echtzeit</li>
           </ol>
         </div>
+        )}
       </div>
     </div>
   );
