@@ -92,9 +92,16 @@
 }
 
 .invoice-qr-label {
-  margin: 0 0 10px;
+  margin: 10px 0 2px;
   font-size: 0.9rem;
   font-weight: 600;
+  text-align: center;
+}
+
+.invoice-qr-scan {
+  margin: 0;
+  font-size: 0.88rem;
+  text-align: center;
 }
 
 .invoice-qr-address {

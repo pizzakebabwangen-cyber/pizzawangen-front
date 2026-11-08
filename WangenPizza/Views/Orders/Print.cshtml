@@ -72,9 +72,11 @@
       }
       else
       {
-        <p class="invoice-qr-label">Kurier - QR scannen</p>
         @* <img src="@order.QrCodeUrl" alt="QR" /> *@
       }
+      <p class="invoice-qr-label">Kurier - QR scannen</p>
+      <p class="invoice-qr-scan">1. Scan: Unterwegs</p>
+      <p class="invoice-qr-scan">2. Scan: Zugestellt</p>
       <p class="invoice-qr-address">@(order?.Street) @(order?.Hausnummer) @(order?.PostCode) @(order?.City)</p>
     </section>
 
