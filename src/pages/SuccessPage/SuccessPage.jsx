@@ -6,6 +6,7 @@ import "./SuccessPage.css";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { clearWangenCheckoutPaymentSession } from "../../utils/wangenPaymentSessionStorage.js";
+import { getApiBaseUrl } from "../../config/apiBase.js";
 
 const GOOGLE_MERCHANT_ID = 5465477483;
 
@@ -36,7 +37,7 @@ const SuccessPage = () => {
   /** Finalisierung (Stripe) + order-review-data mit vielen Versuchen — Google brauchst du Email + orderId. */
   useEffect(() => {
     if (!orderId) return;
-    const server = import.meta.env.VITE_SERVER;
+    const server = getApiBaseUrl();
     const id = Number(orderId);
     if (!Number.isFinite(id) || id <= 0) return;
 

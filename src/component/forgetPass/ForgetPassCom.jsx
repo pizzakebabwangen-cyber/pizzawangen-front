@@ -24,8 +24,8 @@ function ForgetPassCom() {
                     <div className="content">
                         <p className="verification-message">
                             {message}
-                        </p>s
-                        <Link to={"/Login"}>
+                        </p>
+                        <Link to={"/login"}>
                             <h4 className="return">
                                 <span>Weiter...</span>
                             </h4>
@@ -46,7 +46,7 @@ function ForgetPassCom() {
                         <button type="submit" className={`${loading ? "loading-button" : ""}`}> {loading ? "Wait ..." : "Weiter..."}</button>
                     </form>
                     <div className="returnF">
-                        <Link to={"/Login"}> <h4 className="return"> <span>Neu anmelden</span> </h4></Link>
+                        <Link to={"/login"}> <h4 className="return"> <span>Neu anmelden</span> </h4></Link>
                         <Link to={"/"}> <h4 className="return">  <span>  Startseite </span></h4></Link>
                     </div>
 

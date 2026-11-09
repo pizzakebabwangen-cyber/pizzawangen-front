@@ -129,7 +129,7 @@ function RegisterCom() {
           </form>
 
           <div className="returnF">
-            <Link to={"/Login"}>
+            <Link to={"/login"}>
               <h4 className="return">
                 <span>Anmeldeseite </span>
               </h4>
@@ -152,7 +152,7 @@ function RegisterCom() {
             <p className="verification-message">
               Ihre Registrierung war erfolgreich.
             </p>
-            <Link to={"/Login"}>
+            <Link to={"/login"}>
               <h4 className="return">
                 <span>Weiter... </span>
               </h4>

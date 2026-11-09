@@ -29,7 +29,9 @@ const Angebote = () => {
     });
   };
 
-  scrollToTop();
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   const { ref, inView } = useInView({
     triggerOnce: true,

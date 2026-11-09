@@ -161,7 +161,7 @@ const Footer = () => {
           <div className="footer-extras">
             <div>
               <Link to="/impressum"><p>Impressum</p></Link>
-              <Link to="/Datenschutzbestimmungen"><p>Datenschutzbestimmungen</p></Link>
+              <Link to="/datenschutzbestimmungen"><p>Datenschutzbestimmungen</p></Link>
               <Link to="/agb"><p>AGB</p></Link>
               <Link to="/order-tracking"><p>Bestellung verfolgen</p></Link>
             </div>

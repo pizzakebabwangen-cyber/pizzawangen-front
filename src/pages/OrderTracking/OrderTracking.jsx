@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import './OrderTracking.css';
 
-const API_BASE_URL = "https://pizzawangen.runasp.net";
+const API_BASE_URL = import.meta.env.VITE_SERVER || "https://pizzawangen.runasp.net";
 
 const OrderTracking = () => {
   const [searchParams] = useSearchParams();
