@@ -186,9 +186,9 @@ const MenueDemo = () => {
         </h1>
 
         <motion.div
-          initial={{ opacity: 0, y: 200 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
           className="animated-component"
         >
           <div className="cats">
@@ -240,9 +240,9 @@ const MenueDemo = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 200 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
           className="animated-component"
         >
           <div className="selectedSubCategory">

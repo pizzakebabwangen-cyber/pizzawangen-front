@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 // import React from 'react'
-import backgroundImage1 from "../../assets/background/pizza2.jpg";
-import backgroundImage2 from "../../assets/background/pizza1.jpg";
-import backgroundImage3 from "../../assets/background/pizza3.jpg";
-import backgroundImage4 from "../../assets/background/pizza4.jpg";
-import backgroundImage5 from "../../assets/background/bg11.jpg";
+import backgroundImage1 from "../../assets/background/pizza2.webp";
+import backgroundImage2 from "../../assets/background/pizza1.webp";
+import backgroundImage3 from "../../assets/background/pizza3.webp";
+import backgroundImage4 from "../../assets/background/pizza4.webp";
+import backgroundImage5 from "../../assets/background/bg11.webp";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import {
@@ -58,6 +58,8 @@ const Slider = () => {
           <img
             src={backgroundImage1}
             alt=""
+            width={1600}
+            height={1067}
             fetchPriority="high"
             decoding="async"
             sizes="100vw"
@@ -72,6 +74,8 @@ const Slider = () => {
           <img
             src={backgroundImage2}
             alt=""
+            width={1600}
+            height={1068}
             loading="lazy"
             fetchPriority="low"
             decoding="async"
@@ -87,6 +91,8 @@ const Slider = () => {
           <img
             src={backgroundImage3}
             alt=""
+            width={1600}
+            height={1067}
             loading="lazy"
             fetchPriority="low"
             decoding="async"
@@ -102,6 +108,8 @@ const Slider = () => {
           <img
             src={backgroundImage4}
             alt=""
+            width={1600}
+            height={1067}
             loading="lazy"
             fetchPriority="low"
             decoding="async"
@@ -117,6 +125,8 @@ const Slider = () => {
           <img
             src={backgroundImage5}
             alt=""
+            width={1600}
+            height={900}
             loading="lazy"
             fetchPriority="low"
             decoding="async"

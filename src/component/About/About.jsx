@@ -2,7 +2,7 @@
 import "./About.css";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import About_image from "../../assets/images/aboutimage (2).png";
+import About_image from "../../assets/images/aboutimage (2).webp";
 const About = () => {
   const { ref, inView } = useInView({
     triggerOnce: true, // Animation triggers only once
@@ -12,9 +12,9 @@ const About = () => {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 200 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.3 }}
       className="animated-component"
     >
       <div className="about">
@@ -25,7 +25,14 @@ const About = () => {
         </h1>
         <div className="container">
           <div className="image">
-            <img src={About_image} alt="" />
+            <img
+              src={About_image}
+              alt=""
+              width={441}
+              height={436}
+              loading="lazy"
+              decoding="async"
+            />
           </div>
           <div className="text">
             <h2>Ein einladender Ort für kulinarischen Genuss.</h2>

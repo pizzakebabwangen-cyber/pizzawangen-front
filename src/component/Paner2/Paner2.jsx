@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 // import React from 'react'
 import "./Paner2.css"
-import PanerBoy from "../../assets/images/Image002.png"
+import PanerBoy from "../../assets/images/Image002.webp"
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 const Paner2 = () => {
@@ -13,9 +13,9 @@ const Paner2 = () => {
     return (
       <motion.div
         ref={ref}
-        initial={{ opacity: 0, y: 200 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.3 }}
         className="animated-component"
       >
         <section className="section panner ">
@@ -23,7 +23,14 @@ const Paner2 = () => {
           <div className="container">
             <div className="offer__wrapper">
               <div className="offer__img">
-                <img src={PanerBoy} alt="Im Wangen's Pizza" />
+                <img
+                  src={PanerBoy}
+                  alt="Im Wangen's Pizza"
+                  width={613}
+                  height={478}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
 
               <div className="offer__content">

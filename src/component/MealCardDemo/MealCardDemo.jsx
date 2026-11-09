@@ -100,9 +100,9 @@ const MealCardDemo = ({ mealWithSizes, extensionsData, companyData, mealListInde
       <div className="card card-demo">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 200 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
           className="animated-component"
           onClick={handleCardClick}
         >

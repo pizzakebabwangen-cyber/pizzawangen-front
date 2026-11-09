@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { Modal } from "antd";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -82,9 +82,9 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
       <div className="card" style={{ width: width }}>
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 200 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
           className="animated-component"
           onClick={
             companyData?.data?.pausetyp == 1
@@ -269,4 +269,4 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
   );
 };
 
-export default MealCard;
+export default memo(MealCard);

@@ -1,8 +1,8 @@
 // import React from 'react'
 import "./Garage.css";
-import Garage1 from "../../assets/images/garage1.png";
-import Garage2 from "../../assets/images/garage2.png";
-import Garage3 from "../../assets/images/garage3.png";
+import Garage1 from "../../assets/images/garage1.webp";
+import Garage2 from "../../assets/images/garage2.webp";
+import Garage3 from "../../assets/images/garage3.webp";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 const Garage = () => {
@@ -13,9 +13,9 @@ const Garage = () => {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 200 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.3 }}
       className="animated-component"
     >
       <div className="garage">
@@ -23,9 +23,9 @@ const Garage = () => {
           Gratis <span> Parkplätze</span>
         </h1>
         <div className="places container">
-          <img src={Garage1} alt="garage1" />
-          <img src={Garage2} alt="garage2" />
-          <img src={Garage3} alt="garage3" />
+          <img src={Garage1} alt="garage1" width={360} height={297} loading="lazy" decoding="async" />
+          <img src={Garage2} alt="garage2" width={396} height={297} loading="lazy" decoding="async" />
+          <img src={Garage3} alt="garage3" width={396} height={297} loading="lazy" decoding="async" />
         </div>
       </div>
     </motion.div>
