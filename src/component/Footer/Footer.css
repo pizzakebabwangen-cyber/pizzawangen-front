@@ -217,11 +217,13 @@ hr {
       justify-content: center;
       div{
         justify-content: center;
+        flex-wrap: wrap;
       }
     }
     
     .footer-extras div p {
       font-size: .8rem;
+      margin: 0 8px;
     }
   }
   .footer__box {

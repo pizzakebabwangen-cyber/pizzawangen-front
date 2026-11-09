@@ -2,6 +2,7 @@
   height: 100vh;
   height: 100dvh;
   width: 100%;
+  max-width: 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -19,6 +20,7 @@
   .container {
     width: 100%; /* Full width on small screens */
     max-width: 440px; /* Max width for larger screens */
+    box-sizing: border-box;
     padding: 20px;
     max-height: min(92vh, 92dvh);
     overflow-y: auto;
