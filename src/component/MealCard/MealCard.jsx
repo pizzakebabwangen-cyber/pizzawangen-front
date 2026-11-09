@@ -172,6 +172,19 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                 <div className="pizza-details">
                   <h1>{meal.name}</h1>
                   <p className="price"> CHF {baseUnitPriceChf.toFixed(2)}</p>
+                  {meal.description && String(meal.description).trim() !== "" && (
+                    <p
+                      className="meal-modal-description"
+                      style={{
+                        fontSize: "0.85rem",
+                        fontWeight: 400,
+                        color: "#777",
+                        margin: "4px 0 8px",
+                      }}
+                    >
+                      {meal.description}
+                    </p>
+                  )}
                   <p>{meal.description1}</p>
                   {meal.extensions && <h1>extras :</h1>}
                   <div className="toppings">
