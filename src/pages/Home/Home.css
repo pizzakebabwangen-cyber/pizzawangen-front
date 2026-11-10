@@ -1,0 +1,233 @@
+.home {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  background: var(--body-bg, #0e1213);
+  color: #fff;
+  font-family: var(--font-name, "Montserrat", sans-serif);
+}
+
+/* Das Lieferart-Popup liegt ueber dem Hero: das Foto soll durchscheinen. */
+.home .deliveryMethodContainer {
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.7));
+}
+
+/* ---------- Hero ---------- */
+.home-hero {
+  position: relative;
+  width: 100%;
+  min-height: min(78vh, 640px);
+  display: flex;
+  align-items: flex-end;
+  background: #000;
+  overflow: hidden;
+}
+.home-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+.home-hero__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(14, 18, 19, 1) 0%,
+    rgba(14, 18, 19, 0.75) 28%,
+    rgba(0, 0, 0, 0.15) 62%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+}
+.home-hero__content {
+  position: relative;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 32px 16px 36px;
+  box-sizing: border-box;
+}
+.home-hero h1 {
+  font-size: clamp(1.9rem, 6vw, 3.4rem);
+  line-height: 1.1;
+  font-weight: 700;
+  margin: 0 0 10px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+.home-hero p {
+  margin: 0 0 20px;
+  font-size: clamp(1rem, 3.2vw, 1.3rem);
+  color: #f1f1f1;
+}
+.home-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.home-btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 2px solid var(--primary-color, #f66f00);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  font-weight: 600;
+  text-decoration: none;
+}
+.home-btn--primary {
+  background: var(--primary-color, #f66f00);
+  color: #111;
+}
+.home-btn:hover {
+  filter: brightness(1.12);
+}
+
+/* ---------- Sektionen ---------- */
+.home-section {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 36px 16px 8px;
+  box-sizing: border-box;
+}
+.home-section > h2,
+.home-kitchen__text h2 {
+  font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+  margin: 0 0 18px;
+  color: var(--primary-color, #f66f00);
+}
+
+/* Kategorien */
+.home-tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.home-tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #151a1c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  color: #fff;
+}
+.home-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.home-tile:hover img {
+  transform: scale(1.05);
+}
+.home-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0) 55%);
+}
+.home-tile--plain {
+  background: linear-gradient(160deg, #1b2124, #0a0d0e);
+}
+.home-tile--plain::after {
+  display: none;
+}
+.home-tile__label {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  z-index: 1;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.home-tile--plain .home-tile__label {
+  left: 0;
+  right: 0;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  text-align: center;
+  color: var(--primary-color, #f66f00);
+}
+
+/* Feature-Karten */
+.home-features {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+.home-feature {
+  padding: 20px;
+  border-radius: 14px;
+  background: #151a1c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.home-feature h2 {
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+  color: var(--primary-color, #f66f00);
+}
+.home-feature p {
+  margin: 0 0 10px;
+  line-height: 1.55;
+  color: #d4d8d8;
+}
+.home-feature a,
+.home-kitchen a {
+  color: var(--primary-color, #f66f00);
+  font-weight: 600;
+}
+
+/* Kueche */
+.home-kitchen {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  padding-bottom: 36px;
+}
+.home-kitchen__text p {
+  margin: 0 0 14px;
+  line-height: 1.7;
+  color: #d4d8d8;
+}
+.home-kitchen__pics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.home-kitchen__pics img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  background: #000;
+}
+
+@media (min-width: 700px) {
+  .home-tiles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .home-features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 960px) {
+  .home-tiles {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .home-features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .home-kitchen {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+  }
+}

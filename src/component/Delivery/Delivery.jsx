@@ -6,7 +6,8 @@ import "./Delivery.css";
 import Spiner from "../spiner/Spiner";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-const Delivery = () => {
+const Delivery = ({ headingLevel = "h1" }) => {
+  const Heading = headingLevel;
   const { ref, inView } = useInView({
     triggerOnce: true, 
     threshold: 0.1, 
@@ -42,7 +43,7 @@ const Delivery = () => {
       className="animated-component"
     >
       <div className="postbox-container">
-        <h1 className="highlight">Liefergebiete</h1>
+        <Heading className="highlight">Liefergebiete</Heading>
         <div className="postbox-item container">
           {isLoading ? (
             <Spiner />

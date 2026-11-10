@@ -5,6 +5,13 @@
   display: block;
 }
 /* Nur die Seitennavigation — nicht jedes <header> (z. B. Gutscheine-Helden) */
+/* Logo-Text war ein <h1>; jetzt div, damit die Seite genau ein H1 hat (gleiches Aussehen). */
+.logo-title {
+  font-size: 2em;
+  line-height: 1.1;
+  font-weight: 500;
+  color: var(--heading-color);
+}
 header.header {
   width: 100%;
   height: 80px;
@@ -404,7 +411,7 @@ header.header {
     object-fit: cover;
   }
 
-  header.header nav .logo h1 {
+  header.header nav .logo .logo-title {
     margin: 0;
     font-size: clamp(0.8rem, 3.8vw, 1.05rem);
     line-height: 1.15;
@@ -504,7 +511,7 @@ header.header {
     font-size: 0.62rem;
     padding: 0 3px;
   }
-  header.header nav .logo h1 {
+  header.header nav .logo .logo-title {
     font-size: clamp(0.75rem, 3.5vw, 0.95rem);
   }
   header.header nav .logo img {

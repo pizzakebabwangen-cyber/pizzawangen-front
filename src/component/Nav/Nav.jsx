@@ -142,10 +142,10 @@ const handleLogout = () => {
         <Link to="/">
           <div className="logo">
             <img src={Logo} alt="logo" />
-            <h1>
+            <div className="logo-title">
               <span className="highlight">Wangen </span>
               Pizza
-            </h1>
+            </div>
           </div>
         </Link>
 

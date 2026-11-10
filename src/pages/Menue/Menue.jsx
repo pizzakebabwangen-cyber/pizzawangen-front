@@ -7,7 +7,7 @@ import Location from "../../component/Location/Location";
 import "./Menue.css";
 import DeliveryMethod from "../../component/DeliveryMethod/DeliveryMethod";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useGetCompanyData from "../../hooks/useGetCompanyData";
 import useGetExtensionsData from "../../hooks/useGetExtensions";
 import GutscheineHomeCta from "../../component/GutscheineHomeCta/GutscheineHomeCta";
@@ -226,6 +226,23 @@ useEffect(() => {
     }
   };
 
+  // Deep link von der Startseite: /menue?kategorie=pizza waehlt die passende Kategorie.
+  useEffect(() => {
+    const wanted = normalizeSearchText(
+      new URLSearchParams(routeLocation.search).get("kategorie")
+    ).trim();
+    if (!wanted || !categories.length) return;
+    if (appliedCategoryParamRef.current === wanted) return;
+    const match = categories.find((cat) =>
+      normalizeSearchText(cat.name).includes(wanted)
+    );
+    if (match) {
+      appliedCategoryParamRef.current = wanted;
+      getSelectedCat(match.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categories, routeLocation.search]);
+
   const goDirectlyToCheckout = async () => {
     if (isStartingCheckout || cartItemsCount <= 0) return;
     const minimumBlock = getDeliveryMinimumBlock({
@@ -289,7 +306,7 @@ useEffect(() => {
             Kebab und Döner für Wangen SZ, Lachen, Siebnen und Umgebung.
           </p>
           <div className="menue-trust-row" aria-label="Bewertungen und Direktbestellung">
-            <span className="menue-rating">4.7 ★★★★★ Google</span>
+            <span className="menue-rating">4.5 ★★★★★ Google</span>
             <span>Lieferung & Abholung</span>
             <span>Wertgutscheine online</span>
             <a
