@@ -12,7 +12,7 @@ import { MotionConfig } from "framer-motion";
 const routerBasename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
 
 // Build marker: aendert den Bundle-Hash (Cache-Busting).
-window.__WANGEN_BUILD__ = "2026-11-10-r7";
+window.__WANGEN_BUILD__ = "2026-11-11-r8";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 

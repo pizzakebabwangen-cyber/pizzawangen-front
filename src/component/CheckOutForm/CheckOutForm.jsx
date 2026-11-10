@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import checkOut from "../../assets/images/checkOut.jpg";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { successCheckOut } from "../../reduxTool/AuthContext";
@@ -597,6 +597,9 @@ const photonFeatureToAddress = (feature) => {
   return { line1, postBox: pc, plzOrt, label, streetOnly, houseNumber: hn };
 };
 
+const PAYMENT_START_ERROR_TEXT =
+  "Die Zahlung konnte nicht gestartet werden. Bitte versuchen Sie es erneut oder wählen Sie Barzahlung.";
+
 const CheckOutForm = () => {
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -607,6 +610,22 @@ const CheckOutForm = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [sending, setSending] = useState(false);
+  /** true nach location.replace → Button bleibt gesperrt («Weiterleitung zu PostFinance…»). */
+  const [redirecting, setRedirecting] = useState(false);
+  /** Sichtbare Fehlermeldung über dem Button (Toasts allein reichen auf dem Handy nicht). */
+  const [payError, setPayError] = useState("");
+
+  /* Zurück aus PostFinance per bfcache (iOS): Button wieder freigeben. */
+  useEffect(() => {
+    const onPageShow = (e) => {
+      if (e.persisted) {
+        setRedirecting(false);
+        setSending(false);
+      }
+    };
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
   const [errors, setErrors] = useState({});
   const [deliveryTimeOption, setDeliveryTimeOption] = useState("1");
   const { userData, getUserData } = useGetUserData();
@@ -1546,6 +1565,24 @@ const CheckOutForm = () => {
             </div>
 
             {/* --- submit button --- */}
+            <Toaster position="bottom-center" reverseOrder={false} />
+            {payError ? (
+              <p
+                role="alert"
+                style={{
+                  color: "#b00020",
+                  background: "#fdecea",
+                  border: "1px solid #f5c2c0",
+                  borderRadius: 8,
+                  padding: "10px 12px",
+                  margin: "0 0 12px",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.4,
+                }}
+              >
+                {payError}
+              </p>
+            ) : null}
             <button
                 type="button"
                 className="checkout-submit-btn"
@@ -1688,7 +1725,9 @@ const CheckOutForm = () => {
                 }
 
                 setErrors({});
+                setPayError("");
                 setSending(true);
+                let redirectStarted = false;
                 try {
                   const server = getApiBaseUrl();
                   if (!server) {
@@ -1882,6 +1921,8 @@ const CheckOutForm = () => {
                           JSON.stringify(enriched)
                         );
                       } catch (_) {}
+                      redirectStarted = true;
+                      setRedirecting(true);
                       window.location.replace(paymentUrl);
                       return;
                     }
@@ -1913,12 +1954,16 @@ const CheckOutForm = () => {
                       return;
                     }
 
+                    console.error("Keine Zahlungs-URL in Antwort:", body);
+                    setPayError(PAYMENT_START_ERROR_TEXT);
                     toast.error(
                       "Keine Zahlungs-URL erhalten. Bitte erneut versuchen oder uns anrufen."
                     );
                     navigate("/cart/checkOut", { replace: true });
                   } catch (err) {
                     console.error("Order error:", err);
+                    console.error("Order error response body:", err?.response?.data);
+                    setPayError(PAYMENT_START_ERROR_TEXT);
                     if (err?.response?.status === 400) {
                       console.error(
                         "POST /api/Cart/order 400 body:",
@@ -1963,11 +2008,13 @@ const CheckOutForm = () => {
                     "Unerwarteter Fehler. Bitte Seite neu laden oder uns anrufen."
                   );
                 } finally {
-                  setSending(false);
+                  if (!redirectStarted) setSending(false);
                 }
               }}
             >
-              {sending
+              {redirecting
+                ? "Weiterleitung zu PostFinance…"
+                : sending
                 ? "Bitte warten..."
                 : checkoutSubmitLabel}
             </button>
