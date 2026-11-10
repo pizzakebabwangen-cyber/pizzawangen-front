@@ -1,4 +1,5 @@
 .home {
+  --build-id: "2026-11-10-r7"; /* Cache-Busting: aendert den CSS-Hash */
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
@@ -7,18 +8,24 @@
   font-family: var(--font-name, "Montserrat", sans-serif);
 }
 
-/* Das Lieferart-Popup liegt ueber dem Hero: das Foto soll durchscheinen. */
+/* Das Lieferart-Popup liegt ueber dem Hero: Foto scheint durch, Popup sitzt unten,
+   damit der H1 oben im Hero lesbar bleibt (Platz fuer Cookie-Leiste eingerechnet). */
 .home .deliveryMethodContainer {
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.7));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 45%, rgba(0, 0, 0, 0.65) 100%);
+  align-items: flex-end;
+  padding-bottom: 96px;
+}
+.home .deliveryMethodContainer .container {
+  margin: 0 auto;
 }
 
 /* ---------- Hero ---------- */
 .home-hero {
   position: relative;
   width: 100%;
-  min-height: min(78vh, 640px);
+  min-height: min(82vh, 680px);
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   background: #000;
   overflow: hidden;
 }
@@ -45,7 +52,7 @@
   position: relative;
   width: min(1100px, 100%);
   margin: 0 auto;
-  padding: 32px 16px 36px;
+  padding: 36px 16px 36px;
   box-sizing: border-box;
 }
 .home-hero h1 {

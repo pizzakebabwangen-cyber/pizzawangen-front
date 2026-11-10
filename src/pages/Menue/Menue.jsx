@@ -49,6 +49,8 @@ const Menue = () => {
   const deliveryMethod = useSelector((state) => state.delivery.deliverMethod);
   const cart = useSelector((state) => state.cart);
   const navigate = useNavigate();
+  const routeLocation = useLocation();
+  const appliedCategoryParamRef = useRef("");
   const { deliveryData, getDelivery } = useGetDelivery();
   const cartItemsCount = Array.isArray(cart?.items)
     ? cart.items.reduce((sum, item) => sum + Number(item?.quantity || 0), 0)

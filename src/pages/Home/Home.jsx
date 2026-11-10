@@ -58,8 +58,8 @@ const Home = () => {
       <section className="home-hero" aria-labelledby="home-title">
         <img
           className="home-hero__img"
-          src={`${HOME_IMG}hero-salami.webp`}
-          srcSet={`${HOME_IMG}hero-salami-640.webp 640w, ${HOME_IMG}hero-salami.webp 1280w`}
+          src={`${HOME_IMG}hero-salami.jpg`}
+          srcSet={`${HOME_IMG}hero-salami-640.jpg 640w, ${HOME_IMG}hero-salami.jpg 1280w`}
           sizes="100vw"
           width="1280"
           height="854"
@@ -93,8 +93,8 @@ const Home = () => {
               >
                 {t.img && (
                   <img
-                    src={`${HOME_IMG}${t.img}-360.webp`}
-                    srcSet={`${HOME_IMG}${t.img}-360.webp 360w, ${HOME_IMG}${t.img}-640.webp 640w`}
+                    src={`${HOME_IMG}${t.img}-360.jpg`}
+                    srcSet={`${HOME_IMG}${t.img}-360.jpg 360w, ${HOME_IMG}${t.img}-640.jpg 640w`}
                     sizes="(min-width: 960px) 200px, 45vw"
                     width="360"
                     height="480"
@@ -152,7 +152,7 @@ const Home = () => {
         </div>
         <div className="home-kitchen__pics">
           <img
-            src={`${HOME_IMG}pizza-spinat-640.webp`}
+            src={`${HOME_IMG}pizza-spinat-640.jpg`}
             width="640"
             height="480"
             alt="Pizza mit Spinat frisch aus dem Ofen"
@@ -160,7 +160,7 @@ const Home = () => {
             decoding="async"
           />
           <img
-            src={`${HOME_IMG}pizza-pommes-640.webp`}
+            src={`${HOME_IMG}pizza-pommes-640.jpg`}
             width="640"
             height="853"
             alt="Pizza mit Pommes bei Wangen Pizza Kebab"
