@@ -36,12 +36,7 @@ import {
 import useGetDelivery from "../../hooks/useGetDelivery.jsx";
 import { getDeliveryMinimumBlock } from "../../utils/deliveryMinimum.js";
 import PhoneOtpModal from "./PhoneOtpModal.jsx";
-import {
-  isPhoneNotVerifiedError,
-  getPhoneFromNotVerifiedError,
-  getOrderPhoneOrRateMessage,
-  deviceHeaders,
-} from "../../Api/otp.js";
+import { getOtpRequired } from "../../Api/otp.js";
 
 const splitPlzCity = (value) => {
   const raw = String(value || "").trim();
@@ -617,6 +612,8 @@ const CheckOutForm = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [sending, setSending] = useState(false);
+  /** Synchroner Doppelklick-Schutz (State-Update ist erst nach dem Render sichtbar). */
+  const submittingRef = useRef(false);
   /** true nach location.replace → Button bleibt gesperrt («Weiterleitung zu PostFinance…»). */
   const [redirecting, setRedirecting] = useState(false);
   /** Sichtbare Fehlermeldung über dem Button (Toasts allein reichen auf dem Handy nicht). */
@@ -1754,6 +1751,8 @@ const CheckOutForm = () => {
 
                 setErrors({});
                 setPayError("");
+                if (submittingRef.current) return;
+                submittingRef.current = true;
                 setSending(true);
                 let redirectStarted = false;
                 try {
@@ -1856,24 +1855,23 @@ const CheckOutForm = () => {
                     payload.DeliveryDate = formData.deliveryDate;
                   }
 
-                  /* Bestellung absenden. Nur bei PHONE_NOT_VERIFIED: SMS-Code abfragen und genau einmal wiederholen. */
+                  /* SMS-Bestätigung über den separaten OTP-Dienst, VOR dem Bestell-POST.
+                     Fail-open: Dienst nicht erreichbar oder required:false -> kein Schritt, Bestellung läuft normal. */
+                  const ensurePhoneVerified = async () => {
+                    if (!(await getOtpRequired())) return;
+                    await requestPhoneVerification(
+                      String(formData.mobile || "").trim()
+                    );
+                  };
+
+                  /* Bestell-POST: Header/Verhalten identisch zum Live-Frontend (nur Content-Type, kein X-Device-Token). */
                   const postOrder = async () => {
-                    const doPost = () =>
-                      axios.post(`${server}/api/Cart/order`, payload, {
-                        headers: deviceHeaders(),
-                        withCredentials: true,
-                        timeout: 120_000,
-                      });
-                    try {
-                      return await doPost();
-                    } catch (err) {
-                      if (!isPhoneNotVerifiedError(err)) throw err;
-                      await requestPhoneVerification(
-                        getPhoneFromNotVerifiedError(err) ||
-                          String(formData.mobile || "").trim()
-                      );
-                      return await doPost();
-                    }
+                    await ensurePhoneVerified();
+                    return axios.post(`${server}/api/Cart/order`, payload, {
+                      headers: { "Content-Type": "application/json" },
+                      withCredentials: true,
+                      timeout: 120_000,
+                    });
                   };
 
                   if (payWay === 1) {
@@ -1896,11 +1894,19 @@ const CheckOutForm = () => {
                         );
                         return;
                       }
-                      await axios.get(`${server}/api/Payment/success`, {
-                        params: { orderId: resolvedOrderId },
-                        headers: { "X-Requested-With": "XMLHttpRequest" },
-                        timeout: 120_000,
-                      });
+                      /* Bestellung existiert bereits: Fehler hier darf die Weiterleitung nicht verhindern (SuccessPage ruft den Endpoint selbst auf). */
+                      try {
+                        await axios.get(`${server}/api/Payment/success`, {
+                          params: { orderId: resolvedOrderId },
+                          headers: { "X-Requested-With": "XMLHttpRequest" },
+                          timeout: 120_000,
+                        });
+                      } catch (successErr) {
+                        console.warn(
+                          "Payment/success fehlgeschlagen, Bestellung existiert trotzdem:",
+                          successErr
+                        );
+                      }
                       clearWangenCheckoutPaymentSession();
                       dispatch(successCheckOut());
                       clearCheckoutSessionStorage();
@@ -1916,15 +1922,6 @@ const CheckOutForm = () => {
                         return;
                       }
                       console.error("Barzahlung Abschluss:", err);
-                      const phoneRateMsg = getOrderPhoneOrRateMessage(err);
-                      if (phoneRateMsg) {
-                        setPayError(phoneRateMsg);
-                        toast.error(phoneRateMsg);
-                        if (err?.response?.data?.code === "INVALID_PHONE") {
-                          focusCheckoutFieldById("mobile");
-                        }
-                        return;
-                      }
                       const isTimeout =
                         err?.code === "ECONNABORTED" ||
                         /timeout/i.test(String(err?.message));
@@ -2016,15 +2013,6 @@ const CheckOutForm = () => {
                     }
                     console.error("Order error:", err);
                     console.error("Order error response body:", err?.response?.data);
-                    const phoneRateMsg = getOrderPhoneOrRateMessage(err);
-                    if (phoneRateMsg) {
-                      setPayError(phoneRateMsg);
-                      toast.error(phoneRateMsg);
-                      if (err?.response?.data?.code === "INVALID_PHONE") {
-                        focusCheckoutFieldById("mobile");
-                      }
-                      return;
-                    }
                     setPayError(PAYMENT_START_ERROR_TEXT);
                     if (err?.response?.status === 400) {
                       console.error(
@@ -2070,7 +2058,10 @@ const CheckOutForm = () => {
                     "Unerwarteter Fehler. Bitte Seite neu laden oder uns anrufen."
                   );
                 } finally {
-                  if (!redirectStarted) setSending(false);
+                  if (!redirectStarted) {
+                    setSending(false);
+                    submittingRef.current = false;
+                  }
                 }
               }}
             >

@@ -1,17 +1,29 @@
 import axios from "axios";
-import { getApiBaseUrl } from "../config/apiBase";
 
 /*
- * SMS-Telefonbestaetigung (OTP) beim Checkout.
+ * SMS-Telefonbestaetigung (OTP) beim Checkout — eigener Dienst (otp.pizzawangen.ch),
+ * NICHT die Shop-API. Die Bestell-API (/api/Cart/order) wird hier nie aufgerufen.
  *
- * Backend-Vertrag:
+ * Vertrag des OTP-Dienstes:
+ *  GET  /api/Otp/status  -> 200 { ok:true, required:boolean }
  *  POST /api/Otp/send    Body { phone }                    -> 200 { ok:true, already_verified? }
  *  POST /api/Otp/verify  Body { phone, code, deviceToken } -> 200 bei Erfolg, 400 { ok:false, error } sonst
- *  Header X-Device-Token + withCredentials bei send, verify und Cart/order.
- *  OTP-Fehler: { ok:false, error }.  CreateOrder-Fehler: { code, message }.
+ *  Header X-Device-Token + withCredentials bei send und verify (Cookie rs_session fuer .pizzawangen.ch).
+ *  Fehler: { ok:false, error }.
  */
 
+/** Basis-URL des OTP-Dienstes (ohne trailing slash). */
+export function getOtpBaseUrl() {
+  const raw = import.meta.env.VITE_OTP_SERVER;
+  if (typeof raw === "string" && raw.trim()) {
+    return raw.trim().replace(/\/+$/, "");
+  }
+  return "https://otp.pizzawangen.ch";
+}
+
 const OTP_TIMEOUT_MS = 30_000;
+const STATUS_TIMEOUT_MS = 4_000;
+const PATH_STATUS = "/api/Otp/status";
 const PATH_SEND = "/api/Otp/send";
 const PATH_VERIFY = "/api/Otp/verify";
 const DEVICE_STORAGE_KEY = "rs_dev";
@@ -51,54 +63,14 @@ export function getDeviceToken() {
   return memoryDeviceToken;
 }
 
-/** Header für OTP- und Order-Aufrufe. */
-export const deviceHeaders = () => ({
+/** Header NUR für Aufrufe an den OTP-Dienst (nie für die Shop-API senden: CORS-Preflight). */
+const deviceHeaders = () => ({
   "Content-Type": "application/json",
   "X-Device-Token": getDeviceToken(),
 });
 
 const buildSendBody = (phone) => ({ phone });
 const buildVerifyBody = (phone, code) => ({ phone, code, deviceToken: getDeviceToken() });
-
-const orderCode = (err) => {
-  const data = err?.response?.data;
-  return data?.code ?? data?.Code;
-};
-
-/** true, wenn die Antwort von /api/Cart/order «Nummer noch nicht bestaetigt» meldet. */
-export function isPhoneNotVerifiedError(err) {
-  return err?.response?.status === 409 && orderCode(err) === "PHONE_NOT_VERIFIED";
-}
-
-export function isInvalidPhoneError(err) {
-  return err?.response?.status === 400 && orderCode(err) === "INVALID_PHONE";
-}
-
-export function isRateLimitedError(err) {
-  return err?.response?.status === 429 && orderCode(err) === "RATE_LIMITED";
-}
-
-export function getPhoneFromNotVerifiedError(err) {
-  const data = err?.response?.data;
-  const p = data?.phone ?? data?.Phone;
-  return typeof p === "string" ? p.trim() : "";
-}
-
-/**
- * Meldung für INVALID_PHONE / RATE_LIMITED aus CreateOrder ({ code, message }).
- * Gibt "" zurück, wenn der Fehler keiner dieser Fälle ist.
- */
-export function getOrderPhoneOrRateMessage(err) {
-  const msg = err?.response?.data?.message;
-  const text = typeof msg === "string" ? msg.trim() : "";
-  if (isInvalidPhoneError(err)) {
-    return text || "Die Telefonnummer ist ungültig. Bitte prüfen Sie Ihre Eingabe.";
-  }
-  if (isRateLimitedError(err)) {
-    return text || "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es später erneut.";
-  }
-  return "";
-}
 
 /** Wandelt einen axios-Fehler in eine deutsche Meldung um. Unterstützt { ok:false, error } und { code, message }. */
 export function classifyOtpError(err, kind) {
@@ -127,11 +99,27 @@ export function classifyOtpError(err, kind) {
 }
 
 const post = (path, body) =>
-  axios.post(`${getApiBaseUrl()}${path}`, body, {
+  axios.post(`${getOtpBaseUrl()}${path}`, body, {
     headers: deviceHeaders(),
     withCredentials: true,
     timeout: OTP_TIMEOUT_MS,
   });
+
+/**
+ * Ist die SMS-Bestätigung aktuell Pflicht? Fail-open: bei jedem Fehler (Dienst nicht
+ * erreichbar, Timeout, CORS, ungültige Antwort) -> false, damit nie eine Bestellung blockiert wird.
+ */
+export async function getOtpRequired() {
+  try {
+    const res = await axios.get(`${getOtpBaseUrl()}${PATH_STATUS}`, {
+      withCredentials: true,
+      timeout: STATUS_TIMEOUT_MS,
+    });
+    return res?.status === 200 && res?.data?.required === true;
+  } catch (_) {
+    return false;
+  }
+}
 
 /** Gibt { alreadyVerified } zurück. */
 export async function sendOtp(phone) {
