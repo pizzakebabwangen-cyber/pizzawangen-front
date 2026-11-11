@@ -70,6 +70,9 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
   const [info, setInfo] = useState("");
   const [busy, setBusy] = useState(false);
   const [cooldown, setCooldown] = useState(0);
+  /* Modal erst zeigen, wenn klar ist, dass wirklich ein Code eingegeben werden muss
+     (sonst blitzt es bei bereits bestätigten Nummern kurz auf). */
+  const [checking, setChecking] = useState(true);
   const sentOnce = useRef(false);
 
   const send = useCallback(async () => {
@@ -84,8 +87,10 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
         return;
       }
       setInfo("Wir haben Ihnen einen Code per SMS gesendet.");
+      setChecking(false);
     } catch (err) {
       setError(classifyOtpError(err, "send"));
+      setChecking(false);
     } finally {
       setBusy(false);
       /* Cooldown auch nach Fehler, damit nicht gespammt wird. */
@@ -125,6 +130,8 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
     }
     setBusy(false);
   };
+
+  if (checking) return null;
 
   return (
     <div style={S.overlay} role="dialog" aria-modal="true" aria-labelledby="otp-title">
