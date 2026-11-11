@@ -39,6 +39,8 @@ import PhoneOtpModal from "./PhoneOtpModal.jsx";
 import {
   isPhoneNotVerifiedError,
   getPhoneFromNotVerifiedError,
+  getOrderPhoneOrRateMessage,
+  deviceHeaders,
 } from "../../Api/otp.js";
 
 const splitPlzCity = (value) => {
@@ -1858,7 +1860,7 @@ const CheckOutForm = () => {
                   const postOrder = async () => {
                     const doPost = () =>
                       axios.post(`${server}/api/Cart/order`, payload, {
-                        headers: { "Content-Type": "application/json" },
+                        headers: deviceHeaders(),
                         withCredentials: true,
                         timeout: 120_000,
                       });
@@ -1914,6 +1916,15 @@ const CheckOutForm = () => {
                         return;
                       }
                       console.error("Barzahlung Abschluss:", err);
+                      const phoneRateMsg = getOrderPhoneOrRateMessage(err);
+                      if (phoneRateMsg) {
+                        setPayError(phoneRateMsg);
+                        toast.error(phoneRateMsg);
+                        if (err?.response?.data?.code === "INVALID_PHONE") {
+                          focusCheckoutFieldById("mobile");
+                        }
+                        return;
+                      }
                       const isTimeout =
                         err?.code === "ECONNABORTED" ||
                         /timeout/i.test(String(err?.message));
@@ -2005,6 +2016,15 @@ const CheckOutForm = () => {
                     }
                     console.error("Order error:", err);
                     console.error("Order error response body:", err?.response?.data);
+                    const phoneRateMsg = getOrderPhoneOrRateMessage(err);
+                    if (phoneRateMsg) {
+                      setPayError(phoneRateMsg);
+                      toast.error(phoneRateMsg);
+                      if (err?.response?.data?.code === "INVALID_PHONE") {
+                        focusCheckoutFieldById("mobile");
+                      }
+                      return;
+                    }
                     setPayError(PAYMENT_START_ERROR_TEXT);
                     if (err?.response?.status === 400) {
                       console.error(

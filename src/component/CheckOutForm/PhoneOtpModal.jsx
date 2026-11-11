@@ -77,7 +77,12 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
     setInfo("");
     setBusy(true);
     try {
-      await sendOtp(phone);
+      const { alreadyVerified } = await sendOtp(phone);
+      if (alreadyVerified) {
+        /* Nummer bereits bestätigt: Code-Eingabe überspringen. */
+        onVerified();
+        return;
+      }
       setInfo("Wir haben Ihnen einen Code per SMS gesendet.");
     } catch (err) {
       setError(classifyOtpError(err, "send"));
@@ -86,7 +91,7 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
       /* Cooldown auch nach Fehler, damit nicht gespammt wird. */
       setCooldown(COOLDOWN_SECONDS);
     }
-  }, [phone]);
+  }, [phone, onVerified]);
 
   useEffect(() => {
     if (sentOnce.current) return;

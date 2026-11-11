@@ -4,27 +4,78 @@ import { getApiBaseUrl } from "../config/apiBase";
 /*
  * SMS-Telefonbestaetigung (OTP) beim Checkout.
  *
- * ANNAHMEN (Backend-JSON ist nicht bekannt) – alles hier anpassbar:
- *  TODO: POST /api/Otp/send    Body { phone }        Erfolg = HTTP 200
- *  TODO: POST /api/Otp/verify  Body { phone, code }  Erfolg = HTTP 200
- *  TODO: Fehler-Erkennung (abgelaufen / zu viele Versuche) per Text in
- *        response.data.code | message | error – siehe classifyOtpError().
- *  Cookie-Session (rs_session / rs_dev) -> withCredentials: true.
+ * Backend-Vertrag:
+ *  POST /api/Otp/send    Body { phone }                    -> 200 { ok:true, already_verified? }
+ *  POST /api/Otp/verify  Body { phone, code, deviceToken } -> 200 bei Erfolg, 400 { ok:false, error } sonst
+ *  Header X-Device-Token + withCredentials bei send, verify und Cart/order.
+ *  OTP-Fehler: { ok:false, error }.  CreateOrder-Fehler: { code, message }.
  */
 
 const OTP_TIMEOUT_MS = 30_000;
-const PATH_SEND = "/api/Otp/send"; // TODO: ggf. anpassen
-const PATH_VERIFY = "/api/Otp/verify"; // TODO: ggf. anpassen
+const PATH_SEND = "/api/Otp/send";
+const PATH_VERIFY = "/api/Otp/verify";
+const DEVICE_STORAGE_KEY = "rs_dev";
 
-const buildSendBody = (phone) => ({ phone }); // TODO
-const buildVerifyBody = (phone, code) => ({ phone, code }); // TODO
+let memoryDeviceToken = "";
+
+const generateToken = () => {
+  try {
+    if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  } catch (_) {
+    /* fallthrough */
+  }
+  return `${Date.now().toString(16)}-${Math.random().toString(16).slice(2)}-${Math.random()
+    .toString(16)
+    .slice(2)}`;
+};
+
+/** Zufälliger Geräte-Token, einmal erzeugt und in localStorage («rs_dev») gespeichert. */
+export function getDeviceToken() {
+  try {
+    const stored = localStorage.getItem(DEVICE_STORAGE_KEY);
+    if (stored) {
+      memoryDeviceToken = stored;
+      return stored;
+    }
+  } catch (_) {
+    /* localStorage nicht verfügbar */
+  }
+  if (!memoryDeviceToken) {
+    memoryDeviceToken = generateToken();
+    try {
+      localStorage.setItem(DEVICE_STORAGE_KEY, memoryDeviceToken);
+    } catch (_) {
+      /* nur im Speicher halten */
+    }
+  }
+  return memoryDeviceToken;
+}
+
+/** Header für OTP- und Order-Aufrufe. */
+export const deviceHeaders = () => ({
+  "Content-Type": "application/json",
+  "X-Device-Token": getDeviceToken(),
+});
+
+const buildSendBody = (phone) => ({ phone });
+const buildVerifyBody = (phone, code) => ({ phone, code, deviceToken: getDeviceToken() });
+
+const orderCode = (err) => {
+  const data = err?.response?.data;
+  return data?.code ?? data?.Code;
+};
 
 /** true, wenn die Antwort von /api/Cart/order «Nummer noch nicht bestaetigt» meldet. */
 export function isPhoneNotVerifiedError(err) {
-  const status = err?.response?.status;
-  const data = err?.response?.data;
-  const code = data?.code ?? data?.Code;
-  return (status === 403 || status === 409) && code === "PHONE_NOT_VERIFIED";
+  return err?.response?.status === 409 && orderCode(err) === "PHONE_NOT_VERIFIED";
+}
+
+export function isInvalidPhoneError(err) {
+  return err?.response?.status === 400 && orderCode(err) === "INVALID_PHONE";
+}
+
+export function isRateLimitedError(err) {
+  return err?.response?.status === 429 && orderCode(err) === "RATE_LIMITED";
 }
 
 export function getPhoneFromNotVerifiedError(err) {
@@ -33,30 +84,41 @@ export function getPhoneFromNotVerifiedError(err) {
   return typeof p === "string" ? p.trim() : "";
 }
 
-/** Wandelt einen axios-Fehler in eine deutsche Meldung um. */
+/**
+ * Meldung für INVALID_PHONE / RATE_LIMITED aus CreateOrder ({ code, message }).
+ * Gibt "" zurück, wenn der Fehler keiner dieser Fälle ist.
+ */
+export function getOrderPhoneOrRateMessage(err) {
+  const msg = err?.response?.data?.message;
+  const text = typeof msg === "string" ? msg.trim() : "";
+  if (isInvalidPhoneError(err)) {
+    return text || "Die Telefonnummer ist ungültig. Bitte prüfen Sie Ihre Eingabe.";
+  }
+  if (isRateLimitedError(err)) {
+    return text || "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es später erneut.";
+  }
+  return "";
+}
+
+/** Wandelt einen axios-Fehler in eine deutsche Meldung um. Unterstützt { ok:false, error } und { code, message }. */
 export function classifyOtpError(err, kind) {
   if (!err?.response) {
     return "Netzwerkfehler. Bitte Verbindung prüfen und erneut versuchen.";
   }
   const status = err.response.status;
   const d = err.response.data;
-  const text = [
-    typeof d === "string" ? d : "",
-    d?.code,
-    d?.message,
-    d?.error,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const serverText =
+    (typeof d?.error === "string" && d.error.trim()) ||
+    (typeof d?.message === "string" && d.message.trim()) ||
+    (typeof d === "string" && d.trim()) ||
+    "";
 
-  if (status === 429 || /rate|too.?many|zu viele/i.test(text)) {
+  if (serverText && status >= 400 && status < 500) return serverText;
+  if (status === 429) {
     return "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es später erneut.";
   }
-  if (/expired|abgelaufen/i.test(text)) {
-    return "Der Code ist abgelaufen. Bitte fordern Sie einen neuen Code an.";
-  }
   if (kind === "verify" && status >= 400 && status < 500) {
-    return "Der Code ist falsch. Bitte prüfen Sie die Eingabe.";
+    return "Der Code ist falsch oder abgelaufen. Bitte versuchen Sie es erneut.";
   }
   if (kind === "send" && status >= 400 && status < 500) {
     return "Der Code konnte nicht gesendet werden. Bitte prüfen Sie die Telefonnummer.";
@@ -66,16 +128,18 @@ export function classifyOtpError(err, kind) {
 
 const post = (path, body) =>
   axios.post(`${getApiBaseUrl()}${path}`, body, {
-    headers: { "Content-Type": "application/json" },
+    headers: deviceHeaders(),
     withCredentials: true,
     timeout: OTP_TIMEOUT_MS,
   });
 
+/** Gibt { alreadyVerified } zurück. */
 export async function sendOtp(phone) {
-  return post(PATH_SEND, buildSendBody(phone));
+  const res = await post(PATH_SEND, buildSendBody(phone));
+  return { alreadyVerified: res?.data?.already_verified === true };
 }
 
 export async function verifyOtp(phone, code) {
   const res = await post(PATH_VERIFY, buildVerifyBody(phone, code));
-  return res.status === 200; // TODO: ggf. res.data.verified prüfen
+  return res.status === 200 && res?.data?.ok !== false;
 }
