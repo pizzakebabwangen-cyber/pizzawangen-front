@@ -23,7 +23,7 @@ export const SITE = {
   geo: { latitude: 47.191179, longitude: 8.894814 },
   // Kurzlink zum Google-Eintrag (derselbe wie "Jetzt bewerten" auf der Startseite).
   mapsUrl: "https://maps.app.goo.gl/QrjZMVqjguiuBh1Z7",
-  priceRange: "$$",
+  priceRange: "CHF 7–22",
   logoPath: "/logo.png",
   ogImage: { path: "/home/hero-salami.jpg", width: 1280, height: 854, alt: "Pizza mit Salami, Oliven und Chili auf einem Holzbrett" },
   twitterSite: "@WangenKebabHaus",
