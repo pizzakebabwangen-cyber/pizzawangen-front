@@ -1,6 +1,7 @@
 // import React from 'react'
 import { useEffect } from "react";
 import "./Policy&Info.css"
+import { SITE } from "../../config/site.js";
 const Impressum = () => {
    const scrollToTop = () => {
      window.scrollTo({
@@ -20,7 +21,7 @@ const Impressum = () => {
         Wangen Pizza Kebab GmbH
           <br />
           Zürcherstrasse 3<br />
-          8855 Wangen
+          8855 Wangen SZ
         </p>
         <p>
           E-Mail: <a href="mailto:info@pizzawangen.ch">info@pizzawangen.ch</a>
@@ -30,7 +31,7 @@ const Impressum = () => {
             www.pizzawangen.ch
           </a>
           <br />
-          Telefon: +41 55 – 460 33 66
+          Telefon: {SITE.phoneDisplay}
         </p>
         <p>
           Vertretungsberechtigte Person(en)

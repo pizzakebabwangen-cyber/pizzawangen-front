@@ -1,4 +1,5 @@
 import "./FaqSection.css";
+import { SITE, addressLine } from "../../config/site.js";
 import { DEFAULT_COMPANY_HOURS } from "../../constants/companyHours";
 
 const FAQ_ITEMS = [
@@ -24,7 +25,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Wie erreiche ich das Restaurant?",
-    a: "Telefon: 055 460 33 66, E-Mail: info@pizzawangen.ch, Adresse: Zürcherstrasse 3, 8855 Wangen SZ.",
+    a: `Telefon: ${SITE.phoneDisplay}, E-Mail: ${SITE.email}, Adresse: ${addressLine()}.`,
   },
 ];
 

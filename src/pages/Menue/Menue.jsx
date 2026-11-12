@@ -411,11 +411,11 @@ useEffect(() => {
         >
           {(isSearchActive || selectedSubCategory) && (
           <div className="selectedSubCategory">
-            <h1>
+            <h2 className="menue-subcat-title">
               {isSearchActive
                 ? `Suchergebnisse (${searchResults.length})`
                 : nameOfType}
-            </h1>
+            </h2>
           </div>
           )}
           <div className="cards" ref={sectionRef1}>

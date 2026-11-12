@@ -141,7 +141,7 @@ const handleLogout = () => {
       <nav className="nav">
         <Link to="/">
           <div className="logo">
-            <img src={Logo} alt="logo" />
+            <img src={Logo} alt="Wangen Pizza Kebab Logo" />
             <div className="logo-title">
               <span className="highlight">Wangen </span>
               Pizza

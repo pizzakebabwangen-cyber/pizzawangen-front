@@ -27,7 +27,7 @@ const Datenschutzbestimmungen = () => {
         Wangen Pizza Kebab GmbH
           <br />
           Zürcherstrasse 3<br />
-          8855 Wangen
+          8855 Wangen SZ
           <br />
           Schweiz
         </p>
@@ -271,7 +271,7 @@ const Datenschutzbestimmungen = () => {
           Mohammad Adnan Saifeddin
           <br />
           Zürcherstrasse 3<br />
-          8855 Wangen
+          8855 Wangen SZ
           <br />
           Schweiz
         </p>

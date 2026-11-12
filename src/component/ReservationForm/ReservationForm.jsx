@@ -2,6 +2,7 @@
 // import React from 'react'
 import { useEffect, useState } from "react";
 import "./ReservationForm.css";
+import { SITE, openingHoursSentence } from "../../config/site.js";
 import { format } from "date-fns";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -112,13 +113,16 @@ const ReservationForm = () => {
       </h1> */}
       <form id="contactForm" onSubmit={handleSubmit}>
         <div className="reservation-text">
-          <h2 className="contact-us">Reservation</h2>
+          <h1 className="contact-us">Reservation</h1>
           <p>
             Buchen Sie online oder
             <br />
             rufen Sie uns unter{" "}
-            <span className="highlight">+41 55 460 33 66 </span> zwischen{" "}
-            <span className="highlight">9:30 - 22:00 Uhr </span>an
+            <span className="highlight" style={{ whiteSpace: "nowrap" }}>{SITE.phoneDisplay}</span> an
+            <br />
+            <span style={{ fontSize: "0.75em", fontWeight: "normal" }}>
+              Öffnungszeiten: {openingHoursSentence()}
+            </span>
           </p>
         </div>
         <div className="form-group">

@@ -72,10 +72,15 @@
     line-height: 1.1;
   }
 
-  h1 {
+  h1, h2.menue-subcat-title {
     font-size: 4rem;
     text-align: center;
     font-weight: bold;
+  }
+
+  h2.menue-subcat-title {
+    line-height: 1.1;
+    margin-block: 0.67em;
   }
 
   .menue-local-seo {
@@ -183,7 +188,7 @@
     width: 100%;
     background-color: #4A331F;
     margin-top: 80px;
-    h1{
+    h1, h2{
       color: white;
       text-align: center;
       margin: 20px 0;
@@ -279,7 +284,7 @@
     padding: 0 4px;
   }
 
-  .menue-sec h1 {
+  .menue-sec h1, .menue-sec h2.menue-subcat-title {
     font-size: 2.25rem;
     padding: 0 8px;
     line-height: 1.2;
@@ -458,7 +463,7 @@
     margin-top: 28px;
   }
 
-  .menue-sec .selectedSubCategory h1 {
+  .menue-sec .selectedSubCategory h1, .menue-sec .selectedSubCategory h2 {
     font-size: 1.25rem;
     margin: 12px 0;
     padding: 0 8px;

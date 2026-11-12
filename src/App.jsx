@@ -35,6 +35,8 @@ import { useAvailability } from "./context/AvailabilityContext.jsx";
 import { applyRuntimeLanguage, getInitialLanguage } from "./utils/languageRuntime";
 import { useLocation } from "react-router-dom";
 import ScrollToTop from "./component/ScrollToTop/ScrollToTop";
+import Seo from "./component/Seo/Seo.jsx";
+import NotFound from "./pages/NotFound/NotFound.jsx";
 import { readCheckoutUnlockedFlag } from "./utils/checkoutVisitorStorage.js";
 
 function App() {
@@ -75,6 +77,7 @@ function App() {
   return (
     <>
       <ScrollToTop />
+      <Seo />
       <Nav />
       <Routes>
         <Route
@@ -119,6 +122,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgetPass" element={<ForgetPassPage />} />
         <Route path="/resetPassword" element={<ResetPassPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>

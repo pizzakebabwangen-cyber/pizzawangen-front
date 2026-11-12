@@ -26,7 +26,7 @@
       object-fit: contain;
       flex-shrink: 0;
     }
-    h1 {
+    h1, h2 {
       margin: 0;
       font-size: clamp(2rem, 4vw, 3rem);
       line-height: 1.15;
@@ -118,7 +118,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-      h1{
+      h1, h2{
         margin-bottom: 20px;
         text-align: center;
       }

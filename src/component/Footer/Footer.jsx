@@ -53,7 +53,7 @@ const Footer = () => {
             {/* Logo + Social */}
             <div className="footer__logo">
               <div className="logo">
-                <img src={Logo} alt="Logo" />
+                <img src={Logo} alt="Wangen Pizza Kebab Logo" />
               </div>
               <div className="social-icons">
                 <a
@@ -105,7 +105,7 @@ const Footer = () => {
                     Unsere Küche vereint gekonnt die raffinierte italienische Esskultur mit dem charmanten Schweizer Lebensstil.
                     <br /><br />
                     Ob Sie bei uns vor Ort speisen oder unsere köstlichen Pizzen mit nach Hause nehmen möchten,
-                    bei <span className="highlight" style={{ color: "rgb(255, 179, 3)" }}>Wangen</span> Pizza
+                    bei <span className="highlight" style={{ color: "rgb(255, 179, 3)" }}>Wangen</span> Pizza Kebab
                     erleben Sie stets erstklassigen Genuss und herzliche Gastfreundschaft.
                   </p>
                 </li>
@@ -185,7 +185,7 @@ const Footer = () => {
           <hr />
           <div className="light-soft footer-copyright-block">
             <p className="footer-copyright-line">
-              Copyright © 2015 – {currentYear} Wangen Pizza
+              Copyright © 2015 – {currentYear} Wangen Pizza Kebab
             </p>
             <p className="footer-copyright-line">
               Seit 2024 Wangen Pizza, Kebab GmbH.

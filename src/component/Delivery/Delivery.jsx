@@ -6,7 +6,7 @@ import "./Delivery.css";
 import Spiner from "../spiner/Spiner";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-const Delivery = ({ headingLevel = "h1" }) => {
+const Delivery = ({ headingLevel = "h2" }) => {
   const Heading = headingLevel;
   const { ref, inView } = useInView({
     triggerOnce: true, 

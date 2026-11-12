@@ -3,6 +3,7 @@ import { object, string } from "yup";
 import { useEffect, useState } from "react";
 import "./ContactForm.css";
 import CardInfo from "../CardInfo/CardInfo";
+import { SITE, addressLine } from "../../config/site.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Logo from "../../assets/85a30340-f824-4e4a-b2a5-c5d808affecc.png";
@@ -116,16 +117,16 @@ const ContactForm = () => {
         <div className="container">
           <div className="contact-info">
             <div className="company-logo-name">
-              <img src={Logo} alt="logo" />
+              <img src={Logo} alt="Wangen Pizza Kebab Logo" />
               <div>
-                <h1 className="highlight">Wangen Pizza, Kebab und Kurier</h1>
+                <h2 className="highlight">Wangen Pizza Kebab</h2>
               </div>
             </div>
             <CardInfo
-              address={`${companyData?.data?.street || ""}, ${companyData?.data?.postbox || ""} ${companyData?.data?.city || ""}`.trim()}
-              email={companyData?.data?.email}
-              phone={companyData?.data?.phone1}
-              whatsapp={companyData?.data?.phone1}
+              address={addressLine()}
+              email={SITE.email}
+              phone={SITE.phoneDisplay}
+              whatsapp={SITE.phoneDisplay}
             />
           </div>
           <form onSubmit={handleSubmit} className="contact-form">

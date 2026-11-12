@@ -99,9 +99,9 @@ const Angebote = () => {
         </div>
         {hasOffers && (
           <div className="today-bonus">
-            <h1>
+            <h2 className="angebote-section-title">
               Angebot<span className="highlight"> mit </span>Rabatt
-            </h1>
+            </h2>
             <div className="cards">
               {offers.data.map((offer) => (
                   <MealCard key={offer.id} meal={offer} />
@@ -118,9 +118,9 @@ const Angebote = () => {
               transition={{ duration: 0.3 }}
               className="animated-component"
             >
-              <h1 style={{ marginTop: "200px" }}>
+              <h2 className="angebote-section-title" style={{ marginTop: "200px" }}>
                 Tages<span className="highlight">angebote</span>
-              </h1>
+              </h2>
               <div className="cards">
                 {todayProductsData.data.map((product) => (
                     <MealCard key={product.id} meal={product} companyData={companyData} extensionsData={extensionsData} />

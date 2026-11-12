@@ -176,7 +176,7 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
   return (
     <div className="cart-container">
       <div className="title">
-        <h1 className="highlight">Pizza Wangen</h1>
+        <h1 className="highlight">Wangen Pizza Kebab</h1>
         {cartItemsCount > 0 && isDeliveryOrPreorder(deliverMethod) && (
           <p className="delivery-city-readonly">
             {selectedCity
