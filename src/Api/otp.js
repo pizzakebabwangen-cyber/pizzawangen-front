@@ -22,8 +22,6 @@ export function getOtpBaseUrl() {
 }
 
 const OTP_TIMEOUT_MS = 30_000;
-const STATUS_TIMEOUT_MS = 4_000;
-const PATH_STATUS = "/api/Otp/status";
 const PATH_SEND = "/api/Otp/send";
 const PATH_VERIFY = "/api/Otp/verify";
 const DEVICE_STORAGE_KEY = "rs_dev";
@@ -74,8 +72,9 @@ const buildVerifyBody = (phone, code) => ({ phone, code, deviceToken: getDeviceT
 
 /** Wandelt einen axios-Fehler in eine deutsche Meldung um. Unterstützt { ok:false, error } und { code, message }. */
 export function classifyOtpError(err, kind) {
+  /* Dienst nicht erreichbar (Netzwerk, Timeout, CORS) -> nicht bestellbar, klare Meldung. */
   if (!err?.response) {
-    return "Netzwerkfehler. Bitte Verbindung prüfen und erneut versuchen.";
+    return OTP_UNAVAILABLE_TEXT;
   }
   const status = err.response.status;
   const d = err.response.data;
@@ -95,7 +94,8 @@ export function classifyOtpError(err, kind) {
   if (kind === "send" && status >= 400 && status < 500) {
     return "Der Code konnte nicht gesendet werden. Bitte prüfen Sie die Telefonnummer.";
   }
-  return "Serverfehler. Bitte versuchen Sie es später erneut.";
+  /* 5xx (z. B. 502 SMS-Versand fehlgeschlagen, Twilio/OTP-Dienst down) */
+  return OTP_UNAVAILABLE_TEXT;
 }
 
 const post = (path, body) =>
@@ -106,20 +106,20 @@ const post = (path, body) =>
   });
 
 /**
- * Ist die SMS-Bestätigung aktuell Pflicht? Fail-open: bei jedem Fehler (Dienst nicht
- * erreichbar, Timeout, CORS, ungültige Antwort) -> false, damit nie eine Bestellung blockiert wird.
+ * KEIN Fail-open: Die Pflicht entscheidet der Shop-Server (Tor vor /api/Cart/order).
+ * Das Frontend bestellt zuerst normal; antwortet der Server mit 409 PHONE_NOT_VERIFIED, wird
+ * der SMS-Dialog gezeigt und danach erneut bestellt. Ist die Prüfung nicht möglich (503 OTP_UNAVAILABLE)
+ * oder der Code kann nicht gesendet/geprüft werden, geht die Bestellung NICHT durch.
  */
-export async function getOtpRequired() {
-  try {
-    const res = await axios.get(`${getOtpBaseUrl()}${PATH_STATUS}`, {
-      withCredentials: true,
-      timeout: STATUS_TIMEOUT_MS,
-    });
-    return res?.status === 200 && res?.data?.required === true;
-  } catch (_) {
-    return false;
-  }
-}
+export const OTP_UNAVAILABLE_TEXT = "SMS konnte nicht gesendet werden. Bitte später erneut versuchen.";
+
+/** Server verlangt die SMS-Bestätigung der Telefonnummer (409 PHONE_NOT_VERIFIED). */
+export const isPhoneNotVerified = (err) =>
+  err?.response?.status === 409 && err?.response?.data?.code === "PHONE_NOT_VERIFIED";
+
+/** Server kann die Bestätigung nicht prüfen (503 OTP_UNAVAILABLE) -> Bestellung nicht möglich. */
+export const isOtpUnavailable = (err) =>
+  err?.response?.status === 503 && err?.response?.data?.code === "OTP_UNAVAILABLE";
 
 /** Gibt { alreadyVerified } zurück. */
 export async function sendOtp(phone) {

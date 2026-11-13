@@ -36,7 +36,11 @@ import {
 import useGetDelivery from "../../hooks/useGetDelivery.jsx";
 import { getDeliveryMinimumBlock } from "../../utils/deliveryMinimum.js";
 import PhoneOtpModal from "./PhoneOtpModal.jsx";
-import { getOtpRequired } from "../../Api/otp.js";
+import {
+  isOtpUnavailable,
+  isPhoneNotVerified,
+  OTP_UNAVAILABLE_TEXT,
+} from "../../Api/otp.js";
 
 const splitPlzCity = (value) => {
   const raw = String(value || "").trim();
@@ -1855,23 +1859,28 @@ const CheckOutForm = () => {
                     payload.DeliveryDate = formData.deliveryDate;
                   }
 
-                  /* SMS-Bestätigung über den separaten OTP-Dienst, VOR dem Bestell-POST.
-                     Fail-open: Dienst nicht erreichbar oder required:false -> kein Schritt, Bestellung läuft normal. */
-                  const ensurePhoneVerified = async () => {
-                    if (!(await getOtpRequired())) return;
-                    await requestPhoneVerification(
-                      String(formData.mobile || "").trim()
-                    );
-                  };
-
                   /* Bestell-POST: Header/Verhalten identisch zum Live-Frontend (nur Content-Type, kein X-Device-Token). */
-                  const postOrder = async () => {
-                    await ensurePhoneVerified();
-                    return axios.post(`${server}/api/Cart/order`, payload, {
+                  const postOrderOnce = () =>
+                    axios.post(`${server}/api/Cart/order`, payload, {
                       headers: { "Content-Type": "application/json" },
                       withCredentials: true,
                       timeout: 120_000,
                     });
+
+                  /* SMS-Bestätigung: Der Server entscheidet (Tor vor /api/Cart/order). Verlangt er sie
+                     (409 PHONE_NOT_VERIFIED), zeigen wir den SMS-Dialog und bestellen danach erneut.
+                     KEIN Fail-open: Kann der Code nicht gesendet/geprüft werden (OTP-Dienst/Twilio down,
+                     503 OTP_UNAVAILABLE), geht die Bestellung nicht durch. */
+                  const postOrder = async () => {
+                    try {
+                      return await postOrderOnce();
+                    } catch (err) {
+                      if (!isPhoneNotVerified(err)) throw err;
+                      await requestPhoneVerification(
+                        String(formData.mobile || "").trim()
+                      );
+                      return postOrderOnce();
+                    }
                   };
 
                   if (payWay === 1) {
@@ -1919,6 +1928,10 @@ const CheckOutForm = () => {
                         toast(
                           "Telefonnummer nicht bestätigt. Bestellung nicht aufgegeben."
                         );
+                        return;
+                      }
+                      if (isOtpUnavailable(err)) {
+                        toast.error(OTP_UNAVAILABLE_TEXT);
                         return;
                       }
                       console.error("Barzahlung Abschluss:", err);
@@ -2009,6 +2022,11 @@ const CheckOutForm = () => {
                       toast(
                         "Telefonnummer nicht bestätigt. Bestellung nicht aufgegeben."
                       );
+                      return;
+                    }
+                    if (isOtpUnavailable(err)) {
+                      setPayError(OTP_UNAVAILABLE_TEXT);
+                      toast.error(OTP_UNAVAILABLE_TEXT);
                       return;
                     }
                     console.error("Order error:", err);
