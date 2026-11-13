@@ -35,6 +35,8 @@ import {
 } from "../../utils/hausnummerValidation.js";
 import useGetDelivery from "../../hooks/useGetDelivery.jsx";
 import { getDeliveryMinimumBlock } from "../../utils/deliveryMinimum.js";
+import PhoneOtpModal from "./PhoneOtpModal.jsx";
+import { getOtpRequired } from "../../Api/otp.js";
 
 const splitPlzCity = (value) => {
   const raw = String(value || "").trim();
@@ -610,10 +612,33 @@ const CheckOutForm = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [sending, setSending] = useState(false);
+  /** Synchroner Doppelklick-Schutz (State-Update ist erst nach dem Render sichtbar). */
+  const submittingRef = useRef(false);
   /** true nach location.replace → Button bleibt gesperrt («Weiterleitung zu PostFinance…»). */
   const [redirecting, setRedirecting] = useState(false);
   /** Sichtbare Fehlermeldung über dem Button (Toasts allein reichen auf dem Handy nicht). */
   const [payError, setPayError] = useState("");
+  /** SMS-Bestätigung: { phone } solange das Modal offen ist; Promise-Auflösung über Ref. */
+  const [otpModal, setOtpModal] = useState(null);
+  const otpResolverRef = useRef(null);
+  const requestPhoneVerification = (phone) =>
+    new Promise((resolve, reject) => {
+      otpResolverRef.current = { resolve, reject };
+      setOtpModal({ phone });
+    });
+  const closeOtpModal = (ok) => {
+    const r = otpResolverRef.current;
+    otpResolverRef.current = null;
+    setOtpModal(null);
+    if (!r) return;
+    if (ok) r.resolve();
+    else
+      r.reject(
+        Object.assign(new Error("phone verification cancelled"), {
+          phoneVerifyCancelled: true,
+        })
+      );
+  };
 
   /* Zurück aus PostFinance per bfcache (iOS): Button wieder freigeben. */
   useEffect(() => {
@@ -1726,6 +1751,8 @@ const CheckOutForm = () => {
 
                 setErrors({});
                 setPayError("");
+                if (submittingRef.current) return;
+                submittingRef.current = true;
                 setSending(true);
                 let redirectStarted = false;
                 try {
@@ -1828,17 +1855,28 @@ const CheckOutForm = () => {
                     payload.DeliveryDate = formData.deliveryDate;
                   }
 
+                  /* SMS-Bestätigung über den separaten OTP-Dienst, VOR dem Bestell-POST.
+                     Fail-open: Dienst nicht erreichbar oder required:false -> kein Schritt, Bestellung läuft normal. */
+                  const ensurePhoneVerified = async () => {
+                    if (!(await getOtpRequired())) return;
+                    await requestPhoneVerification(
+                      String(formData.mobile || "").trim()
+                    );
+                  };
+
+                  /* Bestell-POST: Header/Verhalten identisch zum Live-Frontend (nur Content-Type, kein X-Device-Token). */
+                  const postOrder = async () => {
+                    await ensurePhoneVerified();
+                    return axios.post(`${server}/api/Cart/order`, payload, {
+                      headers: { "Content-Type": "application/json" },
+                      withCredentials: true,
+                      timeout: 120_000,
+                    });
+                  };
+
                   if (payWay === 1) {
                     try {
-                      const postRes = await axios.post(
-                        `${server}/api/Cart/order`,
-                        payload,
-                        {
-                          headers: { "Content-Type": "application/json" },
-                          withCredentials: true,
-                          timeout: 120_000,
-                        }
-                      );
+                      const postRes = await postOrder();
                       if (postRes.status < 200 || postRes.status >= 300) {
                         toast.error(
                           "Bestellung konnte nicht ausgelöst werden."
@@ -1856,11 +1894,19 @@ const CheckOutForm = () => {
                         );
                         return;
                       }
-                      await axios.get(`${server}/api/Payment/success`, {
-                        params: { orderId: resolvedOrderId },
-                        headers: { "X-Requested-With": "XMLHttpRequest" },
-                        timeout: 120_000,
-                      });
+                      /* Bestellung existiert bereits: Fehler hier darf die Weiterleitung nicht verhindern (SuccessPage ruft den Endpoint selbst auf). */
+                      try {
+                        await axios.get(`${server}/api/Payment/success`, {
+                          params: { orderId: resolvedOrderId },
+                          headers: { "X-Requested-With": "XMLHttpRequest" },
+                          timeout: 120_000,
+                        });
+                      } catch (successErr) {
+                        console.warn(
+                          "Payment/success fehlgeschlagen, Bestellung existiert trotzdem:",
+                          successErr
+                        );
+                      }
                       clearWangenCheckoutPaymentSession();
                       dispatch(successCheckOut());
                       clearCheckoutSessionStorage();
@@ -1869,6 +1915,12 @@ const CheckOutForm = () => {
                       toast.success("Bestellung erfasst — vielen Dank!");
                       navigate(`/success/${resolvedOrderId}`);
                     } catch (err) {
+                      if (err?.phoneVerifyCancelled) {
+                        toast(
+                          "Telefonnummer nicht bestätigt. Bestellung nicht aufgegeben."
+                        );
+                        return;
+                      }
                       console.error("Barzahlung Abschluss:", err);
                       const isTimeout =
                         err?.code === "ECONNABORTED" ||
@@ -1883,15 +1935,7 @@ const CheckOutForm = () => {
                   }
 
                   try {
-                    const response = await axios.post(
-                      `${server}/api/Cart/order`,
-                      payload,
-                      {
-                        headers: { "Content-Type": "application/json" },
-                        withCredentials: true,
-                        timeout: 120_000,
-                      }
-                    );
+                    const response = await postOrder();
                     const ok =
                       response.status >= 200 && response.status < 300;
                     if (!ok) {
@@ -1961,6 +2005,12 @@ const CheckOutForm = () => {
                     );
                     navigate("/cart/checkOut", { replace: true });
                   } catch (err) {
+                    if (err?.phoneVerifyCancelled) {
+                      toast(
+                        "Telefonnummer nicht bestätigt. Bestellung nicht aufgegeben."
+                      );
+                      return;
+                    }
                     console.error("Order error:", err);
                     console.error("Order error response body:", err?.response?.data);
                     setPayError(PAYMENT_START_ERROR_TEXT);
@@ -2008,7 +2058,10 @@ const CheckOutForm = () => {
                     "Unerwarteter Fehler. Bitte Seite neu laden oder uns anrufen."
                   );
                 } finally {
-                  if (!redirectStarted) setSending(false);
+                  if (!redirectStarted) {
+                    setSending(false);
+                    submittingRef.current = false;
+                  }
                 }
               }}
             >
@@ -2021,6 +2074,13 @@ const CheckOutForm = () => {
           </form>
         </div>
       </div>
+      {otpModal ? (
+        <PhoneOtpModal
+          phone={otpModal.phone}
+          onVerified={() => closeOtpModal(true)}
+          onCancel={() => closeOtpModal(false)}
+        />
+      ) : null}
     </motion.div>
   );
 };
