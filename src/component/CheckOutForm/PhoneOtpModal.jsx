@@ -137,10 +137,6 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
     <div style={S.overlay} role="dialog" aria-modal="true" aria-labelledby="otp-title">
       <div style={S.box}>
         <h3 id="otp-title" style={S.title}>Telefonnummer bestätigen</h3>
-        <p style={S.text}>
-          Zur Sicherheit bestätigen wir Ihre Nummer{phone ? ` ${phone}` : ""} einmalig per SMS.
-          Geben Sie den 6-stelligen Code ein.
-        </p>
         <input
           style={S.input}
           type="text"
@@ -160,6 +156,9 @@ export default function PhoneOtpModal({ phone, onVerified, onCancel }) {
             }
           }}
         />
+        <p style={{ ...S.text, marginTop: 10 }}>
+          Einmalig pro Gerät: SMS-Code zur Bestätigung, danach 30 Tage gültig.
+        </p>
         {info && !error ? <p style={{ ...S.text, marginTop: 10 }}>{info}</p> : null}
         {error ? <p style={S.error} role="alert">{error}</p> : null}
         <div style={S.row}>
