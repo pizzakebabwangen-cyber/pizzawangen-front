@@ -110,7 +110,7 @@
 
     .street-autocomplete-wrap {
       position: relative;
-      text-align: right;
+      text-align: left;
       overflow: visible;
       z-index: 1;
     }
@@ -120,11 +120,11 @@
     }
 
     .street-autocomplete-wrap label {
-      text-align: right;
+      text-align: left;
     }
 
     .street-autocomplete-wrap input#street {
-      text-align: right;
+      text-align: left;
       direction: ltr;
     }
 
@@ -133,7 +133,7 @@
       font-size: 0.85rem;
       line-height: 1.35;
       color: #bbb;
-      text-align: right;
+      text-align: left;
     }
 
     .street-autocomplete-nohits {
@@ -190,7 +190,7 @@
       font-size: 16px;
       line-height: 1.35;
       border-bottom: 1px solid #3a3a3a;
-      text-align: right;
+      text-align: left;
       direction: ltr;
     }
 
