@@ -24,6 +24,18 @@ if ($buildExit -ne 0) {
 Write-Host "Build OK" -ForegroundColor Green
 Write-Host ""
 
+# Sicherheitsnetz: die Live-web.config hat die Tracking-Weiterleitung (/bestellung-verfolgen) und den .webp-MIME-Typ.
+# Fehlen sie in dist\web.config (veraltete Kopie), wuerde der Upload die Live-Datei ueberschreiben und beides verlieren.
+$wc = Get-Content "$projectRoot\dist\web.config" -Raw -ErrorAction SilentlyContinue
+if (-not $wc -or $wc -notmatch 'bestellung-verfolgen' -or $wc -notmatch '\.webp') {
+    Write-Host "ABBRUCH: dist\web.config enthaelt nicht die Live-Regeln (bestellung-verfolgen, .webp). NICHT hochladen!" -ForegroundColor Red
+    Write-Host "Loesung: public\web.config pruefen und neu bauen (npm run build)." -ForegroundColor Yellow
+    Read-Host "Press Enter to exit"
+    exit 2
+}
+Write-Host "web.config check OK" -ForegroundColor Green
+Write-Host ""
+
 # 2. Copy to server (H: drive)
 $serverPath = "h:\root\home\wangen2024-001\www\site1"
 Write-Host "[2/3] Copying to server $serverPath ..." -ForegroundColor Yellow
