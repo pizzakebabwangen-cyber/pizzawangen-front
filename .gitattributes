@@ -1,0 +1,2 @@
+# IIS config is deployed byte-for-byte; keep CRLF in the working tree like live
+web.config text eol=crlf
