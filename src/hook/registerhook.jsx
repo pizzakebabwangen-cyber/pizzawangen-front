@@ -52,10 +52,10 @@ const Registerhook = () => {
                 }))
                 setLog(false)
             } else {
-                toast.error('password must be at least 6 characters')
+                toast.error('Das Passwort muss mindestens 6 Zeichen lang sein.')
             }
         } else {
-            toast.error('password and confirmPassword are not the same ')
+            toast.error('Die Passwörter stimmen nicht überein.')
         }
 
     }
@@ -65,8 +65,8 @@ const Registerhook = () => {
         if (!lo) {
             if (error === null) {
                 if (Registeruser.status === 200) {
-                    toast.success("sucess")
-                    toast('Active Email in Your Gmail', {
+                    toast.success("Registrierung erfolgreich.")
+                    toast('Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrem Posteingang.', {
                         icon: '👏',
                         duration: 6000,
                     })
@@ -80,15 +80,15 @@ const Registerhook = () => {
                     setCity("")
                     setPostBox("")
                     setTimeout(() => {
-                        navigate("/Login")
+                        navigate("/login")
                     }, 5000);
                 }
             } else {
                 if (error.message === "User already registed") {
-                    toast.error(error.message)
+                    toast.error("Diese E-Mail-Adresse ist bereits registriert.")
                 }
                 if (error.message === "User did not create") {
-                    toast.error("Change Name ")
+                    toast.error("Registrierung nicht möglich. Bitte wählen Sie einen anderen Namen.")
                 }
             }
         }

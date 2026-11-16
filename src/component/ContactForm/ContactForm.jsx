@@ -8,8 +8,10 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Logo from "../../assets/85a30340-f824-4e4a-b2a5-c5d808affecc.png";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 const ContactForm = () => {
+  const navigate = useNavigate();
   const { ref, inView } = useInView({
     triggerOnce: true, // Animation triggers only once
     threshold: 0.1, // Trigger when 10% of the component is visible
@@ -24,7 +26,7 @@ const ContactForm = () => {
 
   const userSchema = object({
     name: string().required("Eingabe fehlt...."),
-    email: string().email().required("Eingabe fehlt...."),
+    email: string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein.").required("Eingabe fehlt...."),
     phone: string(),
     message: string().required("Eingabe fehlt...."),
   });
@@ -40,7 +42,7 @@ const ContactForm = () => {
         const data = await response.json();
         setCompanyData(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
       setIsLoading(false);
     };
@@ -74,7 +76,7 @@ const ContactForm = () => {
         `${server}/api/Contact/Contact`,
         formData
       );
-      toast.success("E-mail wurde gesendet...");
+      toast.success("Ihre Nachricht wurde gesendet.");
   
       // Clear form and errors
       setFormData({
@@ -87,17 +89,22 @@ const ContactForm = () => {
   
       // Redirect to home page after a delay
       setTimeout(() => {
-        window.location.href = "/";
+        navigate("/");
       }, 2000); // Adjust delay as needed (2 seconds in this case)
     } catch (err) {
-      console.log(err);
-      const validationErrors = {};
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
-      setErrors(validationErrors);
-      console.log("errors", errors);
-      toast.error("E-mail fehlgeschlagen");
+      console.error(err);
+      if (err?.name === "ValidationError") {
+        // Eingabefehler (Validierung)
+        const validationErrors = {};
+        (err.inner?.length ? err.inner : [err]).forEach((error) => {
+          if (error.path) validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+        toast.error("Bitte prüfen Sie Ihre Eingaben.");
+      } else {
+        // Server- oder Netzwerkfehler: keine Validierungsdetails vorhanden
+        toast.error(`Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut oder rufen Sie uns an: ${SITE.phoneDisplay}.`);
+      }
     } finally {
       setSending(false);
     }
@@ -147,7 +154,7 @@ const ContactForm = () => {
               {errors.name && <div style={{ color: "red" }}>{errors.name}</div>}
             </div>
             <div className="form-group">
-              <label htmlFor="email">E-mail:</label>
+              <label htmlFor="email">E-Mail:</label>
               <input
                 type="email"
                 id="email"

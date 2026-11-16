@@ -37,7 +37,7 @@ function ForgetPasshook() {
                         toast.success("Überprüfen Sie Ihre E-Mail-Nachrichten")
                         setEmail("")
                         setTimeout(() => {
-                            navigate("/Login")
+                            navigate("/login")
                         }, 1000);
                     }
                 }

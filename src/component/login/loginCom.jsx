@@ -60,7 +60,7 @@ function LoginCom() {
             <span>angemeldet bleiben</span>
           </label>
         </div>
-        <button type="submit" className={`${loading ? "loading-button" : ""}`}> {loading ? "Wait ..." : "anmelden »"}</button>
+        <button type="submit" className={`${loading ? "loading-button" : ""}`}> {loading ? "Bitte warten ..." : "Anmelden »"}</button>
       </form>
       <div className="returnF">
         <Link to={"/forgetPass"}>

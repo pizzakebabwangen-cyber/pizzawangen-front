@@ -33,7 +33,7 @@ const ResetPasshook = () => {
     const SendResetPass = async (e) => {
         e.preventDefault()
         if (!email || !token) {
-            toast.error('Reset password link is invalid')
+            toast.error('Der Link zum Zurücksetzen des Passworts ist ungültig.')
             return
         }
         if (password === confirmPassword) {
@@ -44,15 +44,15 @@ const ResetPasshook = () => {
                     token
                 }))
                 if (ResetPasswrod.fulfilled.match(result)) {
-                    toast.success('Password changed successfully')
+                    toast.success('Das Passwort wurde geändert.')
                     setTimeout(() => {
-                        window.location.href = 'https://www.pizzawangen.ch/login?passwordReset=1'
+                        navigate('/login?passwordReset=1')
                     }, 1000)
                     return
                 }
-                toast.error('Password reset failed')
+                toast.error('Das Zurücksetzen des Passworts ist fehlgeschlagen.')
         } else {
-            toast.error('password and confirmPassword are not the same ')
+            toast.error('Die Passwörter stimmen nicht überein.')
         }
 
     }

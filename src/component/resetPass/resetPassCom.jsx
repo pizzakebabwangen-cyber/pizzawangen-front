@@ -13,10 +13,10 @@ function ResetPassCom() {
 
   return (
     <div className="register">
-      <h1 className="Page-name">Reset Password</h1>
+      <h1 className="Page-name">Passwort zurücksetzen</h1>
       <form className="form" onSubmit={SendResetPass}>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Neues Passwort</label>
           <input
             onChange={getRegisterInfo(setPassword)}
             type="password"
@@ -26,7 +26,7 @@ function ResetPassCom() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="confirm-password">Confirm Password</label>
+          <label htmlFor="confirm-password">Passwort bestätigen</label>
           <input
             onChange={getRegisterInfo(setConfirmPassword)}
             type="password"
@@ -35,7 +35,7 @@ function ResetPassCom() {
             required
           />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">Speichern</button>
       </form>
 
       <div className="returnF">

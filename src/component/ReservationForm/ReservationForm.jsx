@@ -29,7 +29,7 @@ const ReservationForm = () => {
   const userSchema = object({
     salute: string().required("Eingabe fehlt...."),
     name: string().required("Eingabe fehlt...."),
-    email: string().email().required("Eingabe fehlt...."),
+    email: string().email("Bitte geben Sie eine gültige E-Mail-Adresse ein.").required("Eingabe fehlt...."),
   });
   const [selectedDate, setSelectedDate] = useState("");
   const [sending, setSending] = useState(false);
@@ -63,7 +63,7 @@ const ReservationForm = () => {
         `${server}/api/Reservation/Reservation`,
         formData
       );
-      toast.success("check your email");
+      toast.success("Vielen Dank! Bitte prüfen Sie Ihre E-Mails.");
       setSent(true);
       setTimeout(() => {
         setSent(false);
@@ -80,14 +80,19 @@ const ReservationForm = () => {
       });
             setErrors({});
     } catch (err) {
-       console.log(err);
-       const validationErrors = {};
-       err.inner.forEach((error) => {
-         validationErrors[error.path] = error.message;
-       });
-       setErrors(validationErrors);
-       console.log("errors", errors);
-      toast.error("email is false", err);
+      console.error(err);
+      if (err?.name === "ValidationError") {
+        // Eingabefehler (Validierung)
+        const validationErrors = {};
+        (err.inner?.length ? err.inner : [err]).forEach((error) => {
+          if (error.path) validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+        toast.error("Bitte prüfen Sie Ihre Eingaben.");
+      } else {
+        // Server- oder Netzwerkfehler: keine Validierungsdetails vorhanden
+        toast.error(`Ihre Reservation konnte nicht gesendet werden. Bitte versuchen Sie es später erneut oder rufen Sie uns an: ${SITE.phoneDisplay}.`);
+      }
     } finally {
       setSending(false);
     }
@@ -102,7 +107,6 @@ const ReservationForm = () => {
       return `${day}.${month}.${year}`;
     }
   };
-  // console.log("formData", formData);
 
   return (
     <div className="reservation">
@@ -154,10 +158,10 @@ const ReservationForm = () => {
           {errors.name && <div style={{ color: "red" }}>{errors.name}</div>}
         </div>
         {/* {selectedDate && (
-          <p>Selected Date: {formatSelectedDate(selectedDate)}</p>
+          <p>Gewähltes Datum: {formatSelectedDate(selectedDate)}</p>
         )} */}
         <div className="form-group">
-          <label htmlFor="email">E-mail:</label>
+          <label htmlFor="email">E-Mail:</label>
           <input
             type="email"
             id="email"
@@ -194,7 +198,7 @@ const ReservationForm = () => {
             <div className="dateContainer">
               <input
                 type="text"
-                placeholder="DD-MM-YYYY"
+                placeholder="TT.MM.JJJJ"
                 // name="rDate"
                 disabled
                 value={
@@ -232,7 +236,7 @@ const ReservationForm = () => {
           />
         </div>
         <button type="submit" disabled={sending}>
-          {sending ? "senden..." : "Bestätigen"}
+          {sending ? "Wird gesendet..." : "Bestätigen"}
         </button>
         {sent && (
           <div>

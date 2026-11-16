@@ -4,6 +4,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { LoginPage } from "../reduxTool/AuthSlice"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+const LOGIN_ERRORS = {
+    "Invalid password": "Das Passwort ist falsch.",
+    "Email not confirmed": "Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse.",
+    "There is no user with that Email address": "Zu dieser E-Mail-Adresse gibt es kein Konto.",
+}
 
 function Loginhook() {
     const [userName, setUserName] = useState("")
@@ -38,7 +43,7 @@ function Loginhook() {
             if (error === null) {
                 if (loginUser && loginUser.data) {
                     if (loginUser.data.message === "User Login successfully!") {
-                        toast.success("User Login successfully ")
+                        toast.success("Anmeldung erfolgreich.")
                         localStorage.setItem("token", loginUser.data.token)
                         setPassword("")
                         setUserName("")
@@ -58,7 +63,7 @@ function Loginhook() {
                     // if (error.message === "There is no user with that Email address") {
                     //     toast.error("This email does not exist")
                     // }
-                    toast.error(error.message)
+                    toast.error(LOGIN_ERRORS[String(error.message || "").trim()] || "Anmeldung fehlgeschlagen. Bitte prüfen Sie Ihre Angaben.")
                 }
             }
         }

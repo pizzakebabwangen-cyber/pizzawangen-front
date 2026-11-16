@@ -19,11 +19,11 @@ password: z.string().min(6, "Das Passwort muss mindestens 6 Zeichen lang sein"),
 ConfirmPassword: z.string().min(6, "Bestätigen Sie Ihr Passwort"),
 street: z.string().min(1, "Strasse ist erforderlich"),
 city: z.string().min(1, "Ort ist erforderlich"),
-postBox: z.string().min(1, "Postfach ist erforderlich"),
+postBox: z.string().min(1, "PLZ ist erforderlich"),
 })
   .refine((data) => data.password === data.ConfirmPassword, {
     path: ["ConfirmPassword"],
-    message: "Passwords do not match",
+    message: "Die Passwörter stimmen nicht überein.",
   });
 
 
@@ -115,7 +115,7 @@ function RegisterCom() {
 
             {/* Post Box */}
             <div className="form-group">
-              <label htmlFor="postBox">Briefkasten</label>
+              <label htmlFor="postBox">PLZ</label>
               <input type="text" id="postBox" {...register("postBox")} />
               {errors.postBox && <p className="error-message">{errors.postBox.message}</p>}
             </div>
@@ -124,7 +124,7 @@ function RegisterCom() {
               type="submit"
               className={`${loading ? "loading-button" : ""}`}
             >
-              {loading ? "Wait ..." : "Weiter..."}
+              {loading ? "Bitte warten ..." : "Weiter..."}
             </button>
           </form>
 

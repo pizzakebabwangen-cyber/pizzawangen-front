@@ -43,7 +43,7 @@ function ForgetPassCom() {
                             <input
                                 type="email" id="username" name="username" required    {...register("email")} />
                         </div>
-                        <button type="submit" className={`${loading ? "loading-button" : ""}`}> {loading ? "Wait ..." : "Weiter..."}</button>
+                        <button type="submit" className={`${loading ? "loading-button" : ""}`}> {loading ? "Bitte warten ..." : "Weiter..."}</button>
                     </form>
                     <div className="returnF">
                         <Link to={"/login"}> <h4 className="return"> <span>Neu anmelden</span> </h4></Link>
