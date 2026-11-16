@@ -154,7 +154,6 @@ const splitStreetAndHouseNumber = (value) => {
   return { street: raw, houseNumber: "" };
 };
 
-const splitGeoDisplayAddress = (value) => {
 /**
  * Strasse darf nie eine Hausnummer am Ende behalten (Chrome-Desktop-Autofill liefert z. B.
  * "Zuercherstrasse 8" in Strasse UND "8" in Hausnummer -> Adresse "Zuercherstrasse 8 8").
@@ -184,6 +183,7 @@ const normalizeStreetHouse = (streetIn, hausnummerIn) => {
   return { street, hausnummer: hn };
 };
 
+const splitGeoDisplayAddress = (value) => {
   const parts = String(value || "")
     .split(",")
     .map((part) => part.trim())
@@ -1255,13 +1255,13 @@ const CheckOutForm = () => {
                 }}
                 onBlur={() => {
                   window.setTimeout(() => setStreetSuggestOpen(false), 200);
-                }}
                   setFormData((prev) => {
                     const n = normalizeStreetHouse(prev.street, prev.hausnummer);
                     return n.street === prev.street && n.hausnummer === prev.hausnummer
                       ? prev
                       : { ...prev, street: n.street, hausnummer: n.hausnummer };
                   });
+                }}
               />
               {streetSuggestOpen && streetSuggestions.length > 0 && (
                 <ul className="street-suggestions" role="listbox">
@@ -1302,7 +1302,6 @@ const CheckOutForm = () => {
                 placeholder="Hausnummer*"
                 value={formData.hausnummer}
                 onChange={handleChange}
-              />
                 onBlur={() => {
                   setFormData((prev) => {
                     const n = normalizeStreetHouse(prev.street, prev.hausnummer);
@@ -1311,6 +1310,7 @@ const CheckOutForm = () => {
                       : { ...prev, street: n.street, hausnummer: n.hausnummer };
                   });
                 }}
+              />
               {errors.hausnummer && <div style={{ color: "red" }}>{errors.hausnummer}</div>}
             </div>
 
@@ -1688,8 +1688,8 @@ const CheckOutForm = () => {
                   navigate("/cart");
                   return;
                 }
-                const newErrors = {};
                 const addrNorm = normalizeStreetHouse(formData.street, formData.hausnummer);
+                const newErrors = {};
                 if (!formData.salute || String(formData.salute).trim() === "") {
                   newErrors.salute = "Anrede fehlt";
                 }
