@@ -147,7 +147,7 @@ const Slider = () => {
         className="animated-component"
       > */}
         <div className="slider-info">
-          <h1> Wangen </h1> <h1> Pizza, Kebab und Kurier </h1>{" "}
+          <h1> Wangen </h1> <h1> Pizza Kebab </h1>{" "}
           <p> Unsere Geheimrezept: Qualität, Frische und Vielfalt! </p>{" "}
         </div>{" "}
       {/* </motion.div> */}

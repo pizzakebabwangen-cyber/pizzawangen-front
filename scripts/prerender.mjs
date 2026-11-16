@@ -48,7 +48,7 @@ const sitemapPath = resolve(dist, "sitemap.xml");
 if (!existsSync(sitemapPath)) warn("dist/sitemap.xml fehlt (public/sitemap.xml).");
 else {
   const sm = readFileSync(sitemapPath, "utf8");
-  for (const r of ROUTES) if (!sm.includes(`<loc>https://www.pizzawangen.ch${r.path === "/" ? "/" : r.path}</loc>`)) warn(`Route ${r.path} fehlt in sitemap.xml`);
+  for (const r of ROUTES) if (r.sitemap !== false && !sm.includes(`<loc>https://www.pizzawangen.ch${r.path === "/" ? "/" : r.path}</loc>`)) warn(`Route ${r.path} fehlt in sitemap.xml`);
 }
 if (!existsSync(resolve(dist, "robots.txt"))) warn("dist/robots.txt fehlt (public/robots.txt).");
 const wc = existsSync(resolve(dist, "web.config")) ? readFileSync(resolve(dist, "web.config"), "utf8") : "";

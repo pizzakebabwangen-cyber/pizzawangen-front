@@ -1,43 +1,51 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import "./App.css";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Footer from "./component/Footer/Footer";
 import Nav from "./component/Nav/Nav";
 import Location from "./component/Location/Location";
 import Home from "./pages/Home/Home";
-import Menue from "./pages/Menue/Menue";
-import MenueDemo from "./pages/MenueDemo/MenueDemo";
-import Reservation from "./pages/Reservation/Reservation";
-import Kontakt from "./pages/Kontakt/Kontakt";
-import Restaurant from "./pages/Restaurant/Restaurant";
-import Angebote from "./pages/Angebote/Angebote";
-import Gutscheine from "./pages/Gutscheine/Gutscheine";
 import { Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/Login/loginpage";
-import RegisterPage from "./pages/Register/Register";
-import ForgetPassPage from "./pages/ForgetPass/ForgetPassPage";
-import ResetPassPage from "./pages/ResetPass/ResetPassPage";
-import AccountPage from "./pages/Account/AccountPage";
+import { lazyWithReload } from "./utils/lazyWithReload.js";
+import { LANDING_PAGES } from "./config/landing.js";
 import CartPage from "./pages/CartPage/CartPage";
 import CheckOut from "./pages/CheckOut/CheckOut";
 import { ProtectedRoute } from "./component/ProtectedRoute/ProtectedRoute";
 import Payment from "./pages/Payment/Payment";
 import { useSelector } from "react-redux";
 import SuccessPage from "./pages/SuccessPage/SuccessPage";
-import OrderTracking from "./pages/OrderTracking/OrderTracking";
 import Delivery from "./component/Delivery/Delivery";
-import Impressum from "./component/Policy&Info/Impressum";
-import Datenschutzbestimmungen from "./component/Policy&Info/Datenschutzbestimmungen";
-import AGB from "./component/Policy&Info/AGB";
 import FailedPayment from "./pages/FailedPaymentPage/FailedPayment";
 import { useAvailability } from "./context/AvailabilityContext.jsx";
 import { applyRuntimeLanguage, getInitialLanguage } from "./utils/languageRuntime";
 import { useLocation } from "react-router-dom";
 import ScrollToTop from "./component/ScrollToTop/ScrollToTop";
 import Seo from "./component/Seo/Seo.jsx";
-import NotFound from "./pages/NotFound/NotFound.jsx";
 import { readCheckoutUnlockedFlag } from "./utils/checkoutVisitorStorage.js";
+
+// Startseite, Warenkorb, Kasse, Zahlung, Erfolg/Fehler bleiben im Haupt-Bundle (Bestellablauf ohne Nachladen).
+// Alle uebrigen Seiten werden erst beim Aufruf geladen.
+const Menue = lazyWithReload(() => import("./pages/Menue/Menue"));
+const MenueDemo = lazyWithReload(() => import("./pages/MenueDemo/MenueDemo"));
+const Reservation = lazyWithReload(() => import("./pages/Reservation/Reservation"));
+const Kontakt = lazyWithReload(() => import("./pages/Kontakt/Kontakt"));
+const Restaurant = lazyWithReload(() => import("./pages/Restaurant/Restaurant"));
+const Angebote = lazyWithReload(() => import("./pages/Angebote/Angebote"));
+const Gutscheine = lazyWithReload(() => import("./pages/Gutscheine/Gutscheine"));
+const LoginPage = lazyWithReload(() => import("./pages/Login/loginpage"));
+const RegisterPage = lazyWithReload(() => import("./pages/Register/Register"));
+const ForgetPassPage = lazyWithReload(() => import("./pages/ForgetPass/ForgetPassPage"));
+const ResetPassPage = lazyWithReload(() => import("./pages/ResetPass/ResetPassPage"));
+const AccountPage = lazyWithReload(() => import("./pages/Account/AccountPage"));
+const OrderTracking = lazyWithReload(() => import("./pages/OrderTracking/OrderTracking"));
+const Impressum = lazyWithReload(() => import("./component/Policy&Info/Impressum"));
+const Datenschutzbestimmungen = lazyWithReload(() => import("./component/Policy&Info/Datenschutzbestimmungen"));
+const AGB = lazyWithReload(() => import("./component/Policy&Info/AGB"));
+const NotFound = lazyWithReload(() => import("./pages/NotFound/NotFound.jsx"));
+const LandingPage = lazyWithReload(() => import("./pages/Landing/LandingPage.jsx"));
+
+const RouteFallback = () => <div style={{ minHeight: "70vh" }} aria-hidden="true" />;
 
 function App() {
   const [isCheckoutAllowed, setCheckoutAllowed] = useState(() =>
@@ -79,6 +87,7 @@ function App() {
       <ScrollToTop />
       <Seo />
       <Nav />
+      <Suspense fallback={<RouteFallback />}>
       <Routes>
         <Route
           path="/"
@@ -91,6 +100,9 @@ function App() {
         <Route path="/gutscheine" element={<Gutscheine />} />
         <Route path="/restaurant" element={<Restaurant />} />
         <Route path="/kontakt" element={<Kontakt />} />
+        {LANDING_PAGES.map((p) => (
+          <Route key={p.path} path={p.path} element={<LandingPage page={p} />} />
+        ))}
         <Route path="/success/:orderId?" element={<SuccessPage />} />
         <Route path="/failed-payment" element={<FailedPayment />} />
         <Route path="/order-tracking" element={<OrderTracking />} />
@@ -124,6 +136,7 @@ function App() {
         <Route path="/resetPassword" element={<ResetPassPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
       <Footer />
     </>
   );

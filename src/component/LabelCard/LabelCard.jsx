@@ -4,7 +4,7 @@ import "./LabelCard.css";
 const LabelCard = ({title,ImgSrc}) => {
   return (
     <div className="card-label">
-      <img src={ImgSrc} alt="Profile Image" className="card-image" />
+      <img src={ImgSrc} alt={title || ""} className="card-image" />
       <h4 className="card-title">{title}</h4>
     </div>
   );

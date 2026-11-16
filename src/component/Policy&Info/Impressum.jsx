@@ -36,7 +36,7 @@ const Impressum = () => {
         <p>
           Vertretungsberechtigte Person(en)
           <br />
-          M. Adnan Safieddin, Geschäftsführer
+          Adnan Seifeddin, Geschäftsführer
         </p>
         <p>Handelsregister-Amt Schwyz: CHE-370.162.307</p>
       </div>
@@ -74,8 +74,7 @@ const Impressum = () => {
         <h2>Urheberrechte</h2>
         <p>
           Die Urheber- und alle anderen Rechte an Inhalten, Bildern, Fotos oder
-          anderen Dateien auf dieser Website, gehören ausschliesslich Nidal
-          Al-Bashawri oder den speziell genannten Rechtsinhabern. Für die
+          anderen Dateien auf dieser Website, gehören ausschliesslich Adnan Seifeddin oder den speziell genannten Rechtsinhabern. Für die
           Reproduktion jeglicher Elemente ist die schriftliche Zustimmung des
           Urheberrechtsträgers im Voraus einzuholen.
         </p>

@@ -1,0 +1,38 @@
+.location-blocked {
+  min-height: 220px;
+  padding: 32px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  background: #1b1c1c;
+  color: #eee;
+}
+
+.location-blocked p {
+  margin: 0;
+  color: #ddd;
+}
+
+.location-consent-btn {
+  min-height: 44px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary-color);
+  color: #111;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.location-maps-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px;
+  color: var(--primary-color);
+  text-decoration: underline;
+}

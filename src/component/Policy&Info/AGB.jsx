@@ -15,14 +15,13 @@ const AGB = () => {
   return (
     <div className="agb container">
       <h1>Allgemeine Geschäftsbedingungen</h1>
-      <h2>Wangen Pizza Kebab und Kurier</h2>
+      <h2>Wangen Pizza Kebab GmbH</h2>
 
       <section>
-        <h2>Grundlegendes</h2>
+        <h2>1. Grundlegendes</h2>
         <p>
           Diese Allgemeinen Geschäftsbedingungen (AGB) regeln die
-          Rechtsbeziehung zwischen der Wangen Pizza Kebab und Kurier und deren
-          Gäste.
+          Rechtsbeziehung zwischen der Wangen Pizza Kebab GmbH und ihren Gästen.
         </p>
         <p>
           Der Einfachheit halber wird in diesen AGB – egal in Bezug auf welche
@@ -30,7 +29,7 @@ const AGB = () => {
         </p>
         <p>
           Es gelten ausschliesslich die bei Vertragsschluss gültigen
-          Geschäftsbedingungen der Wangen Pizza Kebab und Kurier GmbH.
+          Geschäftsbedingungen der Wangen Pizza Kebab GmbH.
         </p>
         <p>
           Allgemeine Geschäftsbedingungen des Gastes kommen nur zur Anwendung,
@@ -40,7 +39,7 @@ const AGB = () => {
       </section>
 
       <section>
-        <h2>Salvatorische Klausel</h2>
+        <h2>2. Salvatorische Klausel</h2>
         <p>
           Sollten einzelne Bestimmungen dieser AGB unwirksam oder nichtig sein
           oder werden, so wird dadurch die Wirksamkeit des Vertrages und der
@@ -52,46 +51,44 @@ const AGB = () => {
       </section>
 
       <section>
-        <h2>Gerichtsstand / Anwendbares Recht</h2>
+        <h2>3. Gerichtsstand / Anwendbares Recht</h2>
         <p>
           Für allfällige Streitigkeiten aus diesem Vertrag ist Schwyz
           Gerichtsstand, sofern kein anderer gesetzlich zwingender Gerichtsstand
           besteht.
         </p>
         <p>
-          Es kommt auf allen Vertrags-, Reserverations-, allfälligen
+          Es kommt auf allen Vertrags-, Reservierungs-, allfälligen
           Zusatzvereinbarungen und allgemeinen Bedingungen ausschliesslich
           schweizerisches Recht zur Anwendung. Erfüllungs- und Zahlungsort ist
-          der Sitz der Wangen Pizza Kebab und Kurier GmbH.
+          der Sitz der Wangen Pizza Kebab GmbH.
         </p>
       </section>
 
       <section>
-        <h2>Gültigkeit</h2>
+        <h2>4. Gültigkeit</h2>
         <p>
           Diese AGB gelten ab dem 1. Juni 2024. Mit der Herausgabe einer neuen
           Dokumentation verliert diese ihre Gültigkeit. Schriftliche
           Bestätigungen: Als schriftliche Bestätigungen gelten E-Mail, SMS und
-          WhatsApp-Nachrichten. Vertragspartner sind der Gast und die Wangen
-          Pizza Kebab und Kurier GmbH.
+          WhatsApp-Nachrichten. Vertragspartner sind der Gast und die Wangen Pizza Kebab GmbH.
         </p>
       </section>
 
       <section>
-        <h2>Vertragsgegenstand / Geltungsbereich</h2>
+        <h2>5. Vertragsgegenstand / Geltungsbereich</h2>
         <p>
           Der Vertrag über die Reservation von Plätzen an Tischen oder Bereichen
           des Restaurants sowie den Bezug von sonstigen Lieferungen und
-          Leistungen kommt mit der schriftlichen Bestätigung durch die Wangen
-          Pizza Kebab und Kurier zustande. Vertragsänderungen werden für die
-          Wangen Pizza Kebab und Kurier erst durch eine (schriftliche)
+          Leistungen kommt mit der schriftlichen Bestätigung durch die Wangen Pizza Kebab GmbH zustande. Vertragsänderungen werden für die
+          Wangen Pizza Kebab GmbH erst durch eine (schriftliche)
           Rückbestätigung verbindlich. Einseitige Änderungen oder Ergänzungen
           des Vertrags durch den Gast sind unwirksam.
         </p>
       </section>
 
       <section>
-        <h2>Leistungsumfang</h2>
+        <h2>6. Leistungsumfang</h2>
         <p>
           Der Leistungsumfang des Vertrags bestimmt sich gemäss individuell
           vorgenommener Reservation des Gastes. Reservationen können nur über
@@ -104,7 +101,7 @@ const AGB = () => {
           Reservation selbst angepasst oder storniert werden.
         </p>
         <p>
-          Bei Gruppen-Reservierungen von 7 bis 14 Gäste gelten folgende Regeln:
+          Bei Gruppen-Reservierungen von 7 bis 14 Gästen gelten folgende Regeln:
         </p>
         <ul>
           <li>
@@ -130,7 +127,7 @@ const AGB = () => {
             entgegengenommen. Komplettabsagen sind bis 7 Tage vor der
             Reservation über den Link im Bestätigungsmail möglich. Ansonsten
             wird die Anzahl der reservierten Plätze verrechnet, auch wenn
-            weniger Gäste erscheinen. Der/die Reservierende ist Aufgrund der
+            weniger Gäste erscheinen. Der/die Reservierende ist aufgrund der
             Anzahlung für die Bezahlung verantwortlich. Bei Gruppen ist ein
             Einzelinkasso nicht möglich.
           </li>
@@ -145,68 +142,65 @@ const AGB = () => {
           </li>
           <li>
             Sollten unangemeldet mehr oder weniger Gäste zur vereinbarten
-            Reservation hinzukommen/wegfallen, so kann die Wangen Pizza Kebab
-            und Kurier diese Gäste frei umplatzieren und/oder auf mehrere Tische
+            Reservation hinzukommen/wegfallen, so kann die Wangen Pizza Kebab GmbH diese Gäste frei umplatzieren und/oder auf mehrere Tische
             verteilen.
           </li>
         </ul>
       </section>
 
       <section>
-        <h2>Optionen/Anfragen</h2>
+        <h2>7. Optionen/Anfragen</h2>
         <p>
           Optionsdaten sind für beide Parteien unverbindlich. Während der
-          Optionsfrist kann die Wangen Pizza Kebab und Kurier über sämtliche
+          Optionsfrist kann die Wangen Pizza Kebab GmbH über sämtliche
           Tische/Bereiche verfügen. Tische/Bereiche werden erst bei erfolgter
           Anzahlung reserviert.
         </p>
       </section>
 
       <section>
-        <h2>Preise / Zahlungspflicht / Zahlungskonditionen</h2>
+        <h2>8. Preise / Zahlungspflicht / Zahlungskonditionen</h2>
         <p>
           Die Preise verstehen sich in Schweizer Franken (CHF) und schliessen
           die gesetzliche Mehrwertsteuer mit ein.
         </p>
         <p>
           Der Gast ist verpflichtet, für die von ihm in Anspruch genommenen
-          Leistungen die vereinbarten bzw. geltenden Preise der Wangen Pizza
-          Kebab und Kurier zu zahlen. Dies gilt auch für vom Gast, seinen
+          Leistungen die vereinbarten bzw. geltenden Preise der Wangen Pizza Kebab GmbH zu zahlen. Dies gilt auch für vom Gast, seinen
           Begleitern und Besuchern veranlasste Leistungen und Auslagen der
-          Wangen Pizza Kebab und Kurier an Dritte.
+          Wangen Pizza Kebab GmbH an Dritte.
         </p>
         <p>
           Eine Erhöhung gesetzlicher Abgaben nach Vertragsabschluss geht zu
           Lasten des Gastes. Preisangaben in Fremdwährungen sind Richtwerte und
           werden zum jeweiligen Tageskurs verrechnet. Alle publizierten Preise
           können jederzeit ohne Mitteilung an den Gast angepasst werden.
-          Gültigkeit haben jeweils diejenigen Preise, die von der Wangen Pizza
-          Kebab und Kurier bestätigt werden.
+          Gültigkeit haben jeweils diejenigen Preise, die von der Wangen Pizza Kebab GmbH bestätigt werden.
         </p>
         <p>
-          Je nach Vereinbarung kann die Wangen Pizza Kebab und Kurier eine
+          Je nach Vereinbarung kann die Wangen Pizza Kebab GmbH eine
           Anzahlung von 50-100 % des gesamten Buchungsbetrags verlangen. Die
           Anzahlung ist als Teilzahlung auf das vereinbarte Entgelt zu
           verstehen. Eine Vorauszahlung ist innerhalb von 5 Tagen nach Erhalt
           der Reservationsbestätigung zu überweisen. Erfolgt die Reservation
-          kurzfristiger, so verlangt die Wangen Pizza Kebab und Kurier eine
+          kurzfristiger, so verlangt die Wangen Pizza Kebab GmbH eine
           Kreditkartengarantie über den gesamten Buchungsbetrag.
         </p>
         <p>
           Bei nicht fristgerechter Anzahlung oder Leistung der
-          Kreditkartengarantie kann die Wangen Pizza Kebab und Kurier den
+          Kreditkartengarantie kann die Wangen Pizza Kebab GmbH den
           Vertrag unverzüglich (ohne Mahnung) auflösen, bzw. von den gemachten
           Leistungsversprechungen zurücktreten und die unter Ziffer 9 genannten
           Stornierungskosten verlangen.
         </p>
         <p>
-          Der Wangen Pizza Kebab und Kurier steht das Recht auf jederzeitige
+          Der Wangen Pizza Kebab GmbH steht das Recht auf jederzeitige
           Abrechnung bzw. Zwischenabrechnung seiner Leistungen zu.
         </p>
         <p>
           Die Schlussrechnung umfasst den vereinbarten Preis zuzüglich
           allfälliger Mehrbeträge, die aufgrund gesonderter Leistungen der
-          Wangen Pizza Kebab und Kurier für den Gast und/oder die ihn
+          Wangen Pizza Kebab GmbH für den Gast und/oder die ihn
           begleitenden Personen entstanden sind. Die Schlussrechnung ist –
           vorbehaltlich anderer Vereinbarungen – spätestens am Ende der
           Reservation, in Schweizer Franken oder mit einer akzeptierten
@@ -220,22 +214,20 @@ const AGB = () => {
           Jahrgangswechsel bei Weinen, bleiben ausdrücklich vorbehalten.
         </p>
         <p>
-          Ab dem 30. Tag nach Rechnungsdatum ist die Wangen Pizza Kebab und
-          Kurier berechtigt, Verzugszinsen in Höhe von 5% zu verlangen, es sei
-          denn, dass die Wangen Pizza Kebab und Kurier höhere Verzugszinsen oder
-          der Gast eine geringere Belastung von der Wangen Pizza Kebab und
-          Kurier nachweist. Schecks werden nicht angenommen. Etwaige Spesen
+          Ab dem 30. Tag nach Rechnungsdatum ist die Wangen Pizza Kebab GmbH berechtigt, Verzugszinsen in Höhe von 5% zu verlangen, es sei
+          denn, dass die Wangen Pizza Kebab GmbH höhere Verzugszinsen oder
+          der Gast eine geringere Belastung von der Wangen Pizza Kebab GmbH nachweist. Schecks werden nicht angenommen. Etwaige Spesen
           gehen zu Lasten des Gastes. Eine Aufrechnung ist nur mit
           unbestrittenen oder gerichtlich rechtskräftig festgestellten
           Forderungen zulässig. Ein Zurückbehaltungsrecht kann der Gast nur dann
           geltend machen, soweit es auf demselben Vertragsverhältnis beruht. Für
-          jede Mahnung kann die Wangen Pizza Kebab und Kurier eine Mahngebühr
+          jede Mahnung kann die Wangen Pizza Kebab GmbH eine Mahngebühr
           von CHF 20.00 erheben.
         </p>
       </section>
 
       <section>
-        <h2>Abbestellung der Reservation/Annullierungskosten</h2>
+        <h2>9. Abbestellung der Reservation/Annullierungskosten</h2>
         <p>
           Eine kostenfreie Annullierung der Reservation ist bis 7 Tage vor dem
           Datum der Reservation möglich. Bei einer späteren Annullierung wird
@@ -255,16 +247,15 @@ const AGB = () => {
       </section>
 
       <section>
-        <h2>Haftung</h2>
+        <h2>10. Haftung</h2>
         <p>
-          Der Gast haftet gegenüber der Wangen Pizza Kebab und Kurier für alle
+          Der Gast haftet gegenüber der Wangen Pizza Kebab GmbH für alle
           Schäden und Verluste, die durch ihn, seine Mitarbeiter, seine
           Veranstaltungsteilnehmer oder seine sonstigen Hilfspersonen sowie
-          seine Veranstaltungsgäste verursacht werden, ohne dass die Wangen
-          Pizza Kebab und Kurier dem Gast ein Verschulden nachweisen muss.
+          seine Veranstaltungsgäste verursacht werden, ohne dass die Wangen Pizza Kebab GmbH dem Gast ein Verschulden nachweisen muss.
         </p>
         <p>
-          Die Wangen Pizza Kebab und Kurier lehnt jede Haftung für Diebstahl und
+          Die Wangen Pizza Kebab GmbH lehnt jede Haftung für Diebstahl und
           Beschädigung von durch den Gast eingebrachten Materialien und Sachen
           ab. Die Versicherung von mitgebrachten Gegenständen obliegt dem Gast.
         </p>
@@ -273,14 +264,14 @@ const AGB = () => {
           Begleitpersonen oder Veranstaltungsgäste verursachen.
         </p>
         <p>
-          Wird die Wangen Pizza Kebab und Kurier durch höhere Gewalt (Feuer,
+          Wird die Wangen Pizza Kebab GmbH durch höhere Gewalt (Feuer,
           Streik, etc.) in der Erfüllung ihrer Leistungen behindert, so kann
           hieraus keine Schadenersatzpflicht abgeleitet werden.
         </p>
       </section>
 
       <section>
-        <h2>Verlängerung der Öffnungszeiten</h2>
+        <h2>11. Verlängerung der Öffnungszeiten</h2>
         <p>
           Veranstaltungen/Bankette, die über 23.30 Uhr hinausgehen, müssen
           spätestens 10 Tage vorher angemeldet werden. Zusätzliche Stunden

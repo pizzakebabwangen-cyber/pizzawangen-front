@@ -27,6 +27,10 @@ const FEATURES = [
     text: "Das Taschenbrot für Ihren Kebab backen wir frisch bei uns, und auch die Falafel machen wir selbst.",
   },
   {
+    title: "Halal",
+    text: "Kebab- und Pouletfleisch 100 % Halal",
+  },
+  {
     title: "Italienisches Mehl",
     text: "Für unsere Pizza verwenden wir 100 % hochwertiges italienisches Mehl – die Basis für einen feinen Pizzateig.",
   },

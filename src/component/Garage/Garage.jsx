@@ -23,9 +23,9 @@ const Garage = () => {
           Gratis <span> Parkplätze</span>
         </h1>
         <div className="places container">
-          <img src={Garage1} alt="garage1" width={360} height={297} loading="lazy" decoding="async" />
-          <img src={Garage2} alt="garage2" width={396} height={297} loading="lazy" decoding="async" />
-          <img src={Garage3} alt="garage3" width={396} height={297} loading="lazy" decoding="async" />
+          <img src={Garage1} alt="Parkplatzschild: Reserviert für Kunden Kebab Haus Wangen" width={360} height={297} loading="lazy" decoding="async" />
+          <img src={Garage2} alt="Kundenparkplätze neben der Strasse in Wangen" width={396} height={297} loading="lazy" decoding="async" />
+          <img src={Garage3} alt="Reservierter Kundenparkplatz mit Parkplatzschild" width={396} height={297} loading="lazy" decoding="async" />
         </div>
       </div>
     </motion.div>

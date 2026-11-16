@@ -6,6 +6,8 @@
 import {
   SITE, OPENING_HOURS, DELIVERY_HOURS, openText, deliveryText, addressLine,
 } from "./site.js";
+import { LANDING_PAGES } from "./landing.js";
+import { FAQ_ITEMS } from "./faq.js";
 
 const BRAND = SITE.name;
 const NAP = `${BRAND}, ${addressLine()}, Tel. ${SITE.phoneDisplay}`;
@@ -15,24 +17,24 @@ export const ROUTES = [
   {
     path: "/",
     file: "index.html",
-    title: `Pizza, Kebab & Pide in Wangen SZ | ${BRAND}`,
+    title: "Pizza, Kebab & Döner in Wangen SZ | Lieferung Lachen, Siebnen",
     description:
-      "Wangen Pizza Kebab in Wangen SZ: Pizza, Kebab, Pide und Gutscheine online bestellen. Lieferung nach Wangen, Lachen, Siebnen, Galgenen und Umgebung.",
+      "Wangen Pizza Kebab in Wangen SZ: Pizza, Halal Kebab, Döner, Pide und Gutscheine online bestellen. Lieferung: Wangen, Lachen, Siebnen, Altendorf, Tuggen.",
     h1: "Pizza, Kebab & Pide in Wangen SZ",
     text:
-      "Frisch zubereitet: Pizza, Kebab und Pide bei Wangen Pizza Kebab an der Zürcherstrasse 3 in Wangen SZ. Wir liefern nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf oder Sie holen Ihre Bestellung bei uns ab.",
+      "Frisch zubereitet: Pizza, Kebab, Döner und Pide bei Wangen Pizza Kebab an der Zürcherstrasse 3 in Wangen SZ. Wir liefern nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf oder Sie holen Ihre Bestellung bei uns ab.",
     jsonLd: true,
     priority: "1.0",
   },
   {
     path: "/menue",
     file: "menue.html",
-    title: `Speisekarte & online bestellen | ${BRAND}`,
+    title: `Speisekarte: Pizza, Kebab & Döner bestellen | ${BRAND}`,
     description:
-      "Speisekarte von Wangen Pizza Kebab: Pizza, Kebab, Pide, Teller und Boxen. Jetzt online bestellen, Lieferung nach Wangen SZ, Lachen, Siebnen und Galgenen.",
+      "Speisekarte von Wangen Pizza Kebab: Pizza, Halal Kebab, Döner, Pide, Teller und Boxen online bestellen. Lieferung: Wangen, Lachen, Siebnen, Altendorf, Tuggen.",
     h1: "Unsere Speisekarte",
     text:
-      "Pizza, Kebab, Pide, Teller und Boxen: Die komplette Speisekarte von Wangen Pizza Kebab. Bestellen Sie online mit Lieferung nach Wangen SZ, Lachen, Siebnen und Galgenen oder zur Abholung.",
+      "Pizza, Kebab, Döner, Pide, Teller und Boxen: Die komplette Speisekarte von Wangen Pizza Kebab. Bestellen Sie online mit Lieferung nach Wangen SZ, Lachen, Siebnen, Altendorf und Tuggen oder zur Abholung.",
     priority: "0.9",
   },
   {
@@ -43,6 +45,7 @@ export const ROUTES = [
       "Wertgutscheine und aktuelle Angebote von Wangen Pizza Kebab in Wangen SZ. Einfach online bestellen und verschenken.",
     h1: "Wertgutscheine & Angebote",
     text: "Wertgutscheine und aktuelle Angebote von Wangen Pizza Kebab in Wangen SZ, bequem online bestellbar.",
+    sitemap: false, // bewusst nicht im Sitemap, solange es keine Angebote gibt (Hauptseite fuer Gutscheine: /gutscheine)
     priority: "0.6",
   },
   {
@@ -84,6 +87,7 @@ export const ROUTES = [
     h1: "Kontakt",
     text: `${NAP}. Wir liefern nach Wangen SZ, Lachen, Siebnen, Galgenen, Tuggen und Umgebung.`,
     jsonLd: true,
+    faqJsonLd: true, // die FAQ steht auf /kontakt (FaqSection)
     priority: "0.8",
   },
   {
@@ -113,6 +117,17 @@ export const ROUTES = [
     text: NAP,
     priority: "0.2",
   },
+  // Orts- und Gericht-Landingpages (Inhalt: config/landing.js)
+  ...LANDING_PAGES.map((p) => ({
+    path: p.path,
+    file: p.file,
+    title: p.title,
+    description: p.description,
+    h1: p.h1,
+    text: p.intro[0],
+    breadcrumbName: p.short,
+    priority: "0.7",
+  })),
 ];
 
 /** Seiten ohne Indexierung (per meta robots, NICHT per robots.txt, damit Google das noindex sieht). */
@@ -165,7 +180,6 @@ export function buildJsonLd() {
     logo: `${SITE.url}${SITE.logoPath}`,
     image: [`${SITE.url}${SITE.ogImage.path}`, `${SITE.url}${SITE.logoPath}`],
     hasMap: SITE.mapsUrl,
-    aggregateRating: { "@type": "AggregateRating", ...SITE.aggregateRating },
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE.address.street,
@@ -205,6 +219,31 @@ export function buildJsonLd() {
   return JSON.stringify({ "@context": "https://schema.org", "@graph": [restaurant, website] }, null, 2);
 }
 
+/** Zusaetzliches JSON-LD je Route: BreadcrumbList (Landingpages) und FAQPage (/kontakt). Gibt null zurueck, wenn nichts passt. */
+export function buildExtraJsonLd(route) {
+  if (route.breadcrumbName) {
+    return JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Startseite", item: `${SITE.url}/` },
+        { "@type": "ListItem", position: 2, name: route.breadcrumbName, item: `${SITE.url}${route.path}` },
+      ],
+    }, null, 2);
+  }
+  if (route.faqJsonLd) {
+    return JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQ_ITEMS.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    }, null, 2);
+  }
+  return null;
+}
 /** Kopf-Tags einer Route (ohne GA/Charset/Viewport/Favicon, die bleiben in index.html). */
 export function buildHeadBlock(route) {
   const lines = [];
@@ -225,12 +264,13 @@ export function buildHeadBlock(route) {
     lines.push(`<meta property="og:image:height" content="${SITE.ogImage.height}" />`);
     lines.push(`<meta property="og:image:alt" content="${esc(SITE.ogImage.alt)}" />`);
     lines.push(`<meta name="twitter:card" content="summary_large_image" />`);
-    lines.push(`<meta name="twitter:site" content="${SITE.twitterSite}" />`);
     lines.push(`<meta name="twitter:title" content="${esc(route.title)}" />`);
     lines.push(`<meta name="twitter:description" content="${esc(route.description)}" />`);
     lines.push(`<meta name="twitter:image" content="${ogImage}" />`);
   }
   if (route.jsonLd) lines.push(`<script type="application/ld+json">\n${buildJsonLd()}\n</script>`);
+  const extraLd = buildExtraJsonLd(route);
+  if (extraLd) lines.push(`<script type="application/ld+json">\n${extraLd}\n</script>`);
   return lines.join("\n    ");
 }
 

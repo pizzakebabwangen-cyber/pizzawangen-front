@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import Logo from "../../assets/85a30340-f824-4e4a-b2a5-c5d808affecc.png";
 import "./Footer.css";
 import Instgram from "../../assets/images/instgram.jpg";
-import Twitter from "../../assets/images/Twitter.jpg";
 import Facebook from "../../assets/images/Facebook.jpg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { DEFAULT_COMPANY_HOURS } from "../../constants/companyHours";
+import { LANDING_PAGES } from "../../config/landing.js";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -53,44 +53,22 @@ const Footer = () => {
             {/* Logo + Social */}
             <div className="footer__logo">
               <div className="logo">
-                <img src={Logo} alt="Wangen Pizza Kebab Logo" />
+                <img src={Logo} alt="Wangen Pizza Kebab Logo" loading="lazy" decoding="async" />
               </div>
               <div className="social-icons">
                 <a
-                  href="https://www.facebook.com/profile.php?id=100079034319158/"
+                  href="https://www.facebook.com/profile.php?id=100079034319158"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={Facebook} alt="facebook" className="icon" />
+                  <img src={Facebook} alt="Wangen Pizza Kebab auf Facebook" className="icon" loading="lazy" decoding="async" />
                 </a>
                 <a
-                  href="https://x.com/WangenKebabHaus/"
+                  href="https://www.instagram.com/wangen.pizza.kebab/"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img src={Twitter} alt="twitter" className="icon" />
-                </a>
-                <a
-                  href="https://www.instagram.com/wange_kebab_haus_sz/?hl=en"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <img src={Instgram} alt="instgram" className="icon" />
-                </a>
-                <a
-                  href="https://www.tiktok.com/@wangen.pizza.kebab?_r=1&_t=ZN-98wQhjm8YqM"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <svg
-                    className="icon"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-label="TikTok"
-                  >
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                  </svg>
+                  <img src={Instgram} alt="Wangen Pizza Kebab auf Instagram" className="icon" loading="lazy" decoding="async" />
                 </a>
               </div>
             </div>
@@ -164,8 +142,21 @@ const Footer = () => {
               <Link to="/datenschutzbestimmungen"><p>Datenschutzbestimmungen</p></Link>
               <Link to="/agb"><p>AGB</p></Link>
               <Link to="/order-tracking"><p>Bestellung verfolgen</p></Link>
+              <a href="#cookie-einstellungen" onClick={(e) => { e.preventDefault(); if (window.openCookieSettings) window.openCookieSettings(); }}><p>Cookie-Einstellungen</p></a>
             </div>
           </div>
+
+          <nav
+            className="footer-local-links"
+            aria-label="Lieferung und Gerichte"
+            style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "6px 18px", marginTop: "24px" }}
+          >
+            {LANDING_PAGES.map((p) => (
+              <Link key={p.path} to={p.path} style={{ color: "rgb(255, 179, 3)", fontSize: "0.95rem" }}>
+                {p.short}
+              </Link>
+            ))}
+          </nav>
 
           <div className="footer-trust-badge" aria-label="11 Jahre Erfahrung in Wangen">
             <strong>11 JAHRE ERFAHRUNG IN WANGEN</strong>
@@ -175,7 +166,7 @@ const Footer = () => {
             <a
               href="https://speisekarte.menu/restaurants/wangen/wangen-pizza-kebab-3"
               target="_blank"
-              rel="noopener follow"
+              rel="noopener"
             >
               Wangen Pizza Kebab
             </a>
@@ -188,21 +179,10 @@ const Footer = () => {
               Copyright © 2015 – {currentYear} Wangen Pizza Kebab
             </p>
             <p className="footer-copyright-line">
-              Seit 2024 Wangen Pizza, Kebab GmbH.
+              Seit 2024 Wangen Pizza Kebab GmbH.
             </p>
             <p className="footer-copyright-line">
-              Developed by
-              {" "}
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://www.lightsoft.ch"
-                className="highlight"
-                style={{ color: "rgb(255, 179, 3)" }}
-              >
-                Lightsoft
-              </a>
-              , All rights reserved
+              Alle Rechte vorbehalten
             </p>
           </div>
         </div>

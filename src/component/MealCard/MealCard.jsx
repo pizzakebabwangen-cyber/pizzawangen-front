@@ -9,7 +9,6 @@ import { FaCartShopping } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { addMeal } from "../../reduxTool/CartSlice";
 import "./MealCard.css";
-import Image from "../../assets/images/paner.png";
 import HolidayPopUp from "../holidayPopUp/HolidayPopUp";
 import { isDeliveryOrPreorder } from "../../utils/isDeliveryOrPreorder";
 import { getDeliveryUnitChf, getPickupUnitChf } from "../../utils/productPrices";
@@ -170,7 +169,7 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                   />
                 </div>
                 <div className="pizza-details">
-                  <h1>{meal.name}</h1>
+                  <h2>{meal.name}</h2>
                   <p className="price"> CHF {baseUnitPriceChf.toFixed(2)}</p>
                   {meal.description && String(meal.description).trim() !== "" && (
                     <p
@@ -186,7 +185,7 @@ const MealCard = ({ meal, width, extensionsData, companyData, mealListIndex }) =
                     </p>
                   )}
                   <p>{meal.description1}</p>
-                  {meal.extensions && <h1>extras :</h1>}
+                  {meal.extensions && <h2>Extras</h2>}
                   <div className="toppings">
                     {extensionsData &&
                       extensionsData

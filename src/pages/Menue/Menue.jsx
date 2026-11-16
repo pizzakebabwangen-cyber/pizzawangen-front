@@ -22,6 +22,7 @@ import {
   getDeliveryMinimumBlock,
 } from "../../utils/deliveryMinimum.js";
 import toast from "react-hot-toast";
+import useMenuJsonLd from "../../hooks/useMenuJsonLd.js";
 
 const MEAL_BATCH = 6;
 
@@ -68,6 +69,7 @@ const Menue = () => {
   const sectionRef2 = useRef(null); // Ref for meals
   const { extensionsData, getExtensionsData } = useGetExtensionsData();
   const { companyData, getCompanyData } = useGetCompanyData()
+  useMenuJsonLd(categories, server);
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -289,7 +291,6 @@ useEffect(() => {
     getExtensionsData()
   }, []);
 
-  // console.log("data", prodOfSubCats);
   return (
     <section
       className={`menue-sec${cartItemsCount > 0 ? " menue-sec--mobile-cart" : ""}`}
@@ -307,6 +308,7 @@ useEffect(() => {
             Direkt bei Wangen Pizza Kebab bestellen: frisch zubereitete Pizza,
             Kebab und Döner für Wangen SZ, Lachen, Siebnen und Umgebung.
           </p>
+          <p>Kebab- und Pouletfleisch 100 % Halal</p>
           <div className="menue-trust-row" aria-label="Bewertungen und Direktbestellung">
             <span className="menue-rating">4.5 ★★★★★ Google</span>
             <span>Lieferung & Abholung</span>

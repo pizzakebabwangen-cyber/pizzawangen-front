@@ -117,7 +117,7 @@ const Datenschutzbestimmungen = () => {
           Die von Ihnen eingegebenen Daten werden zum Zweck der individuellen
           Kommunikation mit Ihnen gespeichert. Hierfür ist die Angabe einer
           validen E-Mail-Adresse sowie Ihres Namens erforderlich. Diese dient
-          der Zuordnung der Anfrage und der anschließenden Beantwortung
+          der Zuordnung der Anfrage und der anschliessenden Beantwortung
           derselben. Die Angabe weiterer Daten ist optional.
         </p>
       </section>
@@ -136,7 +136,7 @@ const Datenschutzbestimmungen = () => {
           werden wir ein temporäres Cookie setzen, um festzustellen, ob Ihr
           Browser Cookies akzeptiert. Dieses Cookie enthält keine
           personenbezogenen Daten und wird verworfen, wenn Sie Ihren Browser
-          schließen.
+          schliessen.
         </p>
         <p>
           Wenn Sie sich anmelden, werden wir einige Cookies einrichten, um Ihre
@@ -218,6 +218,65 @@ const Datenschutzbestimmungen = () => {
       </section>
 
       <section>
+        <h2>Online-Bestellung</h2>
+        <p>
+          Wenn Sie bei uns online bestellen (auch beim Kauf von Wertgutscheinen),
+          erheben wir Ihren Namen, Ihre Adresse, Ihre Telefonnummer, Ihre
+          E-Mail-Adresse sowie die Angaben zu Ihrer Bestellung. Wir verwenden
+          diese Daten, um Ihre Bestellung entgegenzunehmen, zuzubereiten und zu
+          liefern oder zur Abholung bereitzustellen und um Sie bei Rückfragen zu
+          Ihrer Bestellung zu kontaktieren.
+        </p>
+      </section>
+
+      <section>
+        <h2>Zahlung</h2>
+        <p>
+          Online-Zahlungen werden über PostFinance abgewickelt. Ihre
+          Zahlungsdaten geben Sie direkt auf der Zahlungsseite von PostFinance
+          ein. Wir speichern keine Kartendaten.
+        </p>
+      </section>
+
+      <section>
+        <h2>SMS-Verifizierung</h2>
+        <p>
+          Wir verwenden Ihre Telefonnummer, um Ihnen einen Verifizierungscode per
+          SMS zu senden.
+        </p>
+      </section>
+
+      <section>
+        <h2>Google Analytics, Google Maps und Google Kundenrezensionen</h2>
+        <p>
+          <strong>Google Analytics:</strong> Wir setzen Google Analytics ein, um
+          die Nutzung unserer Website auszuwerten. Dabei können Cookies gesetzt
+          und Daten wie Ihre IP-Adresse an Google übermittelt werden. Weitere
+          Angaben finden Sie im Abschnitt «Verwendung von Google Analytics».
+        </p>
+        <p>
+          <strong>Google Maps:</strong> Auf unserer Website ist eine Karte von
+          Google Maps eingebunden. Beim Aufruf einer Seite mit Karte wird eine
+          Verbindung zu Servern von Google hergestellt; dabei kann Ihre
+          IP-Adresse an Google übermittelt werden.
+        </p>
+        <p>
+          <strong>Google Kundenrezensionen:</strong> Nach einer Bestellung kann
+          Ihre E-Mail-Adresse zusammen mit der Bestellnummer an Google
+          übermittelt werden, damit Google Ihnen nach der Lieferung eine
+          Einladung zu einer Bewertung senden kann. Die Teilnahme ist freiwillig.
+          Google verarbeitet die Daten nach der eigenen Datenschutzerklärung:{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            policies.google.com/privacy
+          </a>
+          .
+        </p>
+      </section>
+      <section>
         <h2>Datenschutzerklärung für die Nutzung von Twitter</h2>
         <p>
           Auf unseren Seiten sind Funktionen des Dienstes Twitter eingebunden.
@@ -268,7 +327,7 @@ const Datenschutzbestimmungen = () => {
           verantwortliche Person in unserer Organisation:
         </p>
         <p>
-          Mohammad Adnan Saifeddin
+          Adnan Seifeddin
           <br />
           Zürcherstrasse 3<br />
           8855 Wangen SZ

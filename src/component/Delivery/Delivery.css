@@ -77,11 +77,11 @@
  }
  @media (max-width: 390px) {
   .postbox-details h2 {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
   }
 
   .postbox-details p {
-    font-size: 0.4rem;
+    font-size: 0.75rem;
   }
 }
 

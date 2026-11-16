@@ -1,5 +1,7 @@
 const STORAGE_KEY = "wangen-lang";
-const SUPPORTED = ["DE", "EN", "FR", "IT"];
+// Webseite derzeit nur auf Deutsch: Sprachauswahl ausgeblendet, gespeicherte EN/FR/IT-Werte werden zu DE.
+export const LANGUAGE_SWITCHER_ENABLED = false;
+const SUPPORTED = LANGUAGE_SWITCHER_ENABLED ? ["DE", "EN", "FR", "IT"] : ["DE"];
 
 const TEXTS = {
   EN: {
@@ -19,7 +21,7 @@ const TEXTS = {
     "Zur Kasse": "Checkout",
     "Bitte Liefer-PLZ im Bestellfenster eingeben.": "Please enter delivery postal code in the order window.",
     "Nur Browsing": "Browse only",
-    "Sie müssen eine gueltige Postleitzahl eingeben ....": "You must enter a valid postal code ....",
+    "Sie müssen eine gültige Postleitzahl eingeben ....": "You must enter a valid postal code ....",
   },
   FR: {
     Home: "Accueil",
@@ -38,7 +40,7 @@ const TEXTS = {
     "Zur Kasse": "Paiement",
     "Bitte Liefer-PLZ im Bestellfenster eingeben.": "Veuillez saisir le code postal de livraison dans la fenetre de commande.",
     "Nur Browsing": "Navigation uniquement",
-    "Sie müssen eine gueltige Postleitzahl eingeben ....": "Vous devez saisir un code postal valide ....",
+    "Sie müssen eine gültige Postleitzahl eingeben ....": "Vous devez saisir un code postal valide ....",
   },
   IT: {
     Home: "Home",
@@ -57,7 +59,7 @@ const TEXTS = {
     "Zur Kasse": "Cassa",
     "Bitte Liefer-PLZ im Bestellfenster eingeben.": "Inserisci il CAP di consegna nella finestra d'ordine.",
     "Nur Browsing": "Solo navigazione",
-    "Sie müssen eine gueltige Postleitzahl eingeben ....": "Devi inserire un CAP valido ....",
+    "Sie müssen eine gültige Postleitzahl eingeben ....": "Devi inserire un CAP valido ....",
   },
 };
 

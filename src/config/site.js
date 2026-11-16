@@ -26,22 +26,15 @@ export const SITE = {
   priceRange: "CHF 7–22",
   logoPath: "/logo.png",
   ogImage: { path: "/home/hero-salami.jpg", width: 1280, height: 854, alt: "Pizza mit Salami, Oliven und Chili auf einem Holzbrett" },
-  twitterSite: "@WangenKebabHaus",
   sameAs: [
     "https://www.facebook.com/profile.php?id=100079034319158",
-    "https://www.instagram.com/wange_kebab_haus_sz/",
-    "https://www.tiktok.com/@wangen.pizza.kebab",
-    "https://x.com/WangenKebabHaus",
-    "https://www.just-eat.ch/speisekarte/wangen-pizza-kebab",
-    "https://maps.app.goo.gl/QrjZMVqjguiuBh1Z7",
+    "https://www.instagram.com/wangen.pizza.kebab/",
   ],
   areaServed: [
     "Wangen SZ", "Lachen SZ", "Siebnen", "Galgenen", "Tuggen",
     "Nuolen", "Buttikon", "Schübelbach", "Reichenburg", "Altendorf",
   ],
   servesCuisine: ["Pizza", "Kebab", "Döner", "Pide", "Tacos"],
-  // Bewertung bleibt unveraendert (Entscheid des Inhabers).
-  aggregateRating: { ratingValue: "4.5", reviewCount: "322", bestRating: "5", worstRating: "1" },
 };
 
 /** Restaurant-Oeffnungszeiten. */

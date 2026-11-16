@@ -25,7 +25,7 @@ const Paner = () => {
             <div className="offer__img">
               <img
                 src={PanerImg}
-                alt="Im Wangen's Pizza"
+                alt="Pizza mit Tomaten und Rucola"
                 width={746}
                 height={710}
                 loading="lazy"

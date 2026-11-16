@@ -1,0 +1,92 @@
+.landing {
+  width: 100%;
+  background: var(--body-bg, #0e1213);
+  color: #fff;
+  font-family: var(--font-name, "Montserrat", sans-serif);
+  padding: 140px 16px 48px;
+  box-sizing: border-box;
+}
+.landing__inner {
+  width: min(860px, 100%);
+  margin: 0 auto;
+}
+.landing h1 {
+  font-size: clamp(1.8rem, 5.5vw, 2.8rem);
+  line-height: 1.15;
+  margin: 0 0 18px;
+  color: var(--primary-color, #f66f00);
+}
+.landing p {
+  line-height: 1.65;
+  color: #d4d8d8;
+  margin: 0 0 14px;
+}
+.landing a {
+  color: var(--primary-color, #f66f00);
+  font-weight: 600;
+}
+.landing__cta {
+  margin: 22px 0 32px;
+}
+.landing a.landing__btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 2px solid var(--primary-color, #f66f00);
+  text-decoration: none;
+  color: #fff;
+}
+.landing a.landing__btn--primary {
+  background: var(--primary-color, #f66f00);
+  color: #111;
+}
+.landing__card {
+  padding: 22px;
+  border-radius: 14px;
+  background: #151a1c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.landing__card h2,
+.landing__more h2 {
+  font-size: 1.3rem;
+  margin: 0 0 12px;
+  color: var(--primary-color, #f66f00);
+}
+.landing__hours {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  margin: 8px 0 14px;
+}
+.landing__hours h3 {
+  font-size: 1rem;
+  margin: 0 0 6px;
+  color: #fff;
+}
+.landing__hours ul,
+.landing__more ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: #d4d8d8;
+  line-height: 1.7;
+}
+.landing__hours li span {
+  display: inline-block;
+  min-width: 5.5em;
+  font-weight: 600;
+  color: #fff;
+}
+.landing__more {
+  margin-top: 32px;
+}
+.landing__more ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+@media (min-width: 700px) {
+  .landing__hours {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

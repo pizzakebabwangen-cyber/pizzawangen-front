@@ -18,7 +18,7 @@ import { MdLogout } from "react-icons/md";
 
 import useGetUserData from "../../hook/useGetUserData";
 import { getFirstName } from "../../utils/getFirstName";
-import { applyRuntimeLanguage, normalizeLanguage } from "../../utils/languageRuntime";
+import { applyRuntimeLanguage, normalizeLanguage, LANGUAGE_SWITCHER_ENABLED } from "../../utils/languageRuntime";
 
 const Nav = () => {
   const [isMenue, setIsMenue] = useState(false);
@@ -85,7 +85,6 @@ const handleLogout = () => {
       };
     }
   }, [isCart]);
-  // console.log("cart",cart.cart)
   
   const handleUserNavigate = () => {
     const t = localStorage.getItem("token");
@@ -159,7 +158,7 @@ const handleLogout = () => {
             </li>
 
             <li className="nav-item">
-              <NavLink to="/angebote">Gutscheine</NavLink>
+              <NavLink to="/gutscheine">Gutscheine</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/reservation">Reservation</NavLink>
@@ -174,6 +173,7 @@ const handleLogout = () => {
         </div>
 
         <div className="nav-buttons">
+         {LANGUAGE_SWITCHER_ENABLED && (
          <div className="lang-switcher" ref={langRef}>
             <button
               type="button"
@@ -197,6 +197,7 @@ const handleLogout = () => {
               </div>
             )}
           </div>
+         )}
           {/* <button className="login-btn">
             <Link to="Login">Login</Link>
           </button> */}
@@ -265,7 +266,7 @@ const handleLogout = () => {
                 <div className="cart-item" key={item.id}>
                   <img
                     src={${server}/Images/${item.photoName}}
-                    alt="Product Image"
+                    alt={item.name}
                     className="product-image"
                   />
                   <div className="item-details">
@@ -319,7 +320,7 @@ const handleLogout = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/angebote" onClick={() => setIsMenue(false)}>
+              <NavLink to="/gutscheine" onClick={() => setIsMenue(false)}>
                 Gutscheine
               </NavLink>
             </li>

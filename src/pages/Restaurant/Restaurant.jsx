@@ -6,6 +6,7 @@ import { getApiBaseUrl } from "../../config/apiBase.js";
 import WebRootImage from "../../component/WebRootImage/WebRootImage.jsx";
 import Delivery from "../../component/Delivery/Delivery";
 import Location from "../../component/Location/Location";
+import useCookieConsent from "../../hooks/useCookieConsent.js";
 import "./Restaurant.css";
 
 const scrollToTop = () => {
@@ -46,6 +47,7 @@ const Restaurant = () => {
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.08 });
+  const consent = useCookieConsent();
 
   useEffect(() => {
     scrollToTop();
@@ -114,7 +116,18 @@ const Restaurant = () => {
 
       {!loading && video && (
         <div className="restaurant-video-wrap">
-          {video.type === "iframe" ? (
+          {video.type === "iframe" && consent !== "accepted" ? (
+            // Eingebettetes Fremdvideo (z. B. YouTube) erst nach Cookie-Zustimmung laden; Klassen siehe Location.css
+            <div className="location-blocked">
+              <p>Das Video wird erst nach Ihrer Zustimmung zu Cookies angezeigt.</p>
+              <button type="button" className="location-consent-btn" onClick={() => window.acceptCookies && window.acceptCookies()}>
+                Video anzeigen (Cookies akzeptieren)
+              </button>
+              <a className="location-maps-link" href={video.src} target="_blank" rel="noopener noreferrer">
+                Video extern öffnen
+              </a>
+            </div>
+          ) : video.type === "iframe" ? (
             <iframe
               title="Restaurant Video"
               src={video.src}

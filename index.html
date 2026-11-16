@@ -1,58 +1,108 @@
 <!DOCTYPE html>
 <html lang="de-CH">
   <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4EENSD7KWZ"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4EENSD7KWZ');</script>
+    <!-- Google Analytics und Google-Händlerwidget werden erst nach Zustimmung im Cookie-Banner geladen (Skript unten). -->
     <meta charset="UTF-8" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <link rel="icon" type="image/png" href="/src/assets/85a30340-f824-4e4a-b2a5-c5d808affecc.png" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <!-- <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=1dKuD7xqUmrW"></script>    Bootstrap -->
+    <link rel="preload" href="/src/assets/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin />
     <!--seo:start--><!--seo:end-->
-    <!-- BEGIN Google Merchant store widget (optional) — merchants.google help snippet -->
-    <script
-      id="merchantWidgetScript"
-      src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
-      defer
-    ></script>
-    <script>
-      document.getElementById("merchantWidgetScript")?.addEventListener("load", function () {
-        try {
-          if (typeof merchantwidget !== "undefined" && merchantwidget?.start) {
-            merchantwidget.start({ position: "RIGHT_BOTTOM" });
-          }
-        } catch (e) {
-          console.warn("Merchant widget:", e);
-        }
-      });
-    </script>
-    <!-- END Google Merchant store widget -->
   </head>
   <body>
     <!-- COOKIE BANNER -->
     <div id="cookie-bar" role="dialog" aria-label="Cookie-Hinweis" style="display:none; position:fixed; bottom:0; left:0; right:0; max-width:100%; box-sizing:border-box; background:#fff; border-top:1px solid #e0e0e0; padding:14px 20px; z-index:9999999; font-family:'Segoe UI',Arial,sans-serif; box-shadow:0 -4px 20px rgba(0,0,0,0.12);">
       <div style="max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
-        <div style="font-size:13px; color:#222; line-height:1.5; flex:1; min-width:200px;">
-          Um fortzufahren, akzeptieren Sie bitte unsere&nbsp;
-          <a href="/datenschutz" target="_blank" style="color:#222; text-decoration:underline;">Datenschutzerklärung</a>&nbsp;und&nbsp;
-          <a href="/agb" target="_blank" style="color:#222; text-decoration:underline;">AGB</a>.
+        <div style="font-size:14px; color:#222; line-height:1.5; flex:1; min-width:200px;">
+          Mit Ihrer Zustimmung laden wir Google Analytics, Google Maps und das Google-Bewertungswidget. Mehr dazu in der&nbsp;
+          <a href="/datenschutzbestimmungen" target="_blank" style="color:#222; text-decoration:underline; display:inline-block; padding:12px 4px; min-height:44px; box-sizing:border-box; line-height:20px; vertical-align:middle;">Datenschutzerklärung</a>&nbsp;und den&nbsp;
+          <a href="/agb" target="_blank" style="color:#222; text-decoration:underline; display:inline-block; padding:12px 4px; min-height:44px; min-width:44px; text-align:center; box-sizing:border-box; line-height:20px; vertical-align:middle;">AGB</a>.
         </div>
         <div style="display:flex; gap:8px; flex-shrink:0;">
-          <button onclick="acceptCookies()" style="padding:8px 16px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; background:#222; color:#fff; border:2px solid #222;">OK</button>
+          <button onclick="declineCookies()" style="padding:8px 16px; min-height:44px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; background:#fff; color:#222; border:2px solid #222;">Ablehnen</button>
+          <button onclick="acceptCookies()" style="padding:8px 16px; min-height:44px; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer; background:#222; color:#fff; border:2px solid #222;">Akzeptieren</button>
         </div>
       </div>
     </div>
     <script>
-      function acceptCookies() {
-        localStorage.setItem('cookiesAccepted', 'true');
-        document.getElementById('cookie-bar').style.display = 'none';
-      }
-      window.addEventListener('DOMContentLoaded', function() {
-        if (!localStorage.getItem('cookiesAccepted')) {
-          document.getElementById('cookie-bar').style.display = 'block';
+      // Einwilligung: Google Analytics, Maps-Karte und Händlerwidget laden erst nach "Akzeptieren".
+      // Standard (keine Entscheidung / "Ablehnen"): nichts davon wird geladen.
+      (function () {
+        var KEY = 'cookieConsent';
+        var googleLoaded = false;
+        function readConsent() {
+          try {
+            var v = localStorage.getItem(KEY);
+            if (v === 'accepted' || v === 'declined') return v;
+            if (localStorage.getItem('cookiesAccepted') === 'true') return 'accepted'; // frühere Zustimmung
+          } catch (e) {}
+          return null;
         }
-      });
+        function loadGoogle() {
+          if (googleLoaded) return;
+          googleLoaded = true;
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-4EENSD7KWZ');
+          var ga = document.createElement('script');
+          ga.async = true;
+          ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-4EENSD7KWZ';
+          document.head.appendChild(ga);
+          var mw = document.createElement('script');
+          mw.id = 'merchantWidgetScript';
+          mw.defer = true;
+          mw.src = 'https://www.gstatic.com/shopping/merchant/merchantwidget.js';
+          mw.addEventListener('load', function () {
+            try {
+              if (window.merchantwidget && window.merchantwidget.start) {
+                window.merchantwidget.start({ position: 'RIGHT_BOTTOM' });
+              }
+            } catch (e) {
+              console.warn('Merchant widget:', e);
+            }
+          });
+          document.head.appendChild(mw);
+        }
+        function decide(value) {
+          try {
+            localStorage.setItem(KEY, value);
+            if (value === 'accepted') localStorage.setItem('cookiesAccepted', 'true');
+            else localStorage.removeItem('cookiesAccepted');
+          } catch (e) {}
+          var bar = document.getElementById('cookie-bar');
+          if (bar) bar.style.display = 'none';
+          if (value === 'accepted') {
+            window['ga-disable-G-4EENSD7KWZ'] = false;
+            loadGoogle();
+          } else {
+            window['ga-disable-G-4EENSD7KWZ'] = true; // GA sofort abschalten, falls bereits geladen
+          }
+          window.dispatchEvent(new CustomEvent('cookie-consent-change', { detail: value }));
+        }
+        window.getCookieConsent = readConsent;
+        window.acceptCookies = function () { decide('accepted'); };
+        window.declineCookies = function () { decide('declined'); };
+        window.openCookieSettings = function () {
+          var bar = document.getElementById('cookie-bar');
+          if (bar) bar.style.display = 'block';
+        };
+        function init() {
+          var c = readConsent();
+          if (c === 'accepted') loadGoogle();
+          else if (c === 'declined') window['ga-disable-G-4EENSD7KWZ'] = true;
+          else if (c === null) {
+            var bar = document.getElementById('cookie-bar');
+            if (bar) bar.style.display = 'block';
+          }
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+      })();
     </script>
     <!-- ENDE COOKIE BANNER -->
     <!--seo:noscript-start--><!--seo:noscript-end-->
@@ -61,7 +111,7 @@
       <a
         href="https://speisekarte.menu/restaurants/wangen/wangen-pizza-kebab-3"
         target="_blank"
-        rel="noopener follow"
+        rel="noopener"
         style="color:#ffb303; text-decoration:none;"
       >Wangen Pizza Kebab</a>
       <span style="color:#acb2b2;"> auf Speisekarte</span>
