@@ -155,6 +155,35 @@ const splitStreetAndHouseNumber = (value) => {
 };
 
 const splitGeoDisplayAddress = (value) => {
+/**
+ * Strasse darf nie eine Hausnummer am Ende behalten (Chrome-Desktop-Autofill liefert z. B.
+ * "Zuercherstrasse 8" in Strasse UND "8" in Hausnummer -> Adresse "Zuercherstrasse 8 8").
+ * - Hausnummer leer: Nummer aus Strasse dorthin verschieben.
+ * - Hausnummer gefuellt: Nummer aus Strasse verwerfen.
+ * - Steht in Hausnummer die ganze Zeile "Strasse 8": nur die Nummer behalten.
+ */
+const normalizeStreetHouse = (streetIn, hausnummerIn) => {
+  let street = String(streetIn || "").replace(/\s+/g, " ").trim();
+  let hn = String(hausnummerIn || "").replace(/\s+/g, " ").trim();
+
+  const hnFull = hn.match(/^(.*\D)\s+(\d+[a-zA-Z]?(?:\s*[-–/]\s*\d+[a-zA-Z]?)?)$/u);
+  if (hnFull && /[a-zA-ZÀ-ɏ]/u.test(hnFull[1])) {
+    const prefix = hnFull[1].trim().toLowerCase();
+    if (!street || street.toLowerCase().startsWith(prefix) || prefix.startsWith(street.toLowerCase())) {
+      if (!street) street = hnFull[1].trim();
+      hn = hnFull[2].replace(/\s+/g, "");
+    }
+  }
+
+  let m;
+  // Mehrfach (z. B. "Genossenwiese 3 3"): alle angehaengten Nummern entfernen.
+  while ((m = street.match(/^(.*[a-zA-ZÀ-ɏ.].*?)\s+(\d+[a-zA-Z]?(?:\s*[-–/]\s*\d+[a-zA-Z]?)?)$/u))) {
+    street = m[1].trim();
+    if (!hn) hn = m[2].replace(/\s+/g, "");
+  }
+  return { street, hausnummer: hn };
+};
+
   const parts = String(value || "")
     .split(",")
     .map((part) => part.trim())
@@ -1227,6 +1256,12 @@ const CheckOutForm = () => {
                 onBlur={() => {
                   window.setTimeout(() => setStreetSuggestOpen(false), 200);
                 }}
+                  setFormData((prev) => {
+                    const n = normalizeStreetHouse(prev.street, prev.hausnummer);
+                    return n.street === prev.street && n.hausnummer === prev.hausnummer
+                      ? prev
+                      : { ...prev, street: n.street, hausnummer: n.hausnummer };
+                  });
               />
               {streetSuggestOpen && streetSuggestions.length > 0 && (
                 <ul className="street-suggestions" role="listbox">
@@ -1263,11 +1298,19 @@ const CheckOutForm = () => {
                 type="text"
                 id="hausnummer"
                 name="hausnummer"
-                autoComplete="street-address"
+                autoComplete="off"
                 placeholder="Hausnummer*"
                 value={formData.hausnummer}
                 onChange={handleChange}
               />
+                onBlur={() => {
+                  setFormData((prev) => {
+                    const n = normalizeStreetHouse(prev.street, prev.hausnummer);
+                    return n.street === prev.street && n.hausnummer === prev.hausnummer
+                      ? prev
+                      : { ...prev, street: n.street, hausnummer: n.hausnummer };
+                  });
+                }}
               {errors.hausnummer && <div style={{ color: "red" }}>{errors.hausnummer}</div>}
             </div>
 
@@ -1646,18 +1689,19 @@ const CheckOutForm = () => {
                   return;
                 }
                 const newErrors = {};
+                const addrNorm = normalizeStreetHouse(formData.street, formData.hausnummer);
                 if (!formData.salute || String(formData.salute).trim() === "") {
                   newErrors.salute = "Anrede fehlt";
                 }
                 if (formData.name.trim() === "") {
                   newErrors.name = "Name fehlt";
                 }
-                if (formData.street.trim() === "") {
+                if (addrNorm.street === "") {
                   newErrors.street = "Strasse fehlt";
                 }
-                if (String(formData.hausnummer || "").trim() === "") {
+                if (addrNorm.hausnummer === "") {
                   newErrors.hausnummer = "Hausnummer fehlt";
-                } else if (!isValidSwissHausnummer(formData.hausnummer)) {
+                } else if (!isValidSwissHausnummer(addrNorm.hausnummer)) {
                   newErrors.hausnummer =
                     "Ungültige Hausnummer (z. B. 12, 12a, 12–14).";
                 }
@@ -1840,8 +1884,8 @@ const CheckOutForm = () => {
                     userId: uid,
                     salute: formData.salute,
                     name: formData.name,
-                    street: formData.street,
-                    hausnummer: formData.hausnummer,
+                    street: addrNorm.street,
+                    hausnummer: addrNorm.hausnummer,
                     city: cityMerged,
                     postBox: postBoxMerged,
                     email: formData.email,
