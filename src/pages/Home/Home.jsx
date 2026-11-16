@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DeliveryMethod from "../../component/DeliveryMethod/DeliveryMethod";
 import Delivery from "../../component/Delivery/Delivery";
 import Location from "../../component/Location/Location";
+import LandingLinks from "../../component/LandingLinks/LandingLinks";
 import "./Home.css";
 
 const HOME_IMG = `${import.meta.env.BASE_URL}home/`;
@@ -35,8 +36,8 @@ const FEATURES = [
     text: "Für unsere Pizza verwenden wir 100 % hochwertiges italienisches Mehl – die Basis für einen feinen Pizzateig.",
   },
   {
-    title: "Lieferung & Abholung",
-    text: "Wir liefern nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf. Lieber selbst vorbeikommen? Dann holen Sie Ihre Bestellung an der Zürcherstrasse 3 in Wangen SZ ab.",
+    title: "Pizza Kurier & Abholung",
+    text: "Unser Kurier liefert nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf. Lieber selbst vorbeikommen? Dann holen Sie Ihre Bestellung an der Zürcherstrasse 3 in Wangen SZ ab.",
   },
   {
     title: "Wertgutscheine online",
@@ -74,7 +75,7 @@ const Home = () => {
         <div className="home-hero__shade" aria-hidden="true" />
         <div className="home-hero__content">
           <h1 id="home-title">Pizza, Kebab &amp; Pide in Wangen SZ</h1>
-          <p>Frisch zubereitet – wir liefern zu Ihnen oder Sie holen bei uns ab</p>
+          <p>Frisch zubereitet – unser Pizza Kurier liefert zu Ihnen, oder Sie holen bei uns ab</p>
           <div className="home-hero__cta">
             <Link className="home-btn home-btn--primary" to="/menue">
               Jetzt bestellen
@@ -174,6 +175,7 @@ const Home = () => {
         </div>
       </section>
 
+      <LandingLinks />
       <Delivery headingLevel="h2" />
       <Location />
     </div>

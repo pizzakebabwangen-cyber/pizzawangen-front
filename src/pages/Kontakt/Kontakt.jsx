@@ -5,6 +5,7 @@ import ContactForm from "../../component/ContactForm/ContactForm"
 import FaqSection from "../../component/FaqSection/FaqSection";
 import Delivery from "../../component/Delivery/Delivery";
 import Location from "../../component/Location/Location";
+import LandingLinks from "../../component/LandingLinks/LandingLinks";
 
 const scrollToTop = () => {
   window.scrollTo(0, 0);
@@ -25,6 +26,7 @@ const Kontakt = () => {
     <div>
       <ContactForm />
       <FaqSection />
+      <LandingLinks />
       <Delivery />
       <Location />
     </div>

@@ -17,12 +17,12 @@ export const ROUTES = [
   {
     path: "/",
     file: "index.html",
-    title: "Pizza, Kebab & Döner in Wangen SZ | Lieferung Lachen, Siebnen",
+    title: "Pizza & Kebab in Wangen SZ | Kurier Lachen, Siebnen, Galgenen",
     description:
-      "Wangen Pizza Kebab in Wangen SZ: Pizza, Halal Kebab, Döner, Pide und Gutscheine online bestellen. Lieferung: Wangen, Lachen, Siebnen, Altendorf, Tuggen.",
+      "Wangen Pizza Kebab: Pizza, Halal Kebab, Döner und Pide online bestellen. Pizza Kurier für Wangen SZ, Lachen, Siebnen, Galgenen, Altendorf und Tuggen.",
     h1: "Pizza, Kebab & Pide in Wangen SZ",
     text:
-      "Frisch zubereitet: Pizza, Kebab, Döner und Pide bei Wangen Pizza Kebab an der Zürcherstrasse 3 in Wangen SZ. Wir liefern nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf oder Sie holen Ihre Bestellung bei uns ab.",
+      "Frisch zubereitet: Pizza, Kebab, Döner und Pide bei Wangen Pizza Kebab an der Zürcherstrasse 3 in Wangen SZ. Unser Pizza Kurier liefert nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf, oder Sie holen Ihre Bestellung bei uns ab.",
     jsonLd: true,
     priority: "1.0",
   },
@@ -126,6 +126,7 @@ export const ROUTES = [
     h1: p.h1,
     text: p.intro[0],
     breadcrumbName: p.short,
+    jsonLd: true, // Restaurant-Daten (Name, Adresse, Telefon, Zeiten) auch auf den Landingpages
     priority: "0.7",
   })),
 ];
