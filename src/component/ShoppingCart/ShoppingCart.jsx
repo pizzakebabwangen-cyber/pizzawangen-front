@@ -5,11 +5,10 @@
 // import React from 'react'
 
 import { useState, useEffect } from "react";
-import Image from "../../assets/images/panerBoy.jpg";
 import { useSelector } from "react-redux";
 
 import emptyCart from "../../assets/images/emptyCart.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import "./ShoppingCart.css";
@@ -26,6 +25,11 @@ import { getApiBaseUrl } from "../../config/apiBase.js";
 const POSTCODE_STORAGE_KEY = "wangen-delivery-postcode";
 const POSTCODE_CITY_STORAGE_KEY = "wangen-delivery-city";
 
+/** Technische (englische) Fehlertexte wie "Network Error" nie anzeigen: dann greift der deutsche Standardtext. */
+const germanMessageOnly = (m) =>
+  typeof m === "string" && /[äöüÄÖÜß]|\b(bitte|nicht|ist|der|die|das|und|Bestellung|Warenkorb|Fehler)\b/i.test(m)
+    ? m
+    : "";
 const extractPlz = (value) => {
   const m = String(value || "").match(/\d{4}/);
   return m ? m[0] : "";
@@ -69,7 +73,7 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
             checkoutUnlocked: true,
           },
         });
-        toast.success("success");
+        toast.success("Weiter zur Kasse");
       }
     } catch (err) {
       const d = err?.response?.data;
@@ -78,8 +82,8 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
         d?.message ||
         d?.Message ||
         d?.title ||
-        err?.message ||
-        "Failed to send";
+        germanMessageOnly(err?.message) ||
+        "Senden fehlgeschlagen. Bitte versuchen Sie es erneut.";
       toast.error(msg);
     } finally {
       setSending(false);
@@ -101,7 +105,7 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
       if (response.status >= 200 && response.status < 300) {
         persistVisitorIdFromApiResponse(response.data);
         setCheckoutUnlockedFlag();
-        toast.success("success");
+        toast.success("Weiter zur Kasse");
         setCheckoutAllowed(true);
         navigate("/cart/checkOut", {
           state: {
@@ -118,8 +122,8 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
         d?.message ||
         d?.Message ||
         d?.title ||
-        err?.message ||
-        "Failed to send";
+        germanMessageOnly(err?.message) ||
+        "Senden fehlgeschlagen. Bitte versuchen Sie es erneut.";
       toast.error(msg);
     } finally {
       setSending(false);
@@ -187,7 +191,11 @@ const ShoppingCart = ({ setCheckoutAllowed }) => {
       </div>
       {/* if the cart is empty */}
       {cartItemsCount === 0 && (
-        <img className="empty-cart" src={emptyCart} alt="emptyCart" />
+        <>
+          <img className="empty-cart" src={emptyCart} alt="Leerer Warenkorb" />
+          <p className="empty-cart-text">Ihr Warenkorb ist leer</p>
+          <Link className="empty-cart-link" to="/menue">Zur Speisekarte</Link>
+        </>
       )}
       {/* show the selkected meals */}
       {/* <div className="twoOptionsofDelivery"> */}

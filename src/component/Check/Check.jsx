@@ -157,7 +157,7 @@ const Check = ({
             <Link to="/agb" className="check-agb-link" target="_blank" rel="noopener noreferrer">
               Allgemeinen Geschäftsbedingungen
             </Link>{" "}
-            der Pizza Wangen.
+            der Wangen Pizza Kebab GmbH.
           </span>
         </label>
 

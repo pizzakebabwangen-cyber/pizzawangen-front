@@ -11,6 +11,7 @@ import "./Gutscheine.css";
 import { computeWertgutscheinTotals } from "../../utils/wertgutscheinPricing.js";
 import { extractPaymentPageUrl } from "../../utils/extractPaymentPageUrl.js";
 import { isValidSwissHausnummer } from "../../utils/hausnummerValidation.js";
+import { SITE } from "../../config/site.js";
 
 const WERTGUTSCHEIN_CHECKOUT_PATH = "/api/Cart/wertgutschein-checkout";
 
@@ -19,8 +20,8 @@ const extractCheckoutError = (err, requestUrl) => {
   if (!err?.response) {
     const m = err?.message || "";
     if (/network error/i.test(m))
-      return "Server nicht erreichbar. Bitte Verbindung prüfen — ist die API erreichbar (CORS / gleiche Domain)?";
-    return m || "Verbindungsfehler. Bitte erneut versuchen.";
+      return `Es ist ein Fehler aufgetreten. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es später erneut oder rufen Sie uns an: ${SITE.phoneDisplay}.`;
+    return `Verbindungsfehler. Bitte versuchen Sie es erneut oder rufen Sie uns an: ${SITE.phoneDisplay}.`;
   }
   const st = err.response.status;
   const d = err.response.data;
@@ -520,9 +521,9 @@ name="anrede"
                   />
                   <label htmlFor="agbAccepted">
                     Ich akzeptiere die{" "}
-                    <a href="/agb" target="_blank" rel="noopener noreferrer">
+                    <Link to="/agb" target="_blank" rel="noopener noreferrer">
                       AGB
-                    </a>{" "}
+                    </Link>{" "}
                     und bin mit der Speicherung meiner Daten einverstanden. *
                   </label>
                 </div>

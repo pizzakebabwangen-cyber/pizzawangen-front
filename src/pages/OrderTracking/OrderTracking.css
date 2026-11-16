@@ -263,3 +263,15 @@
     left: 20px;
   }
 }
+
+.current-status.cancelled {
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  color: #b71c1c;
+}
+
+.tracking-refresh-note {
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: #777;
+}

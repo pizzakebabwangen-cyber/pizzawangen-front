@@ -204,3 +204,24 @@
       }
     }
 } */
+
+.cart-container .empty-cart-text {
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 20px 0 8px;
+  color: var(--heading-color);
+}
+
+.cart-container .empty-cart-link {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 12px 24px;
+  min-height: 44px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: #111;
+  font-weight: 600;
+  text-decoration: none;
+}

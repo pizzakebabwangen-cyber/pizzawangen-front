@@ -77,7 +77,7 @@ const CartMeals = ({
                     </>
                   ) : (
                     <>
-                      Preis :{" "}
+                      Preis:{" "}
                       <span className="highlight">CHF {lineTotal.toFixed(2)}</span>
                     </>
                   )}
@@ -92,7 +92,7 @@ const CartMeals = ({
                   })}
                 </p>
                 <div className="quantity-container">
-                  Menge : <span className="highlight"> {meal.quantity}</span>
+                  Menge: <span className="highlight"> {meal.quantity}</span>
                 </div>
                 <div className="cart-buttons">
                   <button
@@ -122,7 +122,7 @@ const CartMeals = ({
       {cartItemsCount > 0 && (
         <div className="cart-checkout-footer">
           <h2 className="total-price">
-            Gesamtpreis : CHF
+            Gesamtpreis: CHF
             <span className="highlight">
               {" "}
               {displayedTotal.toFixed(2)}{" "}
@@ -130,7 +130,7 @@ const CartMeals = ({
           </h2>
           {withDelivery && minimumOrderAb === "" && (
             <p className="minimumOrderAb">
-              Sie müssen eine gueltige Postleitzahl eingeben ....
+              Sie müssen eine gültige Postleitzahl eingeben ....
             </p>
           )}
           {belowDeliveryMinimum && (

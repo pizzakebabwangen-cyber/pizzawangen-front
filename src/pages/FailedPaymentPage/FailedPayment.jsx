@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { SITE } from "../../config/site.js";
 import "./FailedPayment.css";
 // import axios from "axios";
 // import { useEffect } from "react";
@@ -40,8 +41,18 @@ const FailedPayment = () => {
             </svg>
           </span>
         </div>
+        <h1>Zahlung fehlgeschlagen</h1>
         <p>Zahlungstransaktion fehlgeschlagen</p>
         <p>Bitte versuchen Sie es erneut</p>
+        <p>
+          <Link className="failed-retry-link" to="/cart">
+            Erneut versuchen
+          </Link>
+        </p>
+        <p>
+          Bei Fragen erreichen Sie uns unter{" "}
+          <a href={`tel:${SITE.phoneE164}`}>{SITE.phoneDisplay}</a>.
+        </p>
         <button onClick={() => navigate("/")}>Zur Startseite</button>
       </div>
     </div>

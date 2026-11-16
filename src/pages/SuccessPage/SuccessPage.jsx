@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart } from "../../reduxTool/CartSlice";
+import { addressLine } from "../../config/site.js";
+import { getCookieConsent } from "../../hooks/useCookieConsent.js";
 import "./SuccessPage.css";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +21,12 @@ const SuccessPage = () => {
   const { orderId } = useParams();
   const [reviewData, setReviewData] = useState(null);
   const isVoucherOrder = reviewData?.wertgutscheinKauf === true;
+  // Nur Lesen: Lieferart aus dem Shop-State (Abholung = "collect"), Bestellnummer aus Route/Antwort.
+  const dispatch = useDispatch();
+  const deliverMethod = useSelector((state) => state.delivery.deliverMethod);
+  const isPickup = deliverMethod === "collect";
+  const shownOrderId = Number(reviewData?.orderId ?? orderId);
+  const hasOrderId = Number.isFinite(shownOrderId) && shownOrderId > 0;
   const googleBootRef = useRef(false);
 
   const scrollToTop = () => {
@@ -93,9 +103,17 @@ const SuccessPage = () => {
     };
   }, [orderId]);
 
+  // Kartenzahlung verlaesst die Seite (Weiterleitung zu PostFinance): dort wird der Warenkorb nicht per clearCart
+  // geleert. Mit gespeichertem Warenkorb leeren wir ihn hier, sobald die Bestellung bestaetigt ist (nicht bei Gutschein-Kauf).
+  useEffect(() => {
+    if (reviewData && reviewData.wertgutscheinKauf !== true) {
+      dispatch(clearCart());
+    }
+  }, [reviewData]);
   /** Google Customer Reviews — platform.js ruft onload; gapi kann kurz verzögert sein. */
   useEffect(() => {
     if (!reviewData?.orderId || !reviewData?.email) return undefined;
+    if (getCookieConsent() !== "accepted") return undefined; // ohne Cookie-Zustimmung nichts an Google senden
 
     const opts = {
       merchant_id: GOOGLE_MERCHANT_ID,
@@ -166,16 +184,33 @@ const SuccessPage = () => {
           </span>
         </div>
         <h1>Bezahlung erfolgreich</h1>
+        {hasOrderId && (
+          <p className="success-order-number">
+            Bestellnummer: <strong>#{shownOrderId}</strong>
+          </p>
+        )}
         {reviewData == null ? (
           <p>Vielen Dank!</p>
         ) : isVoucherOrder ? (
           <p>
             Vielen Dank für Ihren Wertgutschein-Kauf! Sie erhalten den Gutschein-Code in der Regel
             per E-Mail nach Bearbeitung. Bei Fragen erreichen Sie uns über{" "}
-            <a href="/kontakt">Kontakt</a>.
+            <Link to="/kontakt">Kontakt</Link>.
+          </p>
+        ) : isPickup ? (
+          <p>
+            Vielen Dank für Ihre Bestellung! Sie können sie nach der Zubereitung bei uns abholen:{" "}
+            {addressLine()}. Bitte nennen Sie bei der Abholung Ihre Bestellnummer.
           </p>
         ) : (
-          <p>Vielen Dank für Ihre Bestellung!</p>
+          <p>
+            Vielen Dank für Ihre Bestellung! Wir liefern sie an die angegebene Adresse.
+          </p>
+        )}
+        {hasOrderId && reviewData != null && !isVoucherOrder && !isPickup && (
+          <p className="success-tracking-link">
+            <Link to={`/order-tracking?id=${shownOrderId}`}>Bestellung verfolgen</Link>
+          </p>
         )}
         <button onClick={() => navigate("/")}>Zur Startseite</button>
       </div>

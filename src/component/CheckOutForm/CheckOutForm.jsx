@@ -3,7 +3,7 @@ import "./CheckOutForm.css";
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import checkOut from "../../assets/images/checkOut.jpg";
+import checkOut from "../../assets/images/checkOut.webp";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -36,6 +36,7 @@ import {
 import useGetDelivery from "../../hooks/useGetDelivery.jsx";
 import { getDeliveryMinimumBlock } from "../../utils/deliveryMinimum.js";
 import PhoneOtpModal from "./PhoneOtpModal.jsx";
+import { SITE } from "../../config/site.js";
 import {
   isOtpUnavailable,
   isPhoneNotVerified,
@@ -1157,7 +1158,7 @@ const CheckOutForm = () => {
     >
       <div className="check-out">
         <div className="check-out-image">
-          <img src={checkOut} alt="checkOut" />
+          <img src={checkOut} alt="Kurier mit orangem Rucksack auf dem Velo" width={800} height={1000} loading="lazy" decoding="async" />
         </div>
         <div className="check-out-container">
           <form id="orderForm">
@@ -1345,12 +1346,12 @@ const CheckOutForm = () => {
 
             {/* --- email --- */}
             <div className="form-group">
-              <label htmlFor="email">E-mail:</label>
+              <label htmlFor="email">E-Mail:</label>
               <input
                 type="text"
                 id="email"
                 name="email"
-                placeholder="E-mail"
+                placeholder="E-Mail"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -1630,7 +1631,7 @@ const CheckOutForm = () => {
                   >
                     Allgemeinen Geschäftsbedingungen
                   </Link>{" "}
-                  der Pizza Wangen.
+                  der Wangen Pizza Kebab GmbH.
                 </span>
               </label>
 
@@ -1726,7 +1727,7 @@ const CheckOutForm = () => {
                   newErrors.city = newErrors.city || "PLZ/Ort fehlt";
                 }
                 if (formData.email.trim() === "") {
-                  newErrors.email = "Email fehlt";
+                  newErrors.email = "E-Mail fehlt";
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (
@@ -1806,7 +1807,7 @@ const CheckOutForm = () => {
                 try {
                   const server = getApiBaseUrl();
                   if (!server) {
-                    toast.error("Server-Adresse fehlt (VITE_SERVER).");
+                    toast.error(`Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut oder rufen Sie uns an: ${SITE.phoneDisplay}.`);
                     return;
                   }
 

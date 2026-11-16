@@ -225,7 +225,7 @@ const PaymentWay = ({ open, onClose, formData }) => {
             }
             
             toast.error(errorMessage);
-            console.log("Detailed error:", err);
+            console.error("Detailed error:", err);
         } finally {
             setSending(false);
         }
@@ -325,7 +325,7 @@ const PaymentWay = ({ open, onClose, formData }) => {
                                     <Link to="/agb" target="_blank" rel="noopener noreferrer">
                                         Allgemeinen Geschäftsbedingungen
                                     </Link>{" "}
-                                    der Pizza Wangen.
+                                    der Wangen Pizza Kebab GmbH.
                                 </span>
                             </label>
 

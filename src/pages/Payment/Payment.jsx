@@ -110,8 +110,6 @@ const Payment = () => {
         setOrderId(data?.id ?? data?.Id ?? "");
       };
 
-      console.log("[Payment] useEffect start location.state", location.state);
-      console.log("[Payment] useEffect start readPendingCashCheckout()", pendingStorage);
 
       // Online-Zahlung zuerst: sonst überschreibt altes Barzahlungs-Backup aus sessionStorage den PostFinance-Link.
       if (hasPlacedOrderPayload(responseFromState)) {
@@ -123,7 +121,6 @@ const Payment = () => {
         }
         setVoucherPurchase(fromVoucher);
         applyOrderResponse(responseFromState);
-        console.log("[Payment] hydrate: order response from navigate state");
         return;
       }
 
@@ -137,7 +134,6 @@ const Payment = () => {
         }
         setVoucherPurchase(fromVoucher);
         applyOrderResponse(storedOrderResponse);
-        console.log("[Payment] hydrate: order response from sessionStorage (reload)");
         return;
       }
 
@@ -157,7 +153,6 @@ const Payment = () => {
         setOrderId("");
         setPendingCashOrder(true);
         setPendingCashPayload(fromNav.payload);
-        console.log("[Payment] hydrate: pending cash from navigate state");
         return;
       }
 
@@ -173,7 +168,6 @@ const Payment = () => {
         setOrderId("");
         setPendingCashOrder(true);
         setPendingCashPayload(pendingStorage.payload ?? null);
-        console.log("[Payment] hydrate: pending cash from sessionStorage");
         return;
       }
 
@@ -196,7 +190,6 @@ const Payment = () => {
       if (response) {
         applyOrderResponse(response);
       }
-      console.log("[Payment] hydrate: main path (card / empty shell)");
     } catch (e) {
       console.error("[Payment] hydrate error", e);
     } finally {

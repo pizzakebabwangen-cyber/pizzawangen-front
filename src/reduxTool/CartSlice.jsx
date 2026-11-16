@@ -33,7 +33,6 @@ export const CartSlice = createSlice({
         const rawQty = Number.parseInt(String(action.payload.quantity ?? 1), 10);
         const qty =
           Number.isFinite(rawQty) && rawQty >= 1 ? Math.min(rawQty, 99) : 1;
-        // console.log("meal", meal);
         meal.extensions = action.payload.selectedExtensions || [];
         let priceOfTopings = 0;
         if (meal.extensions.length > 0) {
@@ -72,7 +71,7 @@ export const CartSlice = createSlice({
         }
         syncTotalsFromItems(state);
       } catch (err) {
-        console.log("error in add meal", err);
+        console.error("error in add meal", err);
       }
     },
 
@@ -109,7 +108,7 @@ export const CartSlice = createSlice({
         }
         syncTotalsFromItems(state);
       } catch (err) {
-        console.log("error in delete item", err);
+        console.error("error in delete item", err);
       }
     },
 
@@ -130,7 +129,7 @@ export const CartSlice = createSlice({
         );
         syncTotalsFromItems(state);
       } catch (err) {
-        console.log("can't remove this meal", err);
+        console.error("can't remove this meal", err);
       }
     },
 

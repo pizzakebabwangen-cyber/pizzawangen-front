@@ -75,3 +75,17 @@
     }
   }
 }
+
+.success-card .success-order-number {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.success-card .success-tracking-link a {
+  color: var(--primary-color);
+  text-decoration: underline;
+  display: inline-block;
+  padding: 12px 8px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
