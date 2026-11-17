@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import DeliveryMethod from "../../component/DeliveryMethod/DeliveryMethod";
 import Delivery from "../../component/Delivery/Delivery";
 import Location from "../../component/Location/Location";
+import FaqSection from "../../component/FaqSection/FaqSection";
+import { HOME_FAQ_ITEMS } from "../../config/faq.js";
 import LandingLinks from "../../component/LandingLinks/LandingLinks";
 import "./Home.css";
 
@@ -26,10 +28,6 @@ const FEATURES = [
   {
     title: "Hausgemacht",
     text: "Das Taschenbrot für Ihren Kebab backen wir frisch bei uns, und auch die Falafel machen wir selbst.",
-  },
-  {
-    title: "Halal",
-    text: "Kebab- und Pouletfleisch 100 % Halal",
   },
   {
     title: "Italienisches Mehl",
@@ -175,6 +173,7 @@ const Home = () => {
         </div>
       </section>
 
+      <FaqSection items={HOME_FAQ_ITEMS} />
       <LandingLinks />
       <Delivery headingLevel="h2" />
       <Location />

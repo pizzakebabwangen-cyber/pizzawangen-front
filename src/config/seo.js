@@ -7,7 +7,7 @@ import {
   SITE, OPENING_HOURS, DELIVERY_HOURS, openText, deliveryText, addressLine,
 } from "./site.js";
 import { LANDING_PAGES } from "./landing.js";
-import { FAQ_ITEMS } from "./faq.js";
+import { FAQ_ITEMS, HOME_FAQ_ITEMS } from "./faq.js";
 
 const BRAND = SITE.name;
 const NAP = `${BRAND}, ${addressLine()}, Tel. ${SITE.phoneDisplay}`;
@@ -24,6 +24,7 @@ export const ROUTES = [
     text:
       "Frisch zubereitet: Pizza, Kebab, Döner und Pide bei Wangen Pizza Kebab an der Zürcherstrasse 3 in Wangen SZ. Unser Pizza Kurier liefert nach Wangen, Lachen, Siebnen, Galgenen, Tuggen, Reichenburg, Buttikon, Schübelbach, Nuolen und Altendorf, oder Sie holen Ihre Bestellung bei uns ab.",
     jsonLd: true,
+    faqJsonLd: "home", // kurze FAQ auf der Startseite (HOME_FAQ_ITEMS)
     priority: "1.0",
   },
   {
@@ -236,7 +237,7 @@ export function buildExtraJsonLd(route) {
     return JSON.stringify({
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: FAQ_ITEMS.map((item) => ({
+      mainEntity: (route.faqJsonLd === "home" ? HOME_FAQ_ITEMS : FAQ_ITEMS).map((item) => ({
         "@type": "Question",
         name: item.q,
         acceptedAnswer: { "@type": "Answer", text: item.a },

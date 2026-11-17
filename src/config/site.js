@@ -34,7 +34,7 @@ export const SITE = {
     "Wangen SZ", "Lachen SZ", "Siebnen", "Galgenen", "Tuggen",
     "Nuolen", "Buttikon", "Schübelbach", "Reichenburg", "Altendorf",
   ],
-  servesCuisine: ["Pizza", "Kebab", "Döner", "Pide", "Tacos"],
+  servesCuisine: ["Pizza", "Kebab", "Döner", "Pide", "Tacos", "Halal"],
 };
 
 /** Restaurant-Oeffnungszeiten. */
