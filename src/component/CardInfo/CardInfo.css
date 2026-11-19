@@ -61,6 +61,16 @@
     color: var(--primary-color);
 }
 
+.card-item a.card-whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-whatsapp-icon {
+    flex: none;
+}
+
 @media (max-width: 700px) {
     .card-info {
         grid-template-columns: 1fr;
