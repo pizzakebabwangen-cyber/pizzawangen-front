@@ -61,10 +61,10 @@
     color: var(--primary-color);
 }
 
-.card-item a.card-whatsapp-link {
+.card-label.card-whatsapp-label {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .card-whatsapp-icon {
