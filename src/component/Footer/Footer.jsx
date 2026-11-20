@@ -53,7 +53,7 @@ const Footer = () => {
             {/* Logo + Social */}
             <div className="footer__logo">
               <div className="logo">
-                <img src={Logo} alt="Wangen Pizza Kebab Logo" loading="lazy" decoding="async" />
+                <img src={Logo} alt="Wangen Pizza Kebab Logo" width="190" height="193" loading="lazy" decoding="async" />
               </div>
               <div className="social-icons">
                 <a
